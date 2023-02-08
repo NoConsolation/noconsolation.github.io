@@ -256,28 +256,26 @@
     width: 80%;
   }
   
-  /* Mobile Responsive */
   @media screen and (max-width: 768px) {
     .main__container {
       display: grid;
       grid-template-columns: auto;
-      text-align: center;
       align-items: center;
       justify-self: center;
       width: 100%;
       margin: 0 auto;
       height: 90vh;
     }
-  
     .main__content {
       text-align: center;
       margin-bottom: 4rem;
     }
     
     .main__content iframe{
-      float: right;
-      margin-left: 0px;
-      margin-top: 50px;
+      float: left;
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      margin: 0 auto;
     }
     .main__content h1 {
       font-size: 2.5rem;

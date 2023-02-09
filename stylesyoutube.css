@@ -233,7 +233,7 @@
     font-size: 4rem;
     margin-top: 10px;
     background-color: #ff8177;
-    background-image: linear-gradient(to bottom, rgb(220, 130, 130) 10%, rgb(232, 9, 9) 100%);
+    background-image: linear-gradient(to top, rgb(220, 130, 130) 10%, rgb(232, 9, 9) 100%);
     background-size: 100%;
     -webkit-background-clip: text;
     -moz-background-clip: text;

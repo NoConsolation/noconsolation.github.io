@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTML CSS Website</title>
+  <link rel="stylesheet" href="stylesspl.css" />
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+    integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
+    crossorigin="anonymous"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+    <style>
+      /* Schedule Styles */
+      #schedule {
+        padding: 20px;
+      }
+
+      .week-block {
+        margin-bottom: 40px;
+      }
+
+      .week-title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .matches-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .match {
+        border: 1px solid #ccc;
+        padding: 10px;
+        min-width: 240px;
+        background: #f9f9f9;
+        border-radius: 8px;
+      }
+
+      .team-row {
+        display: flex;
+        gap: 10px;
+        margin: 2px 0;
+      }
+
+      .team-name {
+        width: 80px;
+        font-weight: bold;
+      }
+  </style>
+  <style>
+    #sheet-data table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+    #sheet-data th, #sheet-data td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    .table1 thead tr {
+      background-color: purple;
+      color: white;
+    }
+    .table2 thead tr {
+      background-color: red;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar Section -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/" id="navbar__logo"><i class="fas fa-gem"></i>NC</a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+      </div>
+      <ul class="navbar__menu">
+        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+        <li class="navbar__item"><a href="/streaming.html" class="navbar__links">Streaming</a></li>
+        <li class="navbar__item"><a href="/podcasts.html" class="navbar__links">Podcasts</a></li>
+        <li class="navbar__item"><a href="/roster.html" class="navbar__links">Info</a></li>
+        <li class="navbar__item"><a href="/spl.html" class="navbar__links">SPL</a></li>
+        <li class="navbar__btn">
+          <a href="https://discord.gg/dzEZA3Jwm5" target="_blank" class="button">Get Notified</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Secondary Nav Bar -->
+  <nav class="sub-navbar">
+    <ul class="sub-navbar__menu">
+      <li><a href="/spl.html">SPL Home</a></li>
+      <li><a href="/spl-stats.html">Stats</a></li>
+      <li><a href="/spl-forms.html">Forms</a></li>
+    </ul>
+  </nav>
+
+
+
+  <!-- Google Sheet Content -->
+  <div id="sheet-data" style="padding: 20px;">Loading data...</div>
+
+  <script>
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeC5HfoWoUQxwN42AtBg72omZBULnVWAmzgEAvh5E0NYrQhwBLeG22SKvrXfgr1UKDQF82t8KvHxQk/pub?gid=1520901699&single=true&output=csv';
+
+    function parseCSV(text) {
+      return text.trim().split('\n').map(row => row.split(','));
+    }
+
+    function buildTable(headerRow, bodyRows, tableClass) {
+      const columnIndexes = [0, 2, 4, 7, 5];
+      
+      let html = `<table class="${tableClass}"><thead><tr>`;
+      columnIndexes.forEach(index => {
+        html += `<th>${headerRow[index] || ''}</th>`;
+      });
+      html += `</tr></thead><tbody>`;
+
+      bodyRows.forEach(row => {
+        html += '<tr>';
+        columnIndexes.forEach(index => {
+          html += `<td>${row[index] || ''}</td>`;
+        });
+        html += '</tr>';
+      });
+
+      html += '</tbody></table>';
+      return html;
+    }
+
+
+    fetch(csvUrl)
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.text();
+      })
+      .then(csvText => {
+        const data = parseCSV(csvText);
+
+        // Table 1 header and body
+        const table1Header = data[1];
+        const table1Body = data.slice(2, 8);
+
+        // Table 2 header and body
+        const table2Header = data[9];
+        const table2Body = data.slice(10, 16);
+
+        const html = `
+          <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 300px;">
+              <h3 class="spellcasters-title";">SpellCasters</h3>
+              ${buildTable(table1Header, table1Body, 'table1')}
+            </div>
+            <div style="flex: 1; min-width: 300px;">
+              <h3 class="mfmk-title">The MFMK</h3>
+              ${buildTable(table2Header, table2Body, 'table2')}
+            </div>
+          </div>
+        `;
+        document.getElementById('sheet-data').innerHTML = html;
+      })
+      .catch(error => {
+        console.error('Error fetching CSV:', error);
+        document.getElementById('sheet-data').textContent = 'Failed to load data.';
+      });
+  </script>
+
+
+
+
+
+
+
+
+
+  <div id="schedule" style="padding:20px; margin-top:40px;">Loading schedule...</div>
+
+  <style>
+    #schedule {
+      padding: 20px;
+    }
+
+    .week-block {
+      margin-bottom: 10px;
+    }
+
+    .week-title {
+      font-size: 1.5em;
+      margin-bottom: 2px;
+      font-weight: bold;
+      color: #ccc;
+    }
+
+    .matches-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .match-box {
+      border: 1px solid #000000;
+      background: #333;
+      border-radius: 8px;
+      padding: 12px;
+      min-width: 200px;
+      box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+    }
+
+    .team-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .team-name {
+      font-weight: normal;
+      min-width: 80px;
+    }
+
+    .team-data {
+      width: 30px;
+      text-align: center;
+    }
+  </style>
+
+
+  <script>
+    const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeC5HfoWoUQxwN42AtBg72omZBULnVWAmzgEAvh5E0NYrQhwBLeG22SKvrXfgr1UKDQF82t8KvHxQk/pub?gid=1001386983&single=true&output=csv';
+
+    function parseCSV(text) {
+      return text.trim().split('\n').map(row => row.split(','));
+    }
+
+    function countWins(team, opponent) {
+      let wins = 0;
+      for (let i of [3, 4, 5]) {
+        const val = parseInt(team[i], 10);
+        const oppVal = parseInt(opponent[i], 10);
+        if (!isNaN(val) && !isNaN(oppVal) && val > oppVal) {
+          wins++;
+        }
+      }
+      return wins;
+    }
+
+    function createTeamRow(team, opponent, boldName) {
+      const nameHTML = boldName ? `<strong>${team[2]}</strong>` : team[2];
+
+      const games = [3, 4, 5].map(i => {
+        const val = parseInt(team[i], 10);
+        const oppVal = parseInt(opponent[i], 10);
+        const isHigher = !isNaN(val) && !isNaN(oppVal) && val > oppVal;
+        const value = team[i] === '' ? '' : isHigher ? `<strong>${val}</strong>` : val;
+        return `<div class="team-data">${value}</div>`;
+      });
+
+      return `
+        <div class="team-row">
+          <div class="team-name">${nameHTML}</div>
+          ${games.join('')}
+        </div>
+      `;
+    }
+
+
+    function createMatchBox(team1, team2) {
+      const team1Wins = countWins(team1, team2);
+      const team2Wins = countWins(team2, team1);
+
+      const boldTeam1 = team1Wins > team2Wins;
+      const boldTeam2 = team2Wins > team1Wins;
+
+      return `
+        <div class="match-box">
+          ${createTeamRow(team1, team2, boldTeam1)}
+          ${createTeamRow(team2, team1, boldTeam2)}
+        </div>
+      `;
+    }
+
+
+
+    function createWeekBlock(weekNumber, matchesHtml) {
+      return `
+        <div class="week-block">
+          <div class="week-title">${weekNumber}</div>
+          <div class="matches-row">${matchesHtml}</div>
+        </div>
+      `;
+    }
+
+    fetch(scheduleCsvUrl)
+      .then(res => res.text())
+      .then(csv => {
+        const rows = parseCSV(csv).slice(29, 125); // A30:F125
+        const weeks = {};
+
+        for (let i = 0; i < rows.length - 1; i += 2) {
+          const row1 = rows[i];
+          const row2 = rows[i + 1];
+
+          const week = row1[0].trim();
+          if (!weeks[week]) weeks[week] = [];
+
+          weeks[week].push(createMatchBox(row1, row2));
+        }
+
+        let html = '';
+        Object.keys(weeks).forEach(week => {
+          html += createWeekBlock(week, weeks[week].join(''));
+        });
+
+        document.getElementById('schedule').innerHTML = html;
+      });
+  </script>
+
+
+
+
+
+
+  <!-- Footer Section -->
+  <div class="footer__container">
+    <div class="footer__links">
+      <div class="footer__link--wrapper">
+        <div class="footer__link--items">
+          <h2>About Us</h2>
+          <a href="/info.html">Mission</a>
+          <a href="/info.html">Vision</a>
+          <a href="/info.html">Roster</a>
+        </div>
+        <div class="footer__link--items">
+          <h2>Standings</h2>
+          <a href="/info.html">Statistics</a>
+        </div>
+      </div>
+      <div class="footer__link--wrapper">
+        <div class="footer__link--items">
+          <h2>Contact Us</h2>
+          <a href="https://discord.gg/dzEZA3Jwm5">Discord</a>
+        </div>
+        <div class="footer__link--items">
+          <h2>Social Media</h2>
+          <a href="https://twitch.tv/noconsolation" target="_blank">Twitch</a>
+          <a href="https://www.tiktok.com/@noconsolation?lang=en" target="_blank">TikTok</a>
+          <a href="https://www.youtube.com/@thereisnoconsolation" target="_blank">YouTube</a>
+          <a href="https://twitter.com/NoConsolation_" target="_blank">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <section class="social__media">
+      <div class="social__media--wrap">
+        <div class="footer__logo">
+          <a href="/" id="footer__logo"><i class="fas fa-gem"></i>No Consolation</a>
+        </div>
+        <p class="website__rights">© No Consolation 2023. All rights reserved</p>
+        <div class="social__icons">
+          <a class="social__icon--link" href="https://twitch.tv/noconsolation" target="_blank"><i class="fab fa-twitch"></i></a>
+          <a class="social__icon--link" href="https://discord.gg/dzEZA3Jwm5" target="_blank"><i class="fab fa-discord"></i></a>
+          <a class="social__icon--link" href="https://www.youtube.com/@thereisnoconsolation" target="_blank"><i class="fab fa-youtube"></i></a>
+          <a class="social__icon--link" href="https://twitter.com/NoConsolation_" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a class="social__icon--link" href="https://www.tiktok.com/@noconsolation?lang=en" target="_blank"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

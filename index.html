@@ -16,6 +16,7 @@
       rel="stylesheet"
     />
   </head>
+  <base href="./">
   <body>
     <!-- Navbar Section -->
     <nav class="navbar">
@@ -30,16 +31,16 @@
             <a href="/" class="navbar__links">Home</a>
           </li>
           <li class="navbar__item">
-            <a href="/twitch.html" class="navbar__links">Twitch</a>
-          </li>
-          <li class="navbar__item">
-            <a href="/youtube.html" class="navbar__links">YouTube</a>
+            <a href="/streaming.html" class="navbar__links">Streaming</a>
           </li>
           <li class="navbar__item">
             <a href="/podcasts.html" class="navbar__links">Podcasts</a>
           </li>
           <li class="navbar__item">
             <a href="/roster.html" class="navbar__links">Info</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/spl.html" class ="navbar__links">SPL</a>
           </li>
           <li class="navbar__btn"><a href="https://discord.gg/dzEZA3Jwm5" target="_blank" class="button">Get Notified</a></li>
         </ul>
@@ -54,10 +55,7 @@
           <h2>Welcome!</h2>
           <p>Join the Community</p>
           <button class="main__btn"><a href= "https://discord.gg/dzEZA3Jwm5" target="_blank">Get Notified</a></button>
-          <div class="iframeVideo">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLvZQiW1fJARIncO8u9JMVeeJHMiZZXL2L" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-          </div>
-         </div>
+          <div id ="youtube-player" class="iframeVideo"></div>
         <div class="main__img--container">
         </div>
       </div>
@@ -161,6 +159,33 @@
         </div>
       </section>
     </div>
+
+    
     <script src="app.js"></script>
+
+
+  <script>
+    const apiKey = 'AIzaSyCyrEAomy-AmrTCJQYTb3CFSc7r_UC7UUA'; // Your API key
+    const channelId = 'UCE0Y9Niy6KNT27yO7pVjFtw'; // Your channel ID
+
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=1`;
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const latestVideoId = data.items[0].id.videoId;
+        const iframe = document.createElement('iframe');
+        iframe.width = "800";
+        iframe.height = "450";
+        iframe.src = `https://www.youtube.com/embed/${latestVideoId}?autoplay=1&mute=1`;
+        iframe.frameBorder = "0";
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+
+        document.getElementById('youtube-player').appendChild(iframe);
+      })
+      .catch(error => console.error('Error loading latest video:', error));
+  </script>
+
   </body>
 </html>

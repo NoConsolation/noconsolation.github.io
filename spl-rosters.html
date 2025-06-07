@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTML CSS Website</title>
+  <link rel="stylesheet" href="stylesspl.css" />
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+    integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
+    crossorigin="anonymous"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 40px 0;
+    }
+    .big-button {
+      display: inline-block;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      padding: 40px 60px;
+      background-color: rgb(1, 114, 1);
+      color: azure;
+      font-size: 1.5em;
+      text-decoration: none;
+      border-radius: 12px;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s;
+      border: 2px solid black;
+      box-sizing: border-box;
+    }
+    .big-button:hover {
+      box-shadow: 0 0 0 6px black;
+      text-shadow: 0 0 3px azure;
+    }
+    #tables-container {
+      display: flex;
+      justify-content: center;
+  
+      margin-top: 10px;
+      gap: 40px;
+     
+    }
+    .table-heading {
+      text-align: center;
+      margin-bottom: 10px;
+      color: rgb(0, 0, 150);
+      text-shadow: 1px 1px 0 black;
+    }
+
+    #table-container1 table,
+    #table-container2 table,
+    #table-container3 table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      background-color: #ccc;
+      color: black;
+      font-family: Arial, sans-serif;
+      min-width: 300px;
+    }
+    #table-container1 thead tr,
+    #table-container2 thead tr,
+    #table-container3 thead tr{
+      background-color: rgb(0, 0, 150);
+      color: white;
+      font-weight: bold;
+    }
+    #table-container1 tbody tr,
+    #table-container2 tbody tr,
+    #table-container3 tbody tr {
+      background-color: #eee;
+      color: black;
+    }
+    #table-container1 th,
+    #table-container1 td,
+    #table-container2 th,
+    #table-container2 td,
+    #table-container3 th,
+    #table-container3 td {
+      padding: 8px 12px;
+      text-align: center;
+      border: 1px solid #999;
+    }
+    h1{
+      margin-top: 10px;
+      margin-bottom: 10px;
+      text-align: center;
+      color: rgb(0, 0, 150);
+      text-shadow:
+        -1px -1px 0 black,
+        1px -1px 0 black,
+        -1px 1px 0 black,
+        1px 1px 0 black;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar Section -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/" id="navbar__logo"><i class="fas fa-gem"></i>NC</a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+      </div>
+      <ul class="navbar__menu">
+        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+        <li class="navbar__item"><a href="/streaming.html" class="navbar__links">Streaming</a></li>
+        <li class="navbar__item"><a href="/podcasts.html" class="navbar__links">Podcasts</a></li>
+        <li class="navbar__item"><a href="/roster.html" class="navbar__links">Info</a></li>
+        <li class="navbar__item"><a href="/spl.html" class="navbar__links">SPL</a></li>
+        <li class="navbar__btn">
+          <a href="https://discord.gg/dzEZA3Jwm5" target="_blank" class="button">Get Notified</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Secondary Nav Bar -->
+  <nav class="sub-navbar">
+    <ul class="sub-navbar__menu">
+      <li><a href="/spl.html">SPL Home</a></li>
+      <li><a href="/spl-stats.html">Stats</a></li>
+      <li><a href="/spl-rosters.html">Rosters</a></li>
+    </ul>
+  </nav>
+
+  <div class="button-row">
+    <a
+      href="https://docs.google.com/forms/d/e/1FAIpQLScVoJXgAXlgrSb2DqW1gJFvWLQ4CRszYnNHsmncTjrONB-RLQ/viewform"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="big-button"
+      >Submit Rosters</a
+    >
+    <a
+      href="https://docs.google.com/forms/d/e/1FAIpQLSfGI9ADmhChnR6SWIC_pg8r0EnL1RDRJXmqfgo2Quz4To03FA/viewform"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="big-button"
+      >Submit Waiver</a
+    >
+  </div>
+
+  <h1>Current Rosters</h1>
+<div id="tables-container" style="display: flex; gap: 40px;">
+  <div id="table-container1"></div>
+  <div id="table-container2"></div>
+  <div id="table-container3"></div> <!-- NEW table -->
+</div>
+
+
+
+  <!-- Footer Section -->
+  <div class="footer__container">
+    <div class="footer__links">
+      <div class="footer__link--wrapper">
+        <div class="footer__link--items">
+          <h2>About Us</h2>
+          <a href="/info.html">Mission</a>
+          <a href="/info.html">Vision</a>
+          <a href="/info.html">Roster</a>
+        </div>
+        <div class="footer__link--items">
+          <h2>Standings</h2>
+          <a href="/info.html">Statistics</a>
+        </div>
+      </div>
+      <div class="footer__link--wrapper">
+        <div class="footer__link--items">
+          <h2>Contact Us</h2>
+          <a href="https://discord.gg/dzEZA3Jwm5">Discord</a>
+        </div>
+        <div class="footer__link--items">
+          <h2>Social Media</h2>
+          <a href="https://twitch.tv/noconsolation" target="_blank">Twitch</a>
+          <a href="https://www.tiktok.com/@noconsolation?lang=en" target="_blank">TikTok</a>
+          <a href="https://www.youtube.com/@thereisnoconsolation" target="_blank">YouTube</a>
+          <a href="https://twitter.com/NoConsolation_" target="_blank">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <section class="social__media">
+      <div class="social__media--wrap">
+        <div class="footer__logo">
+          <a href="/" id="footer__logo"><i class="fas fa-gem"></i>No Consolation</a>
+        </div>
+        <p class="website__rights">© No Consolation 2023. All rights reserved</p>
+        <div class="social__icons">
+          <a
+            class="social__icon--link"
+            href="https://twitch.tv/noconsolation"
+            target="_blank"
+            ><i class="fab fa-twitch"></i
+          ></a>
+          <a
+            class="social__icon--link"
+            href="https://discord.gg/dzEZA3Jwm5"
+            target="_blank"
+            ><i class="fab fa-discord"></i
+          ></a>
+          <a
+            class="social__icon--link"
+            href="https://www.youtube.com/@thereisnoconsolation"
+            target="_blank"
+            ><i class="fab fa-youtube"></i
+          ></a>
+          <a
+            class="social__icon--link"
+            href="https://twitter.com/NoConsolation_"
+            target="_blank"
+            ><i class="fab fa-twitter"></i
+          ></a>
+          <a
+            class="social__icon--link"
+            href="https://www.tiktok.com/@noconsolation?lang=en"
+            target="_blank"
+            ><i class="fab fa-tiktok"></i
+          ></a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+
+  <script>
+    const sheetUrl =
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeC5HfoWoUQxwN42AtBg72omZBULnVWAmzgEAvh5E0NYrQhwBLeG22SKvrXfgr1UKDQF82t8KvHxQk/pub?gid=1166432758&single=true&output=csv';
+
+    function parseCSV(text) {
+      return text
+        .trim()
+        .split('\n')
+        .map((row) => row.split(','));
+    }
+
+    function extractRange(data, startCol, endCol, startRow, endRow) {
+      return data.slice(startRow, endRow + 1).map((row) =>
+        row.slice(startCol, endCol + 1)
+      );
+    }
+
+    function buildHtmlTable(data, addRowNumbers = false) {
+      let html = '<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse;">';
+
+      // Header
+      html += '<thead><tr>';
+      if (addRowNumbers) {
+        html += '<th>#</th>';
+      }
+      data[0].forEach((cell) => {
+        html += `<th>${cell}</th>`;
+      });
+      html += '</tr></thead>';
+
+      // Body
+      html += '<tbody>';
+      for (let i = 1; i < data.length; i++) {
+        html += '<tr>';
+        if (addRowNumbers) {
+          html += `<td>${i}</td>`;
+        }
+        data[i].forEach((cell) => {
+          html += `<td>${cell}</td>`;
+        });
+        html += '</tr>';
+      }
+      html += '</tbody>';
+
+      html += '</table>';
+      return html;
+    }
+
+
+    fetch(sheetUrl)
+      .then(response => response.text())
+      .then(text => {
+        const data = parseCSV(text);
+
+        // Table 1: AB(27) to AG(32), rows 1-13
+        const firstTableData = extractRange(data, 27, 32, 0, 12);
+        document.getElementById('table-container1').innerHTML = buildHtmlTable(firstTableData);
+
+        // Table 2: Y(24), rows 1-5
+        const secondTableData = extractRange(data, 24, 24, 0, 4);
+        document.getElementById('table-container2').innerHTML = buildHtmlTable(secondTableData);
+
+        // Table 3: AJ(35), rows 1-13
+        const thirdTableData = extractRange(data, 35, 35, 0, 12);
+        document.getElementById('table-container3').innerHTML = buildHtmlTable(thirdTableData,true);
+      })
+      .catch(error => {
+        console.error('Error loading CSV:', error);
+        document.getElementById('table-container1').textContent = 'Failed to load data.';
+        document.getElementById('table-container2').textContent = 'Failed to load data.';
+        document.getElementById('table-container3').textContent = 'Failed to load data.';
+      });
+
+
+  </script>
+</body>
+</html>

@@ -72,7 +72,6 @@ td {
 }
 
 .modal-content {
-  background-color: #fefefe;
   padding: 20px;
   border-radius: 12px;
   width: 90%;
@@ -90,7 +89,6 @@ td {
 
 .modal-content td {
   padding: 8px;
-  border: 1px solid #ccc;
   text-align: left;
   font-size: 14px;
 }

@@ -83,126 +83,11 @@
       border-bottom: 4px solid red;
     }
 
-    .ticker-wrapper {
-    width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    position: relative;
-    top: 0;
-    z-index: 1000;
-    background: repeating-linear-gradient(
-    45deg,
-    red 0,
-    red 20px,
-    purple 20px,
-    purple 40px
-    );
-    background-size: 56.57px 56.57px; /* length of diagonal stripe pattern */
-    animation: background-scroll 1s linear infinite;
-    display: flex;
-    align-items: center;
-    padding-right: 40px;
-
-    }
-
-    @keyframes background-scroll {
-        0% {
-        background-position: 0 0;
-        }
-        100% {
-        background-position: -56.57px 0; /* scroll left exactly one full pattern */
-        }
-    }
-
-    .ticker {
-        display: inline-block;
-        white-space: nowrap;
-        animation: scroll-left 15s linear infinite;
-        flex-grow: 0;
-        width: auto;
-    }
-
-    .ticker span {
-        display: inline-block;
-        padding: 10px 50px; /* add some horizontal padding */
-        font-weight: bold;
-        font-size: 1rem;
-        white-space: nowrap;
-        color: white;
-        text-shadow:
-        -1px -1px 0 black,
-        1px -1px 0 black,
-        -1px 1px 0 black,
-        1px 1px 0 black;
-    }
-    .ticker-close {
-        position: absolute !important;
-        right: 10px;
-        top: 50%;
-        background-color: transparent;
-        transform: translateY(-50%);
-        width: 30px;
-        height: 30px;
-        border: none !important;
-        color: white !important;
-        font-size: 1.5rem !important;
-        font-weight: bold !important;
-        cursor: pointer !important;
-        user-select: none !important;
-        padding: 0 !important;
-        line-height: 1 !important;
-        text-shadow:
-        -1px -1px 0 black,
-        1px -1px 0 black,
-        -1px  1px 0 black,
-        1px  1px 0 black !important;
-        transition: color 0.3s !important;
-        z-index: 1002 !important;
-    }
-
-    .ticker-close:hover {
-        color: #ddd;
-    }
-
-    /* Animate from 0 to -50% since we have 2 copies */
-    @keyframes scroll-left {
-        0% {
-        transform: translateX(0%);
-        }
-        100% {
-        transform: translateX(-50%);
-        }
-    }
-    .ticker-link {
-        display: flex;
-        flex-grow: 1;
-        text-decoration: none;
-        height: 100%;
-        align-items: center;
-    }
-    .ticker-link:hover {
-        cursor: pointer;
-    }
-
+    
   </style>
 </head>
 
-<body>
-  <div class="ticker-wrapper" id="ticker-wrapper">
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeaPBEMQ349MuLmaHvUqy4OzUyS_P6xugEFxLkQj-2VnFVdZw/viewform?usp=header" target="_blank" rel="noopener noreferrer" class="ticker-link">
-      <div class="ticker">
-        <span>🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE</span>
-        <span>🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨</span>
-      </div>
-    </a>
-    <button class="ticker-close" id="ticker-close" aria-label="Close ticker">X</button>
-  </div>
-  <script>
-        document.querySelector('.ticker-close').addEventListener('click', function(event) {
-      event.stopPropagation(); // prevent link click
-      this.parentElement.style.display = 'none';
-    });
-  </script>
+
 
   <!-- Navbar Section -->
   <nav class="navbar">
@@ -305,7 +190,20 @@
 
 
 
-
+  <div id="playoff-bracket" style="margin: 40px auto; max-width: 100%; overflow-x: auto;">
+    <h2 style="text-align:center;">Playoff Bracket</h2>
+    <div style="width: 1200px; height: 500px; overflow: hidden; margin: 0 auto;">
+      <iframe
+        id="playoff-iframe"
+        src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTeC5HfoWoUQxwN42AtBg72omZBULnVWAmzgEAvh5E0NYrQhwBLeG22SKvrXfgr1UKDQF82t8KvHxQk/pubhtml?gid=269961088&single=true&widget=true&headers=false"
+        width="1200"
+        height="575"
+        frameborder="0"
+        style="border: none; transform: translateY(-30px) translateX(-2px);
+        transform-origin: top-left; pointer-events: none;">
+      </iframe>
+    </div>
+  </div>
 
 
 
@@ -361,6 +259,13 @@
       text-align: center;
     }
   </style>
+
+  <script>
+    const iframe = document.getElementById("playoff-iframe");
+    const timestamp = new Date().getTime(); // creates a unique value
+    iframe.src = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTeC5HfoWoUQxwN42AtBg72omZBULnVWAmzgEAvh5E0NYrQhwBLeG22SKvrXfgr1UKDQF82t8KvHxQk/pubhtml?gid=269961088&single=true&widget=true&headers=false&t=" + timestamp;
+  </script>
+
 
 
   <script>
@@ -505,5 +410,6 @@
   </div>
 
   <script src="app.js"></script>
+
 </body>
 </html>

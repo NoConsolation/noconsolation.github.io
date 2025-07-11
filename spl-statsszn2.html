@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>No Consolation</title>
+  <link rel="stylesheet" href="stylesspl.css" />
+  <link rel="stylesheet" href="stats.css">
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+    integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
+    crossorigin="anonymous"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+
+</head>
+<body>
+
+  <!-- Navbar Section -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/" id="navbar__logo"><i class="fas fa-gem"></i>NC</a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+      </div>
+      <ul class="navbar__menu">
+        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+        <li class="navbar__item"><a href="/streaming.html" class="navbar__links">Streaming</a></li>
+        <li class="navbar__item"><a href="/podcasts.html" class="navbar__links">Podcasts</a></li>
+        <li class="navbar__item"><a href="/roster.html" class="navbar__links">Info</a></li>
+        <li class="navbar__item"><a href="/spl.html" class="navbar__links">SPL</a></li>
+        <li class="navbar__btn">
+          <a href="https://discord.gg/dzEZA3Jwm5" target="_blank" class="button">Get Notified</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <nav class="sub-navbar">
+    <ul class="sub-navbar__menu">
+      <li><a href="/spl.html">SPL Home</a></li>
+      <li><a href="/spl-stats.html">Stats</a></li>
+      <li><a href="/splszn2.html">Season 2</a></li>
+    </ul>
+  </nav>
+
+  <nav class="submenu">
+    <ul class="sub-navbar__menu">
+      <li><a href="/splszn2.html">Season 2 Home</a></li>
+      <li><a href="/spl-statsszn2.html">Season 2 Stats</a></li>
+  </nav>
+
+
+    <div id="panelContainer" class="grid-container"></div>
+    <div id="detailModal" class="modal">
+    <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <div id="detailContent"></div>
+    </div>
+    </div>
+
+
+
+
+
+
+  <!-- Footer Section -->
+  <div class="footer__container">
+    <div class="footer__links">
+      <div class="footer__link--wrapper">
+        <div class="footer__link--items">
+          <h2>About Us</h2>
+          <a href="/info.html">Mission</a>
+          <a href="/info.html">Vision</a>
+          <a href="/info.html">Roster</a>
+        </div>
+        <div class="footer__link--items">
+          <h2>Standings</h2>
+          <a href="/info.html">Statistics</a>
+        </div>
+      </div>
+      <div class="footer__link--wrapper">
+        <div class="footer__link--items">
+          <h2>Contact Us</h2>
+          <a href="https://discord.gg/dzEZA3Jwm5">Discord</a>
+        </div>
+        <div class="footer__link--items">
+          <h2>Social Media</h2>
+          <a href="https://twitch.tv/noconsolation" target="_blank">Twitch</a>
+          <a href="https://www.tiktok.com/@noconsolation?lang=en" target="_blank">TikTok</a>
+          <a href="https://www.youtube.com/@thereisnoconsolation" target="_blank">YouTube</a>
+          <a href="https://twitter.com/NoConsolation_" target="_blank">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <section class="social__media">
+      <div class="social__media--wrap">
+        <div class="footer__logo">
+          <a href="/" id="footer__logo"><i class="fas fa-gem"></i>No Consolation</a>
+        </div>
+        <p class="website__rights">© No Consolation 2023. All rights reserved</p>
+        <div class="social__icons">
+          <a
+            class="social__icon--link"
+            href="https://twitch.tv/noconsolation"
+            target="_blank"
+            ><i class="fab fa-twitch"></i
+          ></a>
+          <a
+            class="social__icon--link"
+            href="https://discord.gg/dzEZA3Jwm5"
+            target="_blank"
+            ><i class="fab fa-discord"></i
+          ></a>
+          <a
+            class="social__icon--link"
+            href="https://www.youtube.com/@thereisnoconsolation"
+            target="_blank"
+            ><i class="fab fa-youtube"></i
+          ></a>
+          <a
+            class="social__icon--link"
+            href="https://twitter.com/NoConsolation_"
+            target="_blank"
+            ><i class="fab fa-twitter"></i
+          ></a>
+          <a
+            class="social__icon--link"
+            href="https://www.tiktok.com/@noconsolation?lang=en"
+            target="_blank"
+            ><i class="fab fa-tiktok"></i
+          ></a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+    <script src="app.js"></script>
+
+    <script>
+    function showSection(id) {
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(section => {
+        section.style.display = section.id === id ? 'block' : 'none';
+        });
+    }
+    </script>
+
+
+
+<script>
+const container = document.getElementById('panelContainer'); // Your main grid container
+let panelIndex = 0;
+
+// Panel creation from A18:H29
+fetch("https://script.google.com/macros/s/AKfycbzOBMBo6EhZUTn6o7xYuER_l0dplhP3StR6BAPFeM4OU4GPjKkQxjf6BrTlOKn0-70/exec")
+  .then(res => res.json())
+  .then(data => {
+    for (let row = 0; row <= 8; row += 4) {
+      for (let col = 0; col < 8; col += 2) {
+        const panel = document.createElement('div');
+        panel.className = 'panel';
+        panel.style.cursor = 'pointer';
+
+        const headerData = data[row][col];
+        const header = document.createElement('h3');
+        header.textContent = headerData.value;
+        header.style.backgroundColor = '#333'; // Override sheet color if you want
+        header.style.color = 'white';
+        panel.appendChild(header);
+
+        const table = document.createElement('table');
+        for (let i = 1; i <= 3; i++) {
+          const tr = document.createElement('tr');
+          for (let j = 0; j < 2; j++) {
+            const cellData = data[row + i][col + j];
+            const td = document.createElement('td');
+            let val = cellData.value;
+            if (typeof val === "number") val = val.toFixed(1);
+            td.textContent = val;
+            td.style.backgroundColor = cellData.bgColor;
+            tr.appendChild(td);
+          }
+          table.appendChild(tr);
+        }
+
+        panel.appendChild(table);
+        panel.setAttribute('data-panel-index', panelIndex);
+        panel.addEventListener('click', () => {
+          const index = panel.getAttribute('data-panel-index');
+          openDetailForPanel(index);
+        });
+
+        container.appendChild(panel);
+        panelIndex++;
+      }
+    }
+  });
+
+// Fetch and show detail panel
+function openDetailForPanel(index) {
+ fetch(`https://script.google.com/macros/s/AKfycbyjbWm90zJL05BuLRY9uKycdxirHbL1CMY3DZCnhEz8S0Lk4F4CQCWPkd4vdeTlJIMj-g/exec?panel=${index}`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("Fetched panel data:",data);
+      showDetailModal(data);
+    })
+    .catch(err => {
+        console.error("error fetching panel detail:",err)
+    });
+}
+
+// Modal logic
+const modal = document.getElementById("detailModal");
+const closeBtn = document.getElementById("closeModal");
+closeBtn.onclick = () => modal.classList.remove("show");
+
+window.onclick = (event) => {
+    if (event.target == modal){
+        modal.classList.remove("show");
+    }
+};
+
+function showDetailModal(data) {
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    console.warn("No valid data for modal.");
+    return;
+  }
+  console.log("Modal Data:", data);
+
+
+  const container = document.getElementById("detailContent");
+  container.innerHTML = "";
+
+  const table = document.createElement('table');
+  table.style.width = "100%";
+  table.style.borderCollapse = "collapse";
+  table.style.backgroundColor = "#0c850f";
+
+  // Create thead with one row: first cell value spanning 2 columns
+  const thead = document.createElement('thead');
+  const titleRow = document.createElement('tr');
+  const titleCell = document.createElement('th');
+
+  // Use first row, first cell value as title text
+  const titleText = data[0][0]?.value || "Detail Stats";
+  titleCell.colSpan = 3;
+  titleCell.textContent = titleText;
+  titleCell.style.textAlign = "center";
+  titleCell.style.fontWeight = "bold";
+  titleCell.style.fontSize = "1.2em";
+  titleCell.style.padding = "10px";
+  titleCell.style.backgroundColor = "#333";
+  titleCell.style.color = "white";
+  titleCell.style.border = "1px solid #ccc";
+
+  titleRow.appendChild(titleCell);
+  thead.appendChild(titleRow);
+  table.appendChild(thead);
+
+  // tbody for data rows, starting from 2nd row (index 1)
+  const tbody = document.createElement('tbody');
+
+  for(let i = 1; i < data.length; i++) {
+    const row = data[i];
+    const tr = document.createElement('tr');
+
+    const numTd = document.createElement('td');
+    numTd.textContent = i;  // counting starts at 1 for first data row
+    numTd.style.fontWeight = 'bold';
+    numTd.style.border = '1px solid #ccc';
+    numTd.style.padding = '5px';
+    numTd.style.backgroundColor = '#e0e0e0'; // light grey background
+    tr.appendChild(numTd);
+
+    // Assume two columns per row, create cells accordingly
+    for(let j = 0; j < 2; j++) {
+      const cell = row[j] || {};
+      const td = document.createElement('td');
+      let val = (cell && cell.value !== undefined && cell.value !== null) ? cell.value : "";
+      if (typeof val === "number") val = val.toFixed(1);
+      td.textContent = val;
+      td.style.backgroundColor = cell?.bgColor || "transparent";
+      td.style.border = "1px solid #ccc";
+      td.style.padding = "5px";
+      tr.appendChild(td);
+    }
+
+    tbody.appendChild(tr);
+  }
+
+  table.appendChild(tbody);
+  container.appendChild(table);
+
+  modal.classList.add("show");
+}
+
+</script>
+
+
+</body>
+</html>

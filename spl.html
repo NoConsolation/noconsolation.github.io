@@ -69,18 +69,12 @@
       text-align: left;
     }
     .table1 thead tr {
-      background-color: purple;
+      background-color: orange;
       color: white;
     }
     .table2 thead tr {
-      background-color: red;
+      background-color: teal;
       color: white;
-    }
-    #sheet-data tr:nth-child(2){
-      border-bottom: 4px solid green;
-    }
-    #sheet-data tr:nth-child(4){
-      border-bottom: 4px solid red;
     }
 
     
@@ -115,6 +109,7 @@
       <li><a href="/spl.html">SPL Home</a></li>
       <li><a href="/spl-stats.html">Stats</a></li>
       <li><a href="/spl-rosters.html">Rosters</a></li>
+      <li><a href="/splszn2.html">Season 2</a></li>
     </ul>
   </nav>
 
@@ -124,14 +119,14 @@
   <div id="sheet-data" style="padding: 20px;">Loading data...</div>
 
   <script>
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeC5HfoWoUQxwN42AtBg72omZBULnVWAmzgEAvh5E0NYrQhwBLeG22SKvrXfgr1UKDQF82t8KvHxQk/pub?gid=1520901699&single=true&output=csv';
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1520901699&single=true&output=csv';
 
     function parseCSV(text) {
       return text.trim().split('\n').map(row => row.split(','));
     }
 
     function buildTable(headerRow, bodyRows, tableClass) {
-      const columnIndexes = [0, 2, 4, 7, 5];
+      const columnIndexes = [0, 2, 7, 5];
       
       let html = `<table class="${tableClass}"><thead><tr>`;
       columnIndexes.forEach(index => {
@@ -171,11 +166,11 @@
         const html = `
           <div style="display: flex; gap: 20px; flex-wrap: wrap;">
             <div style="flex: 1; min-width: 300px;">
-              <h3 class="spellcasters-title";">SpellCasters</h3>
+              <h3 class="spellcasters-title";">Tier 1</h3>
               ${buildTable(table1Header, table1Body, 'table1')}
             </div>
             <div style="flex: 1; min-width: 300px;">
-              <h3 class="mfmk-title">The MFMK</h3>
+              <h3 class="mfmk-title">Tier 2</h3>
               ${buildTable(table2Header, table2Body, 'table2')}
             </div>
           </div>
@@ -187,24 +182,6 @@
         document.getElementById('sheet-data').textContent = 'Failed to load data.';
       });
   </script>
-
-
-
-  <div id="playoff-bracket" style="margin: 40px auto; max-width: 100%; overflow-x: auto;">
-    <h2 style="text-align:center;">Playoff Bracket</h2>
-    <div style="width: 1200px; height: 500px; overflow: hidden; margin: 0 auto;">
-      <iframe
-        id="playoff-iframe"
-        src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTeC5HfoWoUQxwN42AtBg72omZBULnVWAmzgEAvh5E0NYrQhwBLeG22SKvrXfgr1UKDQF82t8KvHxQk/pubhtml?gid=269961088&single=true&widget=true&headers=false"
-        width="1200"
-        height="575"
-        frameborder="0"
-        style="border: none; transform: translateY(-30px) translateX(-2px);
-        transform-origin: top-left; pointer-events: none;">
-      </iframe>
-    </div>
-  </div>
-
 
 
 
@@ -260,16 +237,10 @@
     }
   </style>
 
-  <script>
-    const iframe = document.getElementById("playoff-iframe");
-    const timestamp = new Date().getTime(); // creates a unique value
-    iframe.src = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTeC5HfoWoUQxwN42AtBg72omZBULnVWAmzgEAvh5E0NYrQhwBLeG22SKvrXfgr1UKDQF82t8KvHxQk/pubhtml?gid=269961088&single=true&widget=true&headers=false&t=" + timestamp;
-  </script>
-
 
 
   <script>
-    const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeC5HfoWoUQxwN42AtBg72omZBULnVWAmzgEAvh5E0NYrQhwBLeG22SKvrXfgr1UKDQF82t8KvHxQk/pub?gid=1001386983&single=true&output=csv';
+    const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1001386983&single=true&output=csv';
 
     function parseCSV(text) {
       return text.trim().split('\n').map(row => row.split(','));
@@ -336,7 +307,7 @@
     fetch(scheduleCsvUrl)
       .then(res => res.text())
       .then(csv => {
-        const rows = parseCSV(csv).slice(29, 125); // A30:F125
+        const rows = parseCSV(csv).slice(29, 149); // A30:F125
         const weeks = {};
 
         for (let i = 0; i < rows.length - 1; i += 2) {

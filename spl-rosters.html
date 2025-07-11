@@ -117,8 +117,135 @@
         -1px 1px 0 black,
         1px 1px 0 black;
     }
-  
-  </style>
+    
+    #roster-grid {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+  }
+
+  .roster-group {
+    margin-bottom: 40px;
+  }
+
+  .roster-group h2 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    text-align: center;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 4px;
+  }
+
+  .roster-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  .roster-box {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #fdfdfd;
+    padding: 12px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+  }
+
+  .roster-box:hover {
+    transform: scale(1.02);
+  }
+
+  .roster-box h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    text-align: center;
+    color: #333;
+  }
+
+  .roster-box table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    table-layout: fixed;
+  }
+
+  .roster-box td {
+    padding: 4px 6px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+  }
+
+  .roster-box td:first-child{
+    width:75%;
+  }
+  .roster-box td:last-child{
+    width:25%;
+    text-align:center;
+  }
+  .team-header {
+  background: #4A90E2; /* default color, can be varied */
+  color: white;
+  padding: 8px 10px;
+  font-weight: bold;
+  text-align: center;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  font-size: 1.1rem;
+  }
+  td.zero {
+  background-color: #f44336; /* red */
+  color: black;
+   }
+
+  td.one {
+    background-color: #fbc02d; /* yellow */
+    color: black;
+   }
+
+  td.two {
+    background-color: #4caf50; /* green */
+    color: black;
+  }
+  @media (max-width: 600px) {
+  .roster-row {
+    display: block;
+  }
+
+  .roster-box {
+    margin-bottom: 20px;
+  }
+
+  /* Make each roster box full width */
+  .roster-box {
+    width: 100%;
+  }
+  .roster-box td:first-child,
+  .roster-box td:last-child{
+    width:auto;
+  }
+  .roster-box td:last-child{
+    text-align: right;
+  }
+  /* Make table scroll horizontally */
+  .roster-box table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Smaller font size and padding */
+  .roster-box td {
+    padding: 6px 8px;
+    font-size: 0.85rem;
+  }
+
+  .team-header {
+    font-size: 1rem;
+    padding: 6px 8px;
+  }
+}
+</style>
+
 </head>
 <body>
   <!-- Navbar Section -->
@@ -147,14 +274,13 @@
       <li><a href="/spl.html">SPL Home</a></li>
       <li><a href="/spl-stats.html">Stats</a></li>
       <li><a href="/spl-rosters.html">Rosters</a></li>
+      <li><a href="/splszn2.html">Season 2</a></li>
     </ul>
   </nav>
 
   <div class="button-row">
     <a
-      href="https://docs.google.com/forms/d/e/1FAIpQLScVoJXgAXlgrSb2DqW1gJFvWLQ4CRszYnNHsmncTjrONB-RLQ/viewform"
-      target="_blank"
-      rel="noopener noreferrer"
+      href="/rostform.html"
       class="big-button"
       >Submit Rosters</a
     >
@@ -167,12 +293,18 @@
     >
   </div>
 
-  <h1>Current Rosters</h1>
-<div id="tables-container" style="display: flex; gap: 40px;">
-  <div style="overflow-x: auto;"><div id="table-container1"></div></div>
-  <div style="overflow-x: auto;"><div id="table-container2"></div></div>
-  <div style="overflow-x: auto;"><div id="table-container3"></div></div>
-</div>
+
+  <div id="roster-grid">
+    <div class="roster-group" id="top-group">
+      <h2>Tier 1</h2>
+      <div class="roster-row" id="top-teams"></div>
+    </div>
+
+    <div class="roster-group" id="bottom-group">
+      <h2>Tier 2</h2>
+      <div class="roster-row" id="bottom-teams"></div>
+    </div>
+  </div>
 
 
 
@@ -249,82 +381,76 @@
 
   <script src="app.js"></script>
 
-  <script>
-    const sheetUrl =
-      'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeC5HfoWoUQxwN42AtBg72omZBULnVWAmzgEAvh5E0NYrQhwBLeG22SKvrXfgr1UKDQF82t8KvHxQk/pub?gid=1166432758&single=true&output=csv';
+<script>
+  const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1896446593&single=true&output=csv';
 
-    function parseCSV(text) {
-      return text
-        .trim()
-        .split('\n')
-        .map((row) => row.split(','));
+  function parseCSV(text) {
+    return text.trim().split('\n').map(row => row.split(','));
+  }
+
+  function extractRange(data, startCol, endCol, startRow, endRow) {
+    return data.slice(startRow, endRow + 1).map(row => row.slice(startCol, endCol + 1));
+  }
+
+  function buildRosterBox(data) {
+    const teamName = data[0][0] || 'Unnamed Team';
+
+    let html = '<div class="roster-box">';
+    html += `<div class="team-header">${teamName}</div>`;
+    html += '<table>';
+
+    for (let i = 1; i < data.length; i++) {
+      const label = data[i][0] || '';
+      const value = data[i][1] || '';
+
+      let cellClass = '';
+      if (value === '0') cellClass = 'zero';
+      else if (value === '1') cellClass = 'one';
+      else if (value === '2') cellClass = 'two';
+
+      html += '<tr>';
+      html += `<td>${label}</td>`;
+      html += `<td class="${cellClass}">${value}</td>`;
+      html += '</tr>';
     }
 
-    function extractRange(data, startCol, endCol, startRow, endRow) {
-      return data.slice(startRow, endRow + 1).map((row) =>
-        row.slice(startCol, endCol + 1)
-      );
-    }
+    html += '</table></div>';
+    return html;
+  }
 
-    function buildHtmlTable(data, addRowNumbers = false) {
-      let html = '<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse;">';
 
-      // Header
-      html += '<thead><tr>';
-      if (addRowNumbers) {
-        html += '<th>#</th>';
-      }
-      data[0].forEach((cell) => {
-        html += `<th>${cell}</th>`;
-      });
-      html += '</tr></thead>';
+  fetch(sheetUrl)
+    .then(response => response.text())
+    .then(text => {
+      const data = parseCSV(text);
+      const topContainer = document.getElementById('top-teams');
+      const bottomContainer = document.getElementById('bottom-teams');
 
-      // Body
-      html += '<tbody>';
-      for (let i = 1; i < data.length; i++) {
-        html += '<tr>';
-        if (addRowNumbers) {
-          html += `<td>${i}</td>`;
+      for (let rowBox = 0; rowBox < 2; rowBox++) {
+        for (let colBox = 0; colBox < 6; colBox++) {
+          const startCol = 1 + colBox * 2;
+          const endCol = startCol + 1;
+          const startRow = 1 + rowBox * 8;
+          const endRow = startRow + 7;
+
+          const boxData = extractRange(data, startCol, endCol, startRow, endRow);
+          const boxHTML = buildRosterBox(boxData);
+
+          if (rowBox === 0) {
+            topContainer.innerHTML += boxHTML;
+          } else {
+            bottomContainer.innerHTML += boxHTML;
+          }
         }
-        data[i].forEach((cell) => {
-          html += `<td>${cell}</td>`;
-        });
-        html += '</tr>';
       }
-      html += '</tbody>';
+    })
+    .catch(error => {
+      console.error('Error loading CSV:', error);
+      document.getElementById('roster-grid').textContent = 'Failed to load rosters.';
+    });
 
-      html += '</table>';
-      return html;
-    }
-
-
-    fetch(sheetUrl)
-      .then(response => response.text())
-      .then(text => {
-        const data = parseCSV(text);
-
-        // Table 1: AB(27) to AG(32), rows 1-13
-        const firstTableData = extractRange(data, 27, 32, 0, 12);
-        document.getElementById('table-container1').innerHTML = buildHtmlTable(firstTableData);
-
-        // Table 2: Y(24), rows 1-5
-        const secondTableData = extractRange(data, 24, 24, 0, 4);
-        document.getElementById('table-container2').innerHTML = buildHtmlTable(secondTableData);
-
-        // Table 3: AJ(35), rows 1-13
-        const thirdTableData = extractRange(data, 35, 35, 0, 12);
-        document.getElementById('table-container3').innerHTML = buildHtmlTable(thirdTableData,true);
-      })
-      .catch(error => {
-        console.error('Error loading CSV:', error);
-        document.getElementById('table-container1').textContent = 'Failed to load data.';
-        document.getElementById('table-container2').textContent = 'Failed to load data.';
-        document.getElementById('table-container3').textContent = 'Failed to load data.';
-      });
+</script>
 
 
-
-
-  </script>
 </body>
 </html>

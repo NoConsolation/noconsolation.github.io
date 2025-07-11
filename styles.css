@@ -77,6 +77,27 @@
     padding: 0 1rem;
     width: 100%;
   }
+
+  .navbar__btn a.rostbut {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    padding: 10px 20px;
+    height: auto;
+    width: auto;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    background: linear-gradient(to bottom, #f8ac49 0%, rgb(64, 171, 168) 100%);
+    color: #fff;
+  }
+
+
+  .rostbut:hover {
+    background: linear-gradient(to top, #b721ff 0%, #2521fd 100%);
+    transition: all 0.3s ease;
+  }
   
   .button {
     display: flex;

@@ -46,6 +46,7 @@
       <li><a href="/spl.html">SPL Home</a></li>
       <li><a href="/spl-stats.html">Stats</a></li>
       <li><a href="/spl-rosters.html">Rosters</a></li>
+      <li><a href="/splszn2.html">Season 2</a></li>
     </ul>
   </nav>
 
@@ -160,7 +161,7 @@ const container = document.getElementById('panelContainer'); // Your main grid c
 let panelIndex = 0;
 
 // Panel creation from A18:H29
-fetch("https://script.google.com/macros/s/AKfycbyjbWm90zJL05BuLRY9uKycdxirHbL1CMY3DZCnhEz8S0Lk4F4CQCWPkd4vdeTlJIMj-g/exec")
+fetch("https://script.google.com/macros/s/AKfycbwA1MIAHTAif1_al8IDs6KE3herlDSzZEvD6UqCOjq0sW068RBUzCePncNqaAAsGMk6EQ/exec")
   .then(res => res.json())
   .then(data => {
     for (let row = 0; row <= 8; row += 4) {
@@ -206,7 +207,7 @@ fetch("https://script.google.com/macros/s/AKfycbyjbWm90zJL05BuLRY9uKycdxirHbL1CM
 
 // Fetch and show detail panel
 function openDetailForPanel(index) {
- fetch(`https://script.google.com/macros/s/AKfycbyjbWm90zJL05BuLRY9uKycdxirHbL1CMY3DZCnhEz8S0Lk4F4CQCWPkd4vdeTlJIMj-g/exec?panel=${index}`)
+ fetch(`https://script.google.com/macros/s/AKfycbwA1MIAHTAif1_al8IDs6KE3herlDSzZEvD6UqCOjq0sW068RBUzCePncNqaAAsGMk6EQ/exec?panel=${index}`)
     .then(res => res.json())
     .then(data => {
       console.log("Fetched panel data:",data);

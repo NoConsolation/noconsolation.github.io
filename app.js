@@ -7,7 +7,7 @@ menu.addEventListener('click', function() {
 });
 
 
-const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeC5HfoWoUQxwN42AtBg72omZBULnVWAmzgEAvh5E0NYrQhwBLeG22SKvrXfgr1UKDQF82t8KvHxQk/pub?gid=1520901699&single=true&output=csv';
+const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1001386983&single=true&output=csv';
 
 
 fetch(csvUrl)

@@ -652,11 +652,11 @@
     }
 
     .table1 thead tr{
-    background-color: purple; 
+    background-color: orange; 
     }
 
     .table2 thead tr{
-    background-color: red; /* Light red/pink */
+    background-color: teal; /* Light red/pink */
     }
 
 
@@ -664,8 +664,7 @@
     text-align: center;
     font-size: 3rem;
     margin-top: 1px;
-    background-color: #ff8177;
-    background-image: linear-gradient(to top, #1b1b1b 0%, #9d0086 100%);
+    background-image: linear-gradient(to top, white 0%, orange 100%);
     background-size: 100%;
     -webkit-background-clip: text;
     -moz-background-clip: text;
@@ -678,8 +677,7 @@
     text-align: center;
     font-size: 3rem;
     margin-top: 1px;
-    background-color: #ff8177;
-    background-image: linear-gradient(to top, #1b1b1b 0%, #fa0000 100%);
+    background-image: linear-gradient(to top, white 0%, teal 100%);
     background-size: 100%;
     -webkit-background-clip: text;
     -moz-background-clip: text;

@@ -191,7 +191,29 @@
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   font-size: 1.1rem;
+  text-shadow: 
+     -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black;
   }
+  .team-header.eric{background-color: darkred;  }
+  .team-header.freddy{background-color: purple;}
+  .team-header.hamilton{background-color: cyan;}
+  .team-header.dave{background-color: pink;}
+  .team-header.colin{background-color: #4285f4;}
+  .team-header.garrett{background-color: #ea4335;}
+  .teamheader.jake{background-color: #d6a7ff;}
+  .team-header.austin{background-color: #fbbc04;}
+  .team-header.adam{background-color: #78532e;}
+  .team-header.jaco{background-color: darkgreen;}
+  .team-header.danny{background-color: orange;}
+  .team-header.reid{background-color: #57bb8a;}
+
+
+
+
+
   td.zero {
   background-color: #f44336; /* red */
   color: black;
@@ -244,6 +266,16 @@
     padding: 6px 8px;
   }
 }
+.spl-title {
+  color: orangered; /* Example: bright blue */
+  text-shadow: 1px 1px 0 black;
+}
+
+.mls-title {
+  color: teal; /* Example: orange */
+  text-shadow: 1px 1px 0 black;
+}
+
 </style>
 
 </head>
@@ -285,7 +317,7 @@
       >Submit Rosters</a
     >
     <a
-      href="https://docs.google.com/forms/d/e/1FAIpQLSfGI9ADmhChnR6SWIC_pg8r0EnL1RDRJXmqfgo2Quz4To03FA/viewform"
+      href="/waiver.html"
       target="_blank"
       rel="noopener noreferrer"
       class="big-button"
@@ -296,12 +328,12 @@
 
   <div id="roster-grid">
     <div class="roster-group" id="top-group">
-      <h2>Tier 1</h2>
+      <h2 class = "spl-title">Strikers Premier League</h2>
       <div class="roster-row" id="top-teams"></div>
     </div>
 
     <div class="roster-group" id="bottom-group">
-      <h2>Tier 2</h2>
+      <h2 class = "mls-title">Minor League Strikers</h2>
       <div class="roster-row" id="bottom-teams"></div>
     </div>
   </div>
@@ -395,8 +427,11 @@
   function buildRosterBox(data) {
     const teamName = data[0][0] || 'Unnamed Team';
 
+    // Normalize team name to lowercase, no spaces or special chars
+    const className = teamName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+
     let html = '<div class="roster-box">';
-    html += `<div class="team-header">${teamName}</div>`;
+    html += `<div class="team-header ${className}">${teamName}</div>`;
     html += '<table>';
 
     for (let i = 1; i < data.length; i++) {
@@ -417,6 +452,7 @@
     html += '</table></div>';
     return html;
   }
+
 
 
   fetch(sheetUrl)

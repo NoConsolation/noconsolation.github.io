@@ -160,7 +160,10 @@
 const container = document.getElementById('panelContainer'); // Your main grid container
 let panelIndex = 0;
 
-// Panel creation from A18:H29
+// Define the 12 ranges for each stat panel (adjust to your real ranges)
+
+
+// Initial fetch to build panels grid from A18:H29 (or your actual panel header location)
 fetch("https://script.google.com/macros/s/AKfycbwA1MIAHTAif1_al8IDs6KE3herlDSzZEvD6UqCOjq0sW068RBUzCePncNqaAAsGMk6EQ/exec")
   .then(res => res.json())
   .then(data => {
@@ -173,7 +176,7 @@ fetch("https://script.google.com/macros/s/AKfycbwA1MIAHTAif1_al8IDs6KE3herlDSzZE
         const headerData = data[row][col];
         const header = document.createElement('h3');
         header.textContent = headerData.value;
-        header.style.backgroundColor = '#333'; // Override sheet color if you want
+        header.style.backgroundColor = '#333';
         header.style.color = 'white';
         panel.appendChild(header);
 
@@ -196,106 +199,252 @@ fetch("https://script.google.com/macros/s/AKfycbwA1MIAHTAif1_al8IDs6KE3herlDSzZE
         panel.setAttribute('data-panel-index', panelIndex);
         panel.addEventListener('click', () => {
           const index = panel.getAttribute('data-panel-index');
-          openDetailForPanel(index);
+          openDetailForPanel(parseInt(index, 10));
         });
 
         container.appendChild(panel);
         panelIndex++;
       }
     }
-  });
+  })
+  .catch(err => console.error("Error loading panels:", err));
 
-// Fetch and show detail panel
-function openDetailForPanel(index) {
- fetch(`https://script.google.com/macros/s/AKfycbwA1MIAHTAif1_al8IDs6KE3herlDSzZEvD6UqCOjq0sW068RBUzCePncNqaAAsGMk6EQ/exec?panel=${index}`)
-    .then(res => res.json())
-    .then(data => {
-      console.log("Fetched panel data:",data);
-      showDetailModal(data);
-    })
-    .catch(err => {
-        console.error("error fetching panel detail:",err)
-    });
+
+// Fetch and show detail panel for clicked stat index
+const rangesByPanel = {
+  0: "a3:d8",
+  1: "e3:h7",
+  2: "i3:l7",
+  3: "m3:p7",
+  4: "a11:d16",
+  5: "e11:h15",
+  6: "i11:l15",
+  7: "m11:p15",
+  8: "a18:b25",
+  9: "e19:h23",
+  10: "i19:l23",
+  11: "m19:p23"
+};
+
+const titles = [
+  "Team Goals per Game",
+  "Goals per Game",
+  "Megastrike Goals per Game",
+  "Skill Shot Goals",
+  "Team Goals Against per Game",
+  "Striker Index",
+  "Impact",
+  "Skill Shot Assists",
+  "Map Goals per Game",
+  "Sidekick Goals per Game",
+  "Sidekick Impact",
+  "Skill Shot Participation"
+];
+
+function getRangeData(sheetData, range) {
+  const colToIndex = col => col.charCodeAt(0) - 'A'.charCodeAt(0);
+  const [start, end] = range.split(':');
+  const startCol = colToIndex(start[0]);
+  const startRow = parseInt(start.slice(1)) - 1;
+  const endCol = colToIndex(end[0]);
+  const endRow = parseInt(end.slice(1)) - 1;
+
+  // if sheetData has .values property, use that
+  const data = Array.isArray(sheetData) ? sheetData : (sheetData.values || []);
+
+  return data.slice(startRow, endRow + 1).map(row =>
+    row.slice(startCol, endCol + 1)
+  );
 }
 
-// Modal logic
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwA1MIAHTAif1_al8IDs6KE3herlDSzZEvD6UqCOjq0sW068RBUzCePncNqaAAsGMk6EQ/exec";
+
+function openDetailForPanel(index) {
+  fetch(`${SCRIPT_URL}?panel=${index}`)
+    .then(res => res.json())
+    .then(data => {
+      if (index === 8) {
+        // Panel 8: simple 8 rows x 2 cols, no SPL/MLS split
+        const rows = data.map(row => [row[0].value, row[1].value]);
+        showSimpleTableModal({
+          title: titles[index] || "Untitled",
+          rows: rows
+        });
+      } else {
+        // Default: split into SPL and MLS columns
+        const splRows = data.map(row => [row[0].value, row[1].value]);
+        const mlsRows = data.map(row => [row[2].value, row[3].value]);
+        showDetailModal([
+          { title: titles[index] || "Untitled SPL", rows: splRows },
+          { title: titles[index] || "Untitled MLS", rows: mlsRows }
+        ]);
+      }
+    })
+    .catch(err => console.error("Error fetching panel detail:", err));
+}
+
+
+
+// Keep your showDetailModal as is, but when setting textContent:
+// Example:
+// if (typeof value === 'number') value = value.toFixed(1);
+// td.textContent = value;
+
+
+
+// Modal logic and close button
 const modal = document.getElementById("detailModal");
 const closeBtn = document.getElementById("closeModal");
 closeBtn.onclick = () => modal.classList.remove("show");
 
 window.onclick = (event) => {
-    if (event.target == modal){
-        modal.classList.remove("show");
-    }
+  if (event.target === modal){
+    modal.classList.remove("show");
+  }
 };
 
-function showDetailModal(data) {
-  if (!data || !Array.isArray(data) || data.length === 0) {
-    console.warn("No valid data for modal.");
+// Your existing showDetailModal function to render the data nicely
+function showDetailModal(blocks,panelIndex) {
+  if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
+    console.warn("Invalid modal data.");
     return;
   }
-  console.log("Modal Data:", data);
-
 
   const container = document.getElementById("detailContent");
   container.innerHTML = "";
 
-  const table = document.createElement('table');
+  const table = document.createElement("table");
   table.style.width = "100%";
   table.style.borderCollapse = "collapse";
-  table.style.backgroundColor = "#0c850f";
+  table.style.tableLayout = "fixed";
 
-  // Create thead with one row: first cell value spanning 2 columns
-  const thead = document.createElement('thead');
-  const titleRow = document.createElement('tr');
-  const titleCell = document.createElement('th');
+  const thead = document.createElement("thead");
 
-  // Use first row, first cell value as title text
-  const titleText = data[0][0]?.value || "Detail Stats";
-  titleCell.colSpan = 3;
-  titleCell.textContent = titleText;
+  // Big title row spanning all 5 columns
+  const titleRow = document.createElement("tr");
+  const titleCell = document.createElement("th");
+  titleCell.colSpan = 5;
+  titleCell.textContent = blocks[0].title || "Untitled";
   titleCell.style.textAlign = "center";
   titleCell.style.fontWeight = "bold";
-  titleCell.style.fontSize = "1.2em";
+  titleCell.style.fontSize = "1.4em";
   titleCell.style.padding = "10px";
   titleCell.style.backgroundColor = "#333";
   titleCell.style.color = "white";
   titleCell.style.border = "1px solid #ccc";
-
   titleRow.appendChild(titleCell);
   thead.appendChild(titleRow);
+
+  // Header row: #, SPL (colspan=2), MLS (colspan=2)
+  const headerRow1 = document.createElement("tr");
+
+  const thNum = document.createElement("th");
+  thNum.rowSpan = 2;
+  thNum.textContent = "#";
+  thNum.style.border = "1px solid #ccc";
+  thNum.style.padding = "6px";
+  thNum.style.backgroundColor = "#ddd";
+  thNum.style.width = "10%";
+  headerRow1.appendChild(thNum);
+
+  const thSpl = document.createElement("th");
+  thSpl.colSpan = 2;
+  thSpl.textContent = "SPL";
+  thSpl.style.border = "1px solid #ccc";
+  thSpl.style.padding = "6px";
+  thSpl.style.backgroundColor = "orangered";
+  thSpl.style.color = "white";
+  thSpl.style.textAlign = "center";
+  thSpl.style.width = "45%";
+  headerRow1.appendChild(thSpl);
+
+  const thMls = document.createElement("th");
+  thMls.colSpan = 2;
+  thMls.textContent = "MLS";
+  thMls.style.border = "1px solid #ccc";
+  thMls.style.padding = "6px";
+  thMls.style.backgroundColor = "teal";
+  thMls.style.color = "white";
+  thMls.style.textAlign = "center";
+  thMls.style.width = "45%";
+  headerRow1.appendChild(thMls);
+
+  thead.appendChild(headerRow1);
+
   table.appendChild(thead);
 
-  // tbody for data rows, starting from 2nd row (index 1)
-  const tbody = document.createElement('tbody');
+  const tbody = document.createElement("tbody");
 
-  for(let i = 1; i < data.length; i++) {
-    const row = data[i];
-    const tr = document.createElement('tr');
+const modal = document.getElementById("detailModal");
 
-    const numTd = document.createElement('td');
-    numTd.textContent = i;  // counting starts at 1 for first data row
-    numTd.style.fontWeight = 'bold';
-    numTd.style.border = '1px solid #ccc';
-    numTd.style.padding = '5px';
-    numTd.style.backgroundColor = '#e0e0e0'; // light grey background
-    tr.appendChild(numTd);
+  // Use the max rows available from SPL or MLS rows for safety
+  const splLength = blocks[0].rows.length;
+  const mlsLength = blocks[1].rows.length;
+  const maxRows = Math.max(splLength, mlsLength);
 
-    // Assume two columns per row, create cells accordingly
-    for(let j = 0; j < 2; j++) {
-      const cell = row[j] || {};
-      const td = document.createElement('td');
-      let val = (cell && cell.value !== undefined && cell.value !== null) ? cell.value : "";
-      if (typeof val === "number") val = val.toFixed(1);
-      td.textContent = val;
-      td.style.backgroundColor = cell?.bgColor || "transparent";
-      td.style.border = "1px solid #ccc";
-      td.style.padding = "5px";
-      tr.appendChild(td);
-    }
+  // If you want to force 6 rows for panels 0 and 4, otherwise number of rows available:
+  const numRows = (panelIndex === 0 || panelIndex === 4) ? Math.max(6, maxRows) : maxRows;
+
+  // Then loop from 0 to numRows - 1
+  for (let i = 0; i < numRows; i++) {
+    const tr = document.createElement("tr");
+
+    // Row number
+    const tdNum = document.createElement("td");
+    tdNum.textContent = i + 1;
+    tdNum.style.fontWeight = "bold";
+    tdNum.style.border = "1px solid #ccc";
+    tdNum.style.padding = "6px";
+    tdNum.style.backgroundColor = "#f0f0f0";
+    tdNum.style.width = "10%";
+    tdNum.style.textAlign = "center";
+    tr.appendChild(tdNum);
+
+    // SPL Player name
+    const splPlayer = (blocks[0].rows[i] && blocks[0].rows[i][0]) ?? "";
+    const tdSplPlayer = document.createElement("td");
+    tdSplPlayer.textContent = splPlayer;
+    tdSplPlayer.style.border = "1px solid #ccc";
+    tdSplPlayer.style.padding = "6px";
+    tdSplPlayer.style.width = "22.5%";
+    tdSplPlayer.style.backgroundColor = "#f0f0f0";
+    tr.appendChild(tdSplPlayer);
+
+    // SPL Player number
+    let splNum = (blocks[0].rows[i] && blocks[0].rows[i][1]) ?? "";
+    if (typeof splNum === "number") splNum = splNum.toFixed(1);
+    const tdSplNum = document.createElement("td");
+    tdSplNum.textContent = splNum;
+    tdSplNum.style.border = "1px solid #ccc";
+    tdSplNum.style.padding = "6px";
+    tdSplNum.style.width = "22.5%";
+    tdSplNum.style.backgroundColor = "#f0f0f0";
+    tr.appendChild(tdSplNum);
+
+    // MLS Player name
+    const mlsPlayer = (blocks[1].rows[i] && blocks[1].rows[i][0]) ?? "";
+    const tdMlsPlayer = document.createElement("td");
+    tdMlsPlayer.textContent = mlsPlayer;
+    tdMlsPlayer.style.border = "1px solid #ccc";
+    tdMlsPlayer.style.padding = "6px";
+    tdMlsPlayer.style.width = "22.5%";
+    tdMlsPlayer.style.backgroundColor = "#f0f0f0";
+    tr.appendChild(tdMlsPlayer);
+
+    // MLS Player number
+    let mlsNum = (blocks[1].rows[i] && blocks[1].rows[i][1]) ?? "";
+    if (typeof mlsNum === "number") mlsNum = mlsNum.toFixed(1);
+    const tdMlsNum = document.createElement("td");
+    tdMlsNum.textContent = mlsNum;
+    tdMlsNum.style.border = "1px solid #ccc";
+    tdMlsNum.style.padding = "6px";
+    tdMlsNum.style.width = "22.5%";
+    tdMlsNum.style.backgroundColor = "#f0f0f0";
+    tr.appendChild(tdMlsNum);
 
     tbody.appendChild(tr);
   }
+
 
   table.appendChild(tbody);
   container.appendChild(table);
@@ -303,7 +452,75 @@ function showDetailModal(data) {
   modal.classList.add("show");
 }
 
+
+function showSimpleTableModal(block) {
+  const container = document.getElementById("detailContent");
+  container.innerHTML = "";
+
+  const table = document.createElement("table");
+  table.style.width = "100%";
+  table.style.borderCollapse = "collapse";
+
+  const thead = document.createElement("thead");
+
+  // Title row spanning 3 columns (# + 2 data columns)
+  const titleRow = document.createElement("tr");
+  const titleCell = document.createElement("th");
+  titleCell.colSpan = 3;
+  titleCell.textContent = block.title;
+  titleCell.style.textAlign = "center";
+  titleCell.style.backgroundColor = "#333";
+  titleCell.style.color = "white";
+  titleCell.style.padding = "10px";
+  titleRow.appendChild(titleCell);
+  thead.appendChild(titleRow);
+
+  // Header row
+
+  table.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+
+  block.rows.forEach((row, i) => {
+    const tr = document.createElement("tr");
+
+    // Row number
+    const tdNum = document.createElement("td");
+    tdNum.textContent = i + 1;
+    tdNum.style.border = "1px solid #ccc";
+    tdNum.style.padding = "6px";
+    tdNum.style.backgroundColor = "#f0f0f0";
+    tr.appendChild(tdNum);
+
+    // Column 1
+    const td1 = document.createElement("td");
+    td1.textContent = row[0];
+    td1.style.border = "1px solid #ccc";
+    td1.style.padding = "6px";
+    td1.style.backgroundColor='#f0f0f0';
+    tr.appendChild(td1);
+
+    // Column 2
+    const td2 = document.createElement("td");
+    td2.textContent = row[1];
+    td2.style.border = "1px solid #ccc";
+    td2.style.padding = "6px";
+    td2.style.backgroundColor='#f0f0f0';
+    tr.appendChild(td2);
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  container.appendChild(table);
+
+  // Show the modal
+  const modal = document.getElementById("detailModal");
+  modal.classList.add("show");
+}
+
 </script>
+
 
 
 </body>

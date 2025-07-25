@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>No Consolation</title>
+  <link rel="stylesheet" href="stylesspl.css" />
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+    crossorigin="anonymous"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* Reset and body */
+    body {
+      font-family: 'Kumbh Sans', sans-serif;
+      color: #a5a5a5;
+      margin: 0;
+      padding: 0 20px 40px;
+    }
+
+    /* Navbar and sub-navbar (assumed from your stylesheet, minimal override here) */
+    .navbar, .sub-navbar {
+      margin-bottom: 20px;
+    }
+
+    /* Top tables container */
+    #top-tables-container {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 20px auto 40px;
+      max-width: 900px;
+    }
+
+    /* Table common styles */
+    table {
+      width: 160px;
+      border-collapse: separate;
+      border-spacing: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+      transition: box-shadow 0.3s ease;
+    }
+
+
+
+    /* Header row */
+    thead tr:first-child th {
+      padding: 10px 0;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-align: center;
+      color: white;
+      user-select: none;
+    }
+
+    /* Grouped header colors */
+    #table1 thead tr:first-child th,
+    #table3 thead tr:first-child th {
+      background-color: orangered; /* Coral/orange */
+    }
+    #table2 thead tr:first-child th,
+    #table4 thead tr:first-child th {
+      background-color: teal; /* Teal */
+    }
+
+    /* Table body styles */
+    tbody tr:nth-child(odd) td {
+      background-color: #f0f0f0;
+    }
+    tbody tr:nth-child(even) td {
+      background-color: #e5e5e5;
+    }
+
+
+    /* Table cells */
+    tbody td {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      color: #333;
+      text-align: center;
+    }
+
+    /* Number column narrower */
+    tbody td:first-child {
+      width: 25px;
+      font-weight: 600;
+      color: #555;
+    }
+
+    /* Form label and selects */
+    label {
+      font-weight: 600;
+      margin-right: 8px;
+    }
+    select {
+      padding: 6px 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      min-width: 180px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+    }
+    select:focus {
+      border-color: teal;
+      outline: none;
+      box-shadow: 0 0 5px teal;
+    }
+
+    /* Layout form */
+    .form-row {
+      margin: 0 auto 24px;
+      max-width: 400px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 12px;
+      align-items: center;
+      justify-content: center;
+    }
+    .form-row label {
+      flex: 0 0 auto;
+    }
+    .form-row select {
+      flex: 1 1 auto;
+      min-width: 120px;
+    }
+  button[type="submit"] {
+    display: block;
+    margin: 30px auto 10px auto;
+    padding: 16px 0;
+    width: 250px; /* explicitly set width */
+    font-size: 1.2rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #8e44ad, #50a5d5);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+
+
+  button[type="submit"]:hover {
+    background: linear-gradient(135deg, #8e44ad, #50a5d5);
+    transform: scale(1.05);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+  }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navbar Section -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/" id="navbar__logo"><i class="fas fa-gem"></i>NC</a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+      </div>
+      <ul class="navbar__menu">
+        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+        <li class="navbar__item"><a href="/streaming.html" class="navbar__links">Streaming</a></li>
+        <li class="navbar__item"><a href="/podcasts.html" class="navbar__links">Podcasts</a></li>
+        <li class="navbar__item"><a href="/roster.html" class="navbar__links">Info</a></li>
+        <li class="navbar__item"><a href="/spl.html" class="navbar__links">SPL</a></li>
+        <li class="navbar__btn">
+          <a href="https://discord.gg/dzEZA3Jwm5" target="_blank" class="button">Get Notified</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Secondary Nav Bar -->
+  <nav class="sub-navbar">
+    <ul class="sub-navbar__menu">
+      <li><a href="/spl.html">SPL Home</a></li>
+      <li><a href="/spl-stats.html">Stats</a></li>
+      <li><a href="/spl-rosters.html">Rosters</a></li>
+      <li><a href="/splszn2.html">Season 2</a></li>
+    </ul>
+  </nav>
+
+  <!-- Top Tables -->
+  <div id="top-tables-container">
+    <table id="table1" border="0" aria-label="Table 1">
+      <thead><tr><th colspan="2">Table 1</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <table id="table3" border="0" aria-label="Table 3">
+      <thead><tr><th colspan="2">Table 3</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <table id="table2" border="0" aria-label="Table 2">
+      <thead><tr><th colspan="2">Table 2</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <table id="table4" border="0" aria-label="Table 4">
+      <thead><tr><th colspan="2">Table 4</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Dropdown form -->
+   <form id="coachForm">
+  <div class="form-row">
+    <label for="coach">Coach:</label>
+    <select id="coach" aria-label="Select coach">
+      <option value="">-- Select Coach --</option>
+      <option value="Adam">Adam</option>
+      <option value="Austin">Austin</option>
+      <option value="Colin">Colin</option>
+      <option value="Danny">Danny</option>
+      <option value="Dave">Dave</option>
+      <option value="Eric">Eric</option>
+      <option value="Freddy">Freddy</option>
+      <option value="Garrett">Garrett</option>
+      <option value="Hamilton">Hamilton</option>
+      <option value="Jaco">Jaco</option>
+      <option value="Jake">Jake</option>
+      <option value="Reid">Reid</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="option1">First Choice:</label>
+    <select id="option1" aria-label="First option">
+      <option value="">Select option</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="option2">Second Choice (optional):</label>
+    <select id="option2" aria-label="Second option">
+      <option value="">Select option</option>
+    </select>
+  </div>
+  <button type="submit">Submit</button>
+</form>
+
+  <script>
+    const group1Coaches = ['Eric','Austin','Danny','Jaco','Freddy','Adam'];
+    const group2Coaches = ['Colin', 'Hamilton', 'Dave', 'Reid', 'Jake', 'Garrett'];
+
+    const coachOptions = {};
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1166432758&single=true&output=csv';
+
+    // Fetch CSV and setup coach options and tables
+    fetch(csvUrl)
+      .then(res => res.text())
+      .then(csvText => {
+        const rows = csvText.trim().split('\n').map(row => row.split(','));
+        const colY = 24;  // Y column zero-based index
+        const colAJ = 35; // AJ column zero-based index
+
+        // Extract options for coaches from Y column ranges
+        const optionsGroup1 = [];
+        [1, 2].forEach(r => {
+          if (rows[r] && rows[r][colY]) optionsGroup1.push(rows[r][colY]);
+        });
+        const optionsGroup2 = [];
+        [4, 5].forEach(r => {
+          if (rows[r] && rows[r][colY]) optionsGroup2.push(rows[r][colY]);
+        });
+
+        // Assign options to coaches
+        group1Coaches.forEach(coach => {
+          coachOptions[coach] = optionsGroup1;
+        });
+        group2Coaches.forEach(coach => {
+          coachOptions[coach] = optionsGroup2;
+        });
+
+        // Helper to fill table with number and data columns
+        function fillTable(tableId, colIndex, startRow, endRow) {
+          const tbody = document.querySelector(`#${tableId} tbody`);
+          tbody.innerHTML = ''; // clear previous content
+
+          let count = 1;
+          for (let r = startRow - 1; r < endRow; r++) {
+            if (rows[r] && rows[r][colIndex]) {
+              const tr = document.createElement('tr');
+
+              // Number column
+              const tdNum = document.createElement('td');
+              tdNum.textContent = count++;
+              tr.appendChild(tdNum);
+
+              // Data column
+              const tdData = document.createElement('td');
+              tdData.textContent = rows[r][colIndex];
+              tr.appendChild(tdData);
+
+              tbody.appendChild(tr);
+            }
+          }
+        }
+
+        // Fill all four tables
+        fillTable('table1', colAJ, 2, 7);  // AJ2:AJ7
+        fillTable('table3', colY, 2, 3);   // Y2:Y3
+        fillTable('table2', colAJ, 9, 14); // AJ9:AJ14
+        fillTable('table4', colY, 5, 6);   // Y5:Y6
+
+        // Attach coach dropdown event AFTER options are ready
+        document.getElementById('coach').addEventListener('change', function () {
+          const coach = this.value;
+          const options = coachOptions[coach] || [];
+
+          ['option1', 'option2'].forEach(id => {
+            const select = document.getElementById(id);
+            select.innerHTML = ''; // clear previous options
+
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = 'Select option';
+            placeholder.disabled = true;
+            placeholder.selected = true;
+            select.appendChild(placeholder);
+
+            options.forEach(opt => {
+              const option = document.createElement('option');
+              option.value = opt;
+              option.textContent = opt;
+              select.appendChild(option);
+            });
+          });
+        });
+      })
+      .catch(err => {
+        console.error('Error fetching or parsing CSV:', err);
+      });
+    document.getElementById('coachForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const formData = new URLSearchParams();
+      formData.append("playername", document.getElementById('coach').value);
+      formData.append("claim1", document.getElementById('option1').value);
+      formData.append("claim2", document.getElementById('option2').value);
+
+      fetch("https://script.google.com/macros/s/AKfycbwmeu8aPdMrIrFEhBbXubYfhn6-WZkFvEwa5oOenPCCGNwJeQohHF97IKjxjkCzXllESw/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formData.toString(),
+      })
+      .then(response => response.text())
+      .then(result => {
+        alert("Submitted!");
+      })
+      .catch(err => {
+        alert("Error: " + err);
+      });
+    });
+
+
+
+  </script>
+
+  <!-- Footer Section (unchanged) -->
+  <div class="footer__container">
+    <div class="footer__links">
+      <div class="footer__link--wrapper">
+        <div class="footer__link--items">
+          <h2>About Us</h2>
+          <a href="/info.html">Mission</a>
+          <a href="/info.html">Vision</a>
+          <a href="/info.html">Roster</a>
+        </div>
+        <div class="footer__link--items">
+          <h2>Standings</h2>
+          <a href="/info.html">Statistics</a>
+        </div>
+      </div>
+      <div class="footer__link--wrapper">
+        <div class="footer__link--items">
+          <h2>Contact Us</h2>
+          <a href="https://discord.gg/dzEZA3Jwm5">Discord</a>
+        </div>
+        <div class="footer__link--items">
+          <h2>Social Media</h2>
+          <a href="https://twitch.tv/noconsolation" target="_blank">Twitch</a>
+          <a href="https://www.tiktok.com/@noconsolation?lang=en" target="_blank">TikTok</a>
+          <a href="https://www.youtube.com/@thereisnoconsolation" target="_blank">YouTube</a>
+          <a href="https://twitter.com/NoConsolation_" target="_blank">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <section class="social__media">
+      <div class="social__media--wrap">
+        <div class="footer__logo">
+          <a href="/" id="footer__logo"><i class="fas fa-gem"></i>No Consolation</a>
+        </div>
+        <p class="website__rights">© No Consolation 2023. All rights reserved</p>
+        <div class="social__icons">
+          <a class="social__icon--link" href="https://twitch.tv/noconsolation" target="_blank"><i class="fab fa-twitch"></i></a>
+          <a class="social__icon--link" href="https://discord.gg/dzEZA3Jwm5" target="_blank"><i class="fab fa-discord"></i></a>
+          <a class="social__icon--link" href="https://www.youtube.com/@thereisnoconsolation" target="_blank"><i class="fab fa-youtube"></i></a>
+          <a class="social__icon--link" href="https://twitter.com/NoConsolation_" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a class="social__icon--link" href="https://www.tiktok.com/@noconsolation?lang=en" target="_blank"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

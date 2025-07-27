@@ -509,14 +509,11 @@
     fetch('https://script.google.com/macros/s/AKfycbznqUaeQDaIsz9kmQsVowb-G7PeOkFN-7safQju32ziP6E9SB-sqflfJDSsNnsisFZB/exec', {
         method: 'POST',
         body: JSON.stringify(data)
-    }).then(res => {
-    if (res.ok) {
-        alert('Submitted!');
-        window.location.href = '/spl.html';
-    } else {
-        alert('Submission failed.');
-    }
+    })..then(res => {
+    if (res.ok) alert('Submitted!');
+    else alert('Submission failed.');
 })
+
     </script>
 
 

@@ -301,6 +301,15 @@
     }
     }
 
+  #rosterForm button:disabled {
+  background: #666 !important;
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+
+
 
   </style>
 </head>
@@ -807,6 +816,69 @@ fetch(sheetUrl)
 
 
 </script>
+<script>
+const submitButton = document.querySelector('#rosterForm button');
+
+function isPlayerExhausted(player, coach) {
+  const roster = rosterDataByCoach[coach];
+  const playerRow = roster?.find(row => row[0] === player);
+  const fitness = parseInt(playerRow?.[1]);
+  return fitness === 0 && (fitness - 1) === -1;
+}
+
+function validateFormLive() {
+  const coach = document.getElementById('playername').value;
+  const teamname = document.getElementById('teamname').value.trim();
+  const captain = document.getElementById('captain').value;
+  const topmid = document.getElementById('topmid').value;
+  const botmid = document.getElementById('botmid').value;
+  const def = document.getElementById('def').value;
+
+  const selectedPlayers = [captain, topmid, botmid, def].filter(p => p);
+  const uniquePlayers = new Set(selectedPlayers);
+  const hasDuplicates = uniquePlayers.size !== selectedPlayers.length;
+
+  const mapSelections = [];
+  for (let i = 1; i <= 7; i++) {
+    const val = document.getElementById(`map${i}`)?.value;
+    if (val) mapSelections.push(val);
+  }
+  const uniqueMaps = new Set(mapSelections);
+  const mapsValid = uniqueMaps.size === mapSelections.length && mapSelections.length === 7;
+
+  const isExhausted = coach && selectedPlayers.some(p => isPlayerExhausted(p, coach));
+
+  const allRequiredFilled =
+    coach && teamname &&
+    selectedPlayers.length === 4 &&
+    mapSelections.length === 7;
+
+  const messages = [];
+
+  if (!allRequiredFilled) messages.push('Please complete all fields');
+  if (isExhausted) messages.push('One or more players have no fitness left');
+  if (hasDuplicates) messages.push('Ensure all selected players are unique');
+  if (!mapsValid) messages.push('Ensure all selected maps are unique');
+
+  const valid = messages.length === 0;
+  submitButton.disabled = !valid;
+  submitButton.title = valid ? '' : messages.join('\n');
+}
+
+
+// Watch inputs for changes
+['playername', 'teamname', 'captain', 'topmid', 'botmid', 'def'].forEach(id =>
+  document.getElementById(id).addEventListener('change', validateFormLive)
+);
+
+for (let i = 1; i <= 7; i++) {
+  document.getElementById(`map${i}`).addEventListener('change', validateFormLive);
+}
+
+// Run once on page load
+validateFormLive();
+</script>
+
 
    
 </body>

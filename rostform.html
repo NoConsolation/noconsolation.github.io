@@ -510,10 +510,13 @@
         method: 'POST',
         body: JSON.stringify(data)
     }).then(res => {
-        if (res.ok) alert('Submitted!');
-        else alert('Submission failed.');
-    });
-    });
+    if (res.ok) {
+        alert('Submitted!');
+        window.location.href = '/spl.html';
+    } else {
+        alert('Submission failed.');
+    }
+})
     </script>
 
 

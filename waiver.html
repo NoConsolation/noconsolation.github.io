@@ -263,8 +263,8 @@
       .then(res => res.text())
       .then(csvText => {
         const rows = csvText.trim().split('\n').map(row => row.split(','));
-        const colY = 24;  // Y column zero-based index
-        const colAJ = 35; // AJ column zero-based index
+        const colY = 26;  // Y column zero-based index
+        const colAJ = 38; // AJ column zero-based index
 
         // Extract options for coaches from Y column ranges
         const optionsGroup1 = [];

@@ -66,15 +66,17 @@
     #sheet-data th, #sheet-data td {
       border: 1px solid #ccc;
       padding: 8px;
-      text-align: left;
+      text-align: center;
     }
     .table1 thead tr {
       background-color: orangered;
       color: white;
+      justify-content: center;
     }
     .table2 thead tr {
       background-color: teal;
       color: white;
+      justify-content: center;
     }
 
     
@@ -116,7 +118,7 @@
 
 
   <!-- Google Sheet Content -->
-  <div id="sheet-data" style="padding: 100px;">Loading data...</div>
+  <div id="sheet-data" style="margin-left: 100px;margin-right: 100px; margin-top: 10px; margin-bottom: 5px;">Loading data...</div>
 
   <script>
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1520901699&single=true&output=csv';
@@ -126,7 +128,7 @@
     }
 
     function buildTable(headerRow, bodyRows, tableClass) {
-      const columnIndexes = [0, 1, 3, 4, 7];
+      const columnIndexes = [0, 1, 3, 4, 7, 5, 6];
       
       let html = `<table class="${tableClass}"><thead><tr>`;
       columnIndexes.forEach(index => {
@@ -186,8 +188,9 @@
 
 
 
-
-  <div id="schedule" style="padding:100px; margin-top:40px;">Loading schedule...</div>
+  <h1 class="sched-title">Schedule</h1>
+  <div id="schedule" style="margin-left: 100px;margin-right: 100px; margin-top: 5px; margin-bottom: 5px;">Loading schedule...</div>
+ 
 
   <style>
     #schedule {
@@ -261,7 +264,22 @@
   .match-box.orangered {
     border-color: #de451f;
   }
-
+    .sched-title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 40px;
+      margin-bottom: 5px;
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(to bottom, rgb(0, 0, 0),rgb(255, 255, 255));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      border: none;
+      outline: none;
+    }
 
   </style>
 

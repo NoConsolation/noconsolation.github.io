@@ -497,6 +497,10 @@
         return;
     }
 
+      const submitButton = e.target.querySelector('button');
+      submitButton.disabled = true;
+
+    
     // ✅ If all validations pass, prepare data and submit
     const data = {
         playername,
@@ -521,6 +525,7 @@
     }).then(res => {
         if (res.ok) alert('Submitted!');
         else alert('Submission failed.');
+          submitButton.disabled = false;
     });
     });
     </script>

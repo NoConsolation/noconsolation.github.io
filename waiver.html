@@ -102,20 +102,22 @@
       margin-right: 8px;
     }
     select {
+      width: 180px;  /* fixed width so it doesn't shrink */
+      min-width: 180px;
       padding: 6px 10px;
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 6px;
-      min-width: 180px;
-      margin-bottom: 16px;
       cursor: pointer;
       transition: border-color 0.2s ease;
     }
+
     select:focus {
       border-color: teal;
       outline: none;
       box-shadow: 0 0 5px teal;
     }
+
 
     /* Layout form */
     .form-row {
@@ -125,8 +127,9 @@
       flex-wrap: wrap;
       gap: 10px 12px;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
     }
+
     .form-row label {
       flex: 0 0 auto;
     }
@@ -248,128 +251,173 @@
       <option value="">Select option</option>
     </select>
   </div>
+  <div class="form-row">
+    <label for="droppedPlayer">Dropped Player:</label>
+    <select id="droppedPlayer" name="droppedPlayer" aria-label="Dropped player">
+      <option value="">Select a player</option>
+    </select>
+  </div>
+
+  
+
   <button type="submit">Submit</button>
 </form>
 
-  <script>
-    const group1Coaches = ['Eric','Austin','Danny','Jaco','Freddy','Adam'];
-    const group2Coaches = ['Colin', 'Hamilton', 'Dave', 'Reid', 'Jake', 'Garrett'];
 
-    const coachOptions = {};
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1166432758&single=true&output=csv';
 
-    // Fetch CSV and setup coach options and tables
-    fetch(csvUrl)
-      .then(res => res.text())
-      .then(csvText => {
-        const rows = csvText.trim().split('\n').map(row => row.split(','));
-        const colY = 26;  // Y column zero-based index
-        const colAJ = 38; // AJ column zero-based index
+<script>
+  const group1Coaches = ['Eric','Austin','Danny','Jaco','Freddy','Adam'];
+  const group2Coaches = ['Colin', 'Hamilton', 'Dave', 'Reid', 'Jake', 'Garrett'];
 
-        // Extract options for coaches from Y column ranges
-        const optionsGroup1 = [];
-        [1, 2].forEach(r => {
-          if (rows[r] && rows[r][colY]) optionsGroup1.push(rows[r][colY]);
-        });
-        const optionsGroup2 = [];
-        [4, 5].forEach(r => {
-          if (rows[r] && rows[r][colY]) optionsGroup2.push(rows[r][colY]);
-        });
+  const coachOptions = {};
+  const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1166432758&single=true&output=csv';
 
-        // Assign options to coaches
-        group1Coaches.forEach(coach => {
-          coachOptions[coach] = optionsGroup1;
-        });
-        group2Coaches.forEach(coach => {
-          coachOptions[coach] = optionsGroup2;
-        });
+  // Roster CSV URL
+  const rosterCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1896446593&single=true&output=csv';
 
-        // Helper to fill table with number and data columns
-        function fillTable(tableId, colIndex, startRow, endRow) {
-          const tbody = document.querySelector(`#${tableId} tbody`);
-          tbody.innerHTML = ''; // clear previous content
+  function parseCSV(text) {
+    return text.trim().split('\n').map(row => row.split(','));
+  }
 
-          let count = 1;
-          for (let r = startRow - 1; r < endRow; r++) {
-            if (rows[r] && rows[r][colIndex]) {
-              const tr = document.createElement('tr');
+  function extractRange(data, startCol, endCol, startRow, endRow) {
+    return data.slice(startRow, endRow + 1).map(row => row.slice(startCol, endCol + 1));
+  }
 
-              // Number column
-              const tdNum = document.createElement('td');
-              tdNum.textContent = count++;
-              tr.appendChild(tdNum);
+  Promise.all([fetch(csvUrl).then(r => r.text()), fetch(rosterCsvUrl).then(r => r.text())])
+    .then(([claimsText, rosterText]) => {
+      const rows = parseCSV(claimsText);
+      const rosterRows = parseCSV(rosterText);
 
-              // Data column
-              const tdData = document.createElement('td');
-              tdData.textContent = rows[r][colIndex];
-              tr.appendChild(tdData);
+      // Build coachOptions for option1 and option2 selects
+      const colY = 26;  // Y column zero-based index
+      const colAJ = 38; // AJ column zero-based index
 
-              tbody.appendChild(tr);
-            }
+      const optionsGroup1 = [];
+      [1, 2].forEach(r => {
+        if (rows[r] && rows[r][colY]) optionsGroup1.push(rows[r][colY].trim());
+      });
+      const optionsGroup2 = [];
+      [4, 5].forEach(r => {
+        if (rows[r] && rows[r][colY]) optionsGroup2.push(rows[r][colY].trim());
+      });
+
+      group1Coaches.forEach(coach => {
+        coachOptions[coach] = optionsGroup1.slice();
+      });
+      group2Coaches.forEach(coach => {
+        coachOptions[coach] = optionsGroup2.slice();
+      });
+
+      // Fill tables as before
+      function fillTable(tableId, colIndex, startRow, endRow) {
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        tbody.innerHTML = '';
+
+        let count = 1;
+        for (let r = startRow - 1; r < endRow; r++) {
+          if (rows[r] && rows[r][colIndex]) {
+            const tr = document.createElement('tr');
+
+            const tdNum = document.createElement('td');
+            tdNum.textContent = count++;
+            tr.appendChild(tdNum);
+
+            const tdData = document.createElement('td');
+            tdData.textContent = rows[r][colIndex];
+            tr.appendChild(tdData);
+
+            tbody.appendChild(tr);
           }
         }
+      }
 
-        // Fill all four tables
-        fillTable('table1', colAJ, 2, 7);  // AJ2:AJ7
-        fillTable('table3', colY, 2, 3);   // Y2:Y3
-        fillTable('table2', colAJ, 9, 14); // AJ9:AJ14
-        fillTable('table4', colY, 5, 6);   // Y5:Y6
+      fillTable('table1', colAJ, 2, 7);
+      fillTable('table3', colY, 2, 3);
+      fillTable('table2', colAJ, 9, 14);
+      fillTable('table4', colY, 5, 6);
 
-        // Attach coach dropdown event AFTER options are ready
-        document.getElementById('coach').addEventListener('change', function () {
-          const coach = this.value;
-          const options = coachOptions[coach] || [];
+      // Build rosterDataByCoach from rosterRows
+      const rosterDataByCoach = {};
+      for (let rowBox = 0; rowBox < 2; rowBox++) {
+        for (let colBox = 0; colBox < 6; colBox++) {
+          const startCol = 1 + colBox * 2;
+          const endCol = startCol + 1;
+          const startRow = 1 + rowBox * 8;
+          const endRow = startRow + 7;
 
-          ['option1', 'option2'].forEach(id => {
-            const select = document.getElementById(id);
-            select.innerHTML = ''; // clear previous options
+          const boxData = extractRange(rosterRows, startCol, endCol, startRow, endRow);
+          const coachName = boxData[0] && boxData[0][0] ? boxData[0][0].trim() : null;
+          if (coachName) rosterDataByCoach[coachName] = boxData;
+        }
+      }
 
-            const placeholder = document.createElement('option');
-            placeholder.value = '';
-            placeholder.textContent = 'Select option';
-            placeholder.disabled = true;
-            placeholder.selected = true;
-            select.appendChild(placeholder);
+      // UI wiring: populate selects on coach change
+      const coachSelect = document.getElementById('coach');
+      const dropContainer = document.getElementById('drop-player-container');
+      const droppedPlayerSelect = document.getElementById('droppedPlayer');
 
-            options.forEach(opt => {
-              const option = document.createElement('option');
-              option.value = opt;
-              option.textContent = opt;
-              select.appendChild(option);
-            });
+      coachSelect.addEventListener('change', function () {
+        const coach = this.value;
+        const options = coachOptions[coach] || [];
+
+        // Populate option1 & option2 selects
+        ['option1', 'option2'].forEach(id => {
+          const select = document.getElementById(id);
+          select.innerHTML = '';
+
+          const placeholder = document.createElement('option');
+          placeholder.value = '';
+          placeholder.textContent = 'Select option';
+          placeholder.disabled = true;
+          placeholder.selected = true;
+          select.appendChild(placeholder);
+
+          options.forEach(opt => {
+            const option = document.createElement('option');
+            option.value = opt;
+            option.textContent = opt;
+            select.appendChild(option);
           });
         });
-      })
-      .catch(err => {
-        console.error('Error fetching or parsing CSV:', err);
-      });
-    document.getElementById('coachForm').addEventListener('submit', function(e) {
-      e.preventDefault();
 
-      const formData = new URLSearchParams();
-      formData.append("playername", document.getElementById('coach').value);
-      formData.append("claim1", document.getElementById('option1').value);
-      formData.append("claim2", document.getElementById('option2').value);
+        // Populate droppedPlayer select with last 5 players from roster
+        droppedPlayerSelect.innerHTML = '';
+        const placeholderDrop = document.createElement('option');
+        placeholderDrop.value = '';
+        placeholderDrop.textContent = 'Select a player';
+        placeholderDrop.disabled = true;
+        placeholderDrop.selected = true;
+        droppedPlayerSelect.appendChild(placeholderDrop);
 
-      fetch("https://script.google.com/macros/s/AKfycbwmeu8aPdMrIrFEhBbXubYfhn6-WZkFvEwa5oOenPCCGNwJeQohHF97IKjxjkCzXllESw/exec", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: formData.toString(),
-      })
-      .then(response => response.text())
-      .then(result => {
-        alert("Submitted!");
-      })
-      .catch(err => {
-        alert("Error: " + err);
+        const rosterBox = rosterDataByCoach[coach] || [];
+        const players = rosterBox
+          .slice(1)
+          .map(r => (r && r[0]) ? r[0].trim() : '')
+          .filter(Boolean);
+
+        const uniquePlayers = Array.from(new Set(players));
+        const lastFive = uniquePlayers.slice(-5);
+
+        lastFive.forEach(player => {
+          const opt = document.createElement('option');
+          opt.value = player;
+          opt.textContent = player;
+          droppedPlayerSelect.appendChild(opt);
+        });
+
+        // Ensure the dropped player container is always visible
+        dropContainer.style.display = 'block';
       });
+
+    })
+    .catch(err => {
+      console.error('Error fetching or parsing CSVs:', err);
     });
+</script>
 
 
 
-  </script>
+
 
   <!-- Footer Section (unchanged) -->
   <div class="footer__container">

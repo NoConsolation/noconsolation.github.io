@@ -202,9 +202,7 @@
 
     /* Put Coach Name and Team Name on the same row */
     #rosterForm label[for="playername"],
-    #rosterForm label[for="teamname"],
-    #rosterForm select#playername,
-    #rosterForm input#teamname {
+    #rosterForm select#playername{
     flex: 1 1 calc(50% - 10px);
     min-width: 300px;
     }
@@ -372,10 +370,7 @@
     </select>
   </div>
 
-  <div class="form-group">
-    <label for="teamname">Team Name:</label>
-    <input type="text" id="teamname" name="teamname" placeholder="1st Week Only" required />
-    </div>
+
     </div>
 
     <div class="form-row">
@@ -445,7 +440,6 @@
     e.preventDefault();
 
     const playername = document.getElementById('playername').value;
-    const teamname = document.getElementById('teamname').value.trim();
     const captain = document.getElementById('captain').value;
     const topmid = document.getElementById('topmid').value;
     const botmid = document.getElementById('botmid').value;
@@ -504,7 +498,6 @@
     // ✅ If all validations pass, prepare data and submit
     const data = {
         playername,
-        teamname,
         captain,
         topmid,
         botmid,
@@ -754,7 +747,6 @@ fetch(sheetUrl)
         Reid: "Reid Hot Chili Strikers"
     };
 
-
     function updateRosterDisplay(coach) {
     const displayDiv = document.getElementById('roster-display');
     const captain = document.getElementById('captain').value;
@@ -834,7 +826,6 @@ function isPlayerExhausted(player, coach) {
 
 function validateFormLive() {
   const coach = document.getElementById('playername').value;
-  const teamname = document.getElementById('teamname').value.trim();
   const captain = document.getElementById('captain').value;
   const topmid = document.getElementById('topmid').value;
   const botmid = document.getElementById('botmid').value;
@@ -855,7 +846,7 @@ function validateFormLive() {
   const isExhausted = coach && selectedPlayers.some(p => isPlayerExhausted(p, coach));
 
   const allRequiredFilled =
-    coach && teamname &&
+    coach && 
     selectedPlayers.length === 4 &&
     mapSelections.length === 7;
 
@@ -873,7 +864,7 @@ function validateFormLive() {
 
 
 // Watch inputs for changes
-['playername', 'teamname', 'captain', 'topmid', 'botmid', 'def'].forEach(id =>
+['playername', 'captain', 'topmid', 'botmid', 'def'].forEach(id =>
   document.getElementById(id).addEventListener('change', validateFormLive)
 );
 
@@ -889,4 +880,3 @@ validateFormLive();
    
 </body>
 </html>
-

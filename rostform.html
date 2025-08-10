@@ -308,6 +308,10 @@
 }
 
 
+.taken-map { color: grey !important; font-style: italic; }
+
+
+
 
   </style>
 </head>
@@ -811,6 +815,53 @@ fetch(sheetUrl)
         });
     }
     }
+    const USE_TEXT_FALLBACK = true;
+
+// Call this after your populateMapDropdowns() creates options
+function grayOutSelectedMaps() {
+  // gather selects
+  const mapSelects = [];
+  for (let i = 1; i <= 7; i++) {
+    const s = document.getElementById(`map${i}`);
+    if (s) mapSelects.push(s);
+  }
+  // which maps are chosen right now
+  const selected = mapSelects.map(s => s.value).filter(v => v);
+
+  mapSelects.forEach(select => {
+    Array.from(select.options).forEach(opt => {
+      // store original label so we can restore it
+      if (!opt.dataset.originalLabel) opt.dataset.originalLabel = opt.textContent;
+
+      const takenByOther = opt.value && selected.includes(opt.value) && opt.value !== select.value;
+
+      // try to style the option (works in some browsers)
+      if (takenByOther) {
+        opt.classList.add('taken-map');
+        try { opt.style.color = 'grey'; } catch (e) { /* some browsers ignore styling */ }
+
+        // fallback: append text so users see it's taken
+        if (USE_TEXT_FALLBACK) opt.textContent = opt.dataset.originalLabel;
+      } else {
+        opt.classList.remove('taken-map');
+        opt.style.color = '';
+        opt.textContent = opt.dataset.originalLabel;
+      }
+    });
+  });
+}
+
+for (let i = 1; i <= 7; i++) {
+  const s = document.getElementById(`map${i}`);
+  if (s) s.addEventListener('change', grayOutSelectedMaps);
+}
+
+grayOutSelectedMaps();
+
+
+  document.querySelectorAll('.map-select').forEach(s => {
+    s.addEventListener('change', updateMapStyles);
+  });
 
 
 </script>

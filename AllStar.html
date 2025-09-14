@@ -312,7 +312,7 @@ for (let i = 0; i < 3; i++) {
 
     // Dropdown
     const select = document.createElement("select");
-    select.name = tableDef.id + "_select" + (i + 1);
+    select.name = tableDef.id.toLowerCase() + "_" + (i + 1);
     select.required = true;
     select.style.width = "100%";  // fill the container width
     select.style.fontSize = "16px";  

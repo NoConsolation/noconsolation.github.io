@@ -370,11 +370,12 @@ document.getElementById("submitVote").addEventListener("click", function () {
 
   const data = { voter };
 
-  categories.forEach(cat => {
+    categories.forEach(cat => {
     for (let i = 1; i <= 3; i++) {
-      data[`${cat}_${i}`] = getSelectVal(`${cat}_select${i}`);
+        data[`${cat}_${i}`] = getSelectVal(`${cat}_${i}`);
     }
-  });
+    });
+
 
   fetch('https://script.google.com/macros/s/AKfycbwkWrb7LxXMV59wPgU2xjRw3VDvCmqP1HWApjhUTHzXev3PEZwJmwm9rtz86BUy4w/exec', {
     method: 'POST',

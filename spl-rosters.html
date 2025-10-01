@@ -203,7 +203,7 @@
   .team-header.dave{background-color: pink;}
   .team-header.colin{background-color: #4285f4;}
   .team-header.garrett{background-color: #ea4335;}
-  .team-header.jake{background-color: #d4a7fc;}
+  .team-header.jake{background-color: #d6a7ff;}
   .team-header.austin{background-color: #fbbc04;}
   .team-header.adam{background-color: #78532e;}
   .team-header.jaco{background-color: darkgreen;}
@@ -277,6 +277,127 @@
 }
 
 </style>
+
+<style>
+          .ticker-wrapper {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    top: 0;
+    z-index: 1000;
+    background: repeating-linear-gradient(
+    45deg,
+    orangered 0,
+    orangered 20px,
+    teal 20px,
+    teal 40px
+    );
+    background-size: 56.57px 56.57px; /* length of diagonal stripe pattern */
+    animation: background-scroll 1s linear infinite;
+    display: flex;
+    align-items: center;
+    padding-right: 40px;
+
+    }
+
+    @keyframes background-scroll {
+        0% {
+        background-position: 0 0;
+        }
+        100% {
+        background-position: -56.57px 0; /* scroll left exactly one full pattern */
+        }
+    }
+
+    .ticker {
+        display: inline-block;
+        white-space: nowrap;
+        animation: scroll-left 15s linear infinite;
+        flex-grow: 0;
+        width: auto;
+    }
+
+    .ticker span {
+        display: inline-block;
+        padding: 10px 50px; /* add some horizontal padding */
+        font-weight: bold;
+        font-size: 1rem;
+        white-space: nowrap;
+        color: white;
+        text-shadow:
+        -1px -1px 0 black,
+        1px -1px 0 black,
+        -1px 1px 0 black,
+        1px 1px 0 black;
+    }
+    .ticker-close {
+        position: absolute !important;
+        right: 10px;
+        top: 50%;
+        background-color: transparent;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        border: none !important;
+        color: white !important;
+        font-size: 1.5rem !important;
+        font-weight: bold !important;
+        cursor: pointer !important;
+        user-select: none !important;
+        padding: 0 !important;
+        line-height: 1 !important;
+        text-shadow:
+        -1px -1px 0 black,
+        1px -1px 0 black,
+        -1px  1px 0 black,
+        1px  1px 0 black !important;
+        transition: color 0.3s !important;
+        z-index: 1002 !important;
+    }
+
+    .ticker-close:hover {
+        color: #ddd;
+    }
+
+    /* Animate from 0 to -50% since we have 2 copies */
+    @keyframes scroll-left {
+        0% {
+        transform: translateX(0%);
+        }
+        100% {
+        transform: translateX(-50%);
+        }
+    }
+    .ticker-link {
+        display: flex;
+        flex-grow: 1;
+        text-decoration: none;
+        height: 100%;
+        align-items: center;
+    }
+    .ticker-link:hover {
+        cursor: pointer;
+    }
+
+    </style>
+    <!--
+   <div class="ticker-wrapper" id="ticker-wrapper">
+    <a href="AllStar.html" target="_blank" rel="noopener noreferrer" class="ticker-link">
+      <div class="ticker">
+        <span>🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE</span>
+        <span>🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨</span>
+      </div>
+    </a>
+    <button class="ticker-close" id="ticker-close" aria-label="Close ticker">X</button>
+    </div>
+    <script>
+          document.querySelector('.ticker-close').addEventListener('click', function(event) {
+        event.stopPropagation(); // prevent link click
+        this.parentElement.style.display = 'none';
+      });
+    </script>
+  -->
 
 </head>
 <body>

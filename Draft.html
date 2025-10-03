@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>No Consolation</title>
+  <link rel="stylesheet" href="stylesspl.css" />
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+    crossorigin="anonymous"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* Reset and body */
+    body {
+      font-family: 'Kumbh Sans', sans-serif;
+      color: #a5a5a5;
+      margin: 0;
+      padding: 0 20px 40px;
+    }
+
+    /* Navbar and sub-navbar (assumed from your stylesheet, minimal override here) */
+    .navbar, .sub-navbar {
+      margin-bottom: 20px;
+    }
+
+
+
+
+    /* Form label and selects */
+    label {
+      font-weight: 600;
+      margin-right: 8px;
+    }
+    select {
+      width: 180px;  /* fixed width so it doesn't shrink */
+      min-width: 180px;
+      padding: 6px 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+    }
+
+    select:focus {
+      border-color: teal;
+      outline: none;
+      box-shadow: 0 0 5px teal;
+    }
+
+
+    /* Layout form */
+    .form-row {
+      margin: 0 auto 24px;
+      max-width: 400px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 12px;
+      align-items: left;
+      justify-content: space-between;
+    }
+
+    .form-row label {
+      flex: 0 0 auto;
+    }
+    .form-row select {
+      flex: 1 1 auto;
+      min-width: 120px;
+    }
+  button[type="submit"] {
+    display: block;
+    margin: 30px auto 10px auto;
+    padding: 16px 0;
+    width: 250px; /* explicitly set width */
+    font-size: 1.2rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #8e44ad, #50a5d5);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+
+
+  button[type="submit"]:hover {
+    background: linear-gradient(135deg, #8e44ad, #50a5d5);
+    transform: scale(1.05);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+  }
+.dashboard-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1000px;
+  margin: 40px auto;
+  gap: 20px;
+}
+
+#budgetTable {
+  flex: 0 0 300px;
+  border-collapse: collapse;
+  background-color: #f0f0f0;
+  color: #333;
+  font-size: 1rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+#budgetTable th, #budgetTable td {
+  padding: 10px 15px;
+  text-align: left;
+}
+
+#budgetTable thead th {
+  background-color: #7f8c8d;
+  color: #fff;
+  font-weight: 600;
+  border-bottom: 2px solid #555;
+}
+
+#budgetTable tbody tr {
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+#budgetTable th:nth-child(1),
+#budgetTable td:nth-child(1) {
+  width: 70%;
+}
+
+#budgetTable th:nth-child(2),
+#budgetTable td:nth-child(2) {
+  width: 30%;
+  text-align: center;
+}
+
+@keyframes budgetUpdate {
+  0% { background-color: #0c7925; }  /* light green start */
+  100% { background-color: #f0f0f0; }
+}
+
+.highlight-row {
+  animation: budgetUpdate 4s ease forwards;
+}
+
+.dashboard {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+
+.new-bubble {
+  transform: translateX(50%) scale(0.9);
+  opacity: 0;
+  animation: slideFadeScale 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideFadeScale {
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+.player-card {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 15px 20px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  border: 2px solid #e74c3c;
+  color: black;
+  font-family: 'Kumbh Sans', sans-serif;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.player-card h2 {
+  margin: 0 0 10px;
+  font-size: 1.6rem;
+  color: #e74c3c;
+  text-align: center;
+}
+.player-stats {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+.player-stats div {
+  background: #f0f0f0;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+#draftedRostersContainer {
+  max-width: 1000px;
+  margin: 200px auto;
+  padding: 25px 20px;
+}
+
+.drafted-rosters-table {
+  width: 1010px;
+  margin:0 auto;
+  table-layout: fixed; /* evenly spaced columns */
+  border-collapse: collapse; /* needed for vertical borders */
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  
+}
+
+.drafted-rosters-table th,
+.drafted-rosters-table td {
+  padding: 4px 8px; /* more space vertically and horizontally */
+  text-align: center;
+  border-bottom: 1px solid #ccc; /* horizontal row separation */
+  border-right: 1px solid #ccc;  /* vertical column separation */
+  height: 30px; /* fixed row height for even spacing */
+  box-sizing: border-box;
+}
+
+.drafted-rosters-table th:last-child,
+.drafted-rosters-table td:last-child {
+  border-right: none; /* remove border on last column */
+}
+.drafted-rosters-table tbody tr:nth-child(3) td {
+  border-top: 3px solid #ccc; /* thicker border between captains and sidekicks */
+}
+
+.drafted-rosters-table th {
+  font-weight: 600;
+  font-size: .8rem;
+  color: #fff;
+  background-color: #e74c3c;
+}
+
+.drafted-rosters-table td {
+  font-weight: 500;
+  color: #333;
+}
+
+
+/* Rounded corners for top and bottom row */
+.drafted-rosters-table thead th:first-child {
+  border-top-left-radius: 10px;
+}
+.drafted-rosters-table thead th:last-child {
+  border-top-right-radius: 10px;
+}
+.drafted-rosters-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+.drafted-rosters-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+  </style>
+</head>
+<body>
+<style>
+.draft-form {
+  max-width: 400px;
+  padding: 20px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  color: #fff;
+  font-family: 'Kumbh Sans', sans-serif;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.coach-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.change-coach-btn {
+  background: #444;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.change-coach-btn:hover {
+  background: #666;
+}
+
+.bid-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.bid-input {
+  width: 100%;
+  font-size: 2rem;
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #8e44ad, #50a5d5);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.submit-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+#playerTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f0f0f0; /* dark background to match site */
+  color: #333;
+  border: 1px solid #444;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#playerTable th {
+  background: var(--header-color); /* will match dropdown color */
+  color: white;
+  text-align: left;
+  padding: 10px;
+}
+
+#playerTable td {
+  border-bottom: 1px solid #444;
+  padding: 5px;
+}
+/* highlight style for selected player */
+
+#playerListContainer {
+  flex: 0 0 250px;        /* fixed width for the column */
+  max-height: 400px;      /* sets the scrollable height */
+  overflow-y: auto;       /* makes it scrollable */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f0f0f0;
+  padding: 5px;
+}
+
+</style>
+  <!-- Navbar Section -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/" id="navbar__logo"><i class="fas fa-gem"></i>NC</a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+      </div>
+      <ul class="navbar__menu">
+        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+        <li class="navbar__item"><a href="/streaming.html" class="navbar__links">Streaming</a></li>
+        <li class="navbar__item"><a href="/podcasts.html" class="navbar__links">Podcasts</a></li>
+        <li class="navbar__item"><a href="/roster.html" class="navbar__links">Info</a></li>
+        <li class="navbar__item"><a href="/spl.html" class="navbar__links">SPL</a></li>
+        <li class="navbar__btn">
+          <a href="https://discord.gg/dzEZA3Jwm5" target="_blank" class="button">Get Notified</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+<div id="showSelectedPlayer" class="player-card" style="display:none;"></div>
+<div class="dashboard-container">
+    <div id="playerListContainer">
+  <table id="playerTable">
+    <thead>
+      <tr>
+        <th>Players</th>
+      </tr>
+    </thead>
+    <tbody id="playerList">
+      <!-- Filled dynamically -->
+    </tbody>
+  </table>
+</div>
+  <table id="budgetTable">
+    <thead>
+      <tr>
+        <th>Coach</th>
+        <th>Budget</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <div id="commishBoard" class="dashboard"></div>
+<form id="draftForm" class="draft-form">
+  <div class="form-header">
+    <div id="coachContainer" class="coach-name"></div>
+    <button type="button" id="changeCoachBtn" class="change-coach-btn">Change Coach</button>
+  </div>
+
+  <div class="bid-container">
+    <input type="number" id="bid" placeholder="Enter your bid" required min="1" class="bid-input">
+  </div>
+
+
+  <button type="submit" class="submit-btn">Submit</button>
+</div>
+</form>
+<div id="draftedRostersContainerDrafter"></div>
+
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"; // <-- import set and get
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBdFLO9Pt8toDPfq3VUFEjMSfghi47tdio",
+  authDomain: "spldraft.firebaseapp.com",
+  databaseURL: "https://spldraft-default-rtdb.firebaseio.com", // <-- make sure this is included
+  projectId: "spldraft",
+  storageBucket: "spldraft.firebasestorage.app",
+  messagingSenderId: "151054562933",
+  appId: "1:151054562933:web:a294092e46475fa3c",
+  measurementId: "G-V8H70EEQTC"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+const coachContainer = document.getElementById("coachContainer");
+const changeCoachBtn = document.getElementById("changeCoachBtn");
+const draftForm = document.getElementById("draftForm");
+const bidInput = document.getElementById("bid");
+
+let coach = localStorage.getItem("lastCoach");
+
+function showDropdown() {
+  coachContainer.innerHTML = `
+    <label for="coach">Coach:</label>
+    <select id="coach" required>
+      <option value="">-- Select Coach --</option>
+      <option value="Adam">Adam</option>
+      <option value="Austin">Austin</option>
+      <option value="Colin">Colin</option>
+      <option value="Danny">Danny</option>
+      <option value="Dave">Dave</option>
+      <option value="Eric">Eric</option>
+      <option value="Freddy">Freddy</option>
+      <option value="Garrett">Garrett</option>
+      <option value="Hamilton">Hamilton</option>
+      <option value="Jaco">Jaco</option>
+      <option value="Jake">Jake</option>
+      <option value="Reid">Reid</option>
+    </select>
+  `;
+
+  const coachSelect = document.getElementById("coach");
+  coachSelect.addEventListener("change", () => {
+    if (coachSelect.value) {
+      coach = coachSelect.value;
+      localStorage.setItem("lastCoach", coach);
+      coachContainer.innerHTML = `Coach: <strong>${coach}</strong>`;
+    }
+  });
+}
+
+// Initialize coach UI
+if (coach) {
+  coachContainer.innerHTML = `Coach: <strong>${coach}</strong>`;
+} else {
+  showDropdown();
+}
+
+changeCoachBtn.addEventListener("click", () => {
+  localStorage.removeItem("lastCoach");
+  coach = null;
+  showDropdown();
+});
+
+// Submit form
+draftForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  if (!coach) {
+    alert("Please select a coach!");
+    return;
+  }
+
+  const bid = Number(bidInput.value);
+  if (!bid) {
+    alert("Please enter a bid!");
+    return;
+  }
+
+  try {
+    const coachDraftRef = ref(database, `bids/${coach}`);
+    const snapshot = await get(coachDraftRef); // <-- use imported get()
+    let bidNumber = 1;
+
+    if (snapshot.exists()) {
+      bidNumber = Object.keys(snapshot.val()).length + 1;
+    }
+
+    const draftKey = `bid${bidNumber}`;
+
+    await set(ref(database, `bids/${coach}/${draftKey}`), { bid });
+
+    alert("Bid submitted!");
+    draftForm.reset();
+  } catch (err) {
+    console.error("Firebase error:", err);
+  }
+});
+
+const db = getDatabase(app);
+
+const budgetTableBody = document.querySelector("#budgetTable tbody");
+
+// Listen for the league selected by the commish
+const leagueRef = ref(db, "currentLeague");
+
+let currentBudgetListener = null;
+
+onValue(leagueRef, (snapshot) => {
+  const league = snapshot.val();
+  if (!league) return;
+
+  // Remove previous listener if exists
+  if (currentBudgetListener) currentBudgetListener();
+
+  // Listen to that league's budgets
+  const leagueBudgetsRef = ref(db, `budgets/${league}`);
+  currentBudgetListener = onValue(leagueBudgetsRef, (snap) => {
+    if (!snap.exists()) {
+      budgetTableBody.innerHTML = "<tr><td colspan='2'>No coaches found</td></tr>";
+      return;
+    }
+    renderBudgetTable(snap.val());
+  });
+});
+
+function renderBudgetTable(coaches, highlightCoach = null) {
+  budgetTableBody.innerHTML = "";
+  Object.entries(coaches)
+    .sort((a, b) => b[1] - a[1]) // sort descending
+    .forEach(([coach, budget]) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${coach}</td><td>${budget}</td>`;
+      if (coach === highlightCoach) tr.classList.add("highlight-row");
+      budgetTableBody.appendChild(tr);
+    });
+}
+
+const playerTable = document.getElementById("playerTable"); // add this
+const playerListBody = document.getElementById("playerList");
+
+// Define colors for header based on league
+const leagueColors = { "": "#7f8c8d", "SPL": "orangered", "MLS": "teal" };
+
+let currentPlayersListener = null;
+
+onValue(leagueRef, (snapshot) => {
+  const league = snapshot.val();
+  if (!league) return;
+
+  // Update table header color
+  const thead = playerTable.querySelector("thead");
+  thead.style.backgroundColor = leagueColors[league] || leagueColors[""];
+
+  // Remove previous listener if exists
+  if (currentPlayersListener) currentPlayersListener();
+
+  // Listen to players for this league
+  const playersRef = ref(db, `players/${league}`);
+  currentPlayersListener = onValue(playersRef, (snap) => {
+    const data = snap.val();
+    if (!data) {
+      playerListBody.innerHTML = "<tr><td>No players found</td></tr>";
+      return;
+    }
+
+    renderPlayersTable(data);
+  });
+});
+
+function renderPlayersTable(playersData) {
+  playerListBody.innerHTML = "";
+
+  // Sort by order field to match Google Sheet
+  const playersArray = Object.entries(playersData)
+    .map(([name, stats]) => ({ name, ...stats }))
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  playersArray.forEach(player => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${player.name}</td>`; // display player name
+    playerListBody.appendChild(tr);
+  });
+}
+
+const selectedPlayerDiv = document.getElementById("showSelectedPlayer");
+const selectedPlayerRef = ref(database, "selectedPlayer");
+
+onValue(selectedPlayerRef, async (snapshot) => {
+  const selected = snapshot.val();
+  
+  if (!selected) {
+    selectedPlayerDiv.style.display = "none";
+    return;
+  }
+
+  const { league, name } = selected;
+
+  try {
+    const playerSnap = await get(ref(database, `players/${league}/${name}`));
+    if (!playerSnap.exists()) {
+      selectedPlayerDiv.style.display = "none";
+      return;
+    }
+
+    const stats = playerSnap.val();
+
+    selectedPlayerDiv.style.display = "block";
+   selectedPlayerDiv.innerHTML = `
+    <h2>${name} - Career Stats</h2>
+    <div class="player-stats">
+      <div><u>Games</u></b><br>${stats.games}</div>
+      <div><u>Win %</u></b><br>${stats.winp}</div>
+      <div><u>Goals/Game</u></b><br>${stats.goals}</div>
+      <div><u>MS-SS/Game</u></b><br>${stats.msss}</div>
+      <div><u>SI</u></b><br>${stats.si}</div>
+      <div><u>Impact</u></b><br>${stats.impact}</div>
+      <div><u>+/-</u></b><br>${stats.pm}</div>
+    </div>
+    `;
+  } catch (err) {
+    console.error("Error fetching selected player stats:", err);
+    selectedPlayerDiv.style.display = "none";
+  }
+});
+// Listen for drafted players updates
+const draftedPlayersRef = ref(database, "draftedPlayers");
+
+onValue(draftedPlayersRef, (snapshot) => {
+  const draftedPlayers = snapshot.val() || {};
+
+  // get current league
+  get(leagueRef).then((leagueSnap) => {
+    const league = leagueSnap.val();
+    if (!league) return;
+
+    // define your coaches for that league
+    const coaches = [
+      "Adam", "Austin", "Colin", "Danny", "Dave", "Eric",
+      "Freddy", "Garrett", "Hamilton", "Jaco", "Jake", "Reid"
+    ];
+
+    // render for drafter
+    renderDraftedRostersForContainer(
+      "draftedRostersContainerDrafter",
+      draftedPlayers,
+      coaches,
+      league
+    );
+  });
+});
+function renderDraftedRostersForContainer(containerId, draftedPlayers, coaches, league) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  // Filter league coaches
+  let leagueCoaches = [];
+  if (league === "SPL") {
+    leagueCoaches = ["Adam", "Austin","Danny","Eric","Freddy","Jaco"];
+  } else if (league === "MLS") {
+    leagueCoaches = ["Colin","Dave", "Garrett", "Hamilton", "Jake", "Reid"];
+  }
+
+  container.innerHTML = "";
+
+  const table = document.createElement("table");
+  table.classList.add("drafted-rosters-table");
+
+  // Header
+  const thead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  leagueCoaches.forEach((coach) => {
+    const th = document.createElement("th");
+    th.textContent = coach;
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  // Body
+  const tbody = document.createElement("tbody");
+
+  // Always 7 roster slots per coach (2 captain, 5 sidekick)
+  for (let row = 0; row < 7; row++) {
+    const tr = document.createElement("tr");
+
+    leagueCoaches.forEach((coach) => {
+      const td = document.createElement("td");
+
+      const players = draftedPlayers[league]?.[coach] || [];
+
+      // Separate captains and sidekicks
+      const captains = players.filter(p => p.role === "Captain");
+      const sidekicks = players.filter(p => p.role === "Sidekick");
+
+      let playerObj = null;
+      if (row < 2) {
+        // Captain rows (0,1)
+        playerObj = captains[row] || null;
+      } else {
+        // Sidekick rows (2-6)
+        playerObj = sidekicks[row - 2] || null;
+      }
+
+      td.textContent = playerObj ? playerObj.name : "";
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  }
+
+  table.appendChild(tbody);
+  container.appendChild(table);
+}
+
+
+</script>
+

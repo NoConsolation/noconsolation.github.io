@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>No Consolation</title>
+  <link rel="stylesheet" href="stylesspl.css" />
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+    crossorigin="anonymous"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* Reset and body */
+    body {
+      font-family: 'Kumbh Sans', sans-serif;
+      color: #a5a5a5;
+      margin: 0;
+      padding: 0 20px 40px;
+    }
+
+    /* Navbar and sub-navbar (assumed from your stylesheet, minimal override here) */
+    .navbar, .sub-navbar {
+      margin-bottom: 20px;
+    }
+
+
+
+
+    /* Form label and selects */
+    label {
+      font-weight: 600;
+      margin-right: 8px;
+    }
+    select {
+      width: 180px;  /* fixed width so it doesn't shrink */
+      min-width: 180px;
+      padding: 6px 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+    }
+
+    select:focus {
+      border-color: white;
+      outline: none;
+      box-shadow: 0 0 5px white;
+    }
+
+
+    /* Layout form */
+    .form-row {
+      margin: 0 auto 24px;
+      max-width: 400px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 12px;
+      align-items: left;
+      justify-content: space-between;
+    }
+
+    .form-row label {
+      flex: 0 0 auto;
+    }
+    .form-row select {
+      flex: 1 1 auto;
+      min-width: 120px;
+    }
+.dashboard-header {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px;
+}
+
+#dashboardDropdown {
+  padding: 6px 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #000;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+/* default background */
+#dashboardDropdown.default {
+  background-color: #7f8c8d; /* grey for unselected */
+}
+
+#draftedRostersContainer {
+  max-width: 1240px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.drafted-rosters-table {
+  width: 100%;
+  table-layout: fixed; /* evenly spaced columns */
+  border-collapse: collapse; /* needed for vertical borders */
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.drafted-rosters-table th,
+.drafted-rosters-table td {
+  padding: 4px 8px; /* more space vertically and horizontally */
+  text-align: center;
+  border-bottom: 1px solid #ccc; /* horizontal row separation */
+  border-right: 1px solid #ccc;  /* vertical column separation */
+  height: 30px; /* fixed row height for even spacing */
+  box-sizing: border-box;
+}
+
+.drafted-rosters-table th:last-child,
+.drafted-rosters-table td:last-child {
+  border-right: none; /* remove border on last column */
+}
+.drafted-rosters-table tr:nth-child(4) td {
+  border-top: 5px solid #a9a9a9; /* thick border between captains & sidekicks */
+}
+
+.drafted-rosters-table th {
+  font-weight: 600;
+  font-size: .8rem;
+  color: #fff;
+}
+
+.drafted-rosters-table td {
+  font-weight: 500;
+  color: #333;
+}
+
+
+/* Rounded corners for top and bottom row */
+.drafted-rosters-table thead th:first-child {
+  border-top-left-radius: 10px;
+}
+.drafted-rosters-table thead th:last-child {
+  border-top-right-radius: 10px;
+}
+.drafted-rosters-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+.drafted-rosters-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+
+  </style>
+</head>
+
+<style>
+    .right-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 40px auto;
+}
+#budgetTable {
+  flex: 0 0 300px; /* fixed width */
+}
+
+#commishBoard {
+  flex: 1 1 auto; /* fill remaining space */
+}
+.dashboard {
+  max-width: 500px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+.submission-bubble {
+  background-color: #c0392b;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: 2px solid #000;
+  transition: transform 0.4s ease;
+  opacity: 1;
+  width: 400px;
+}
+
+.new-bubble {
+  transform: translateX(50%) scale(0.9); /* start slightly right and smaller */
+  opacity: 0;
+  animation: slideFadeScale 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideFadeScale {
+  to {
+    transform: translateX(0) scale(1); /* final position and normal size */
+    opacity: 1;
+  }
+}
+
+
+.submit-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 15px;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  border: 2px solid #000;
+  cursor: pointer;
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  color: #fff;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+
+.submit-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+#budgetTable {
+  width: 300px;
+  border-collapse: collapse;
+  margin: 0;
+  background-color: #f0f0f0; /* light grey table background */
+  color: #333;
+  font-size: 1rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+#budgetTable th, #budgetTable td {
+  padding: 10px 15px;
+  text-align: left;
+}
+
+#budgetTable thead th {
+  background-color: #7f8c8d; /* default dropdown grey */
+  color: #fff;
+  font-weight: 600;
+  border-bottom: 2px solid #555;
+}
+
+#budgetTable tbody tr {
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+
+#budgetTable th:nth-child(1),
+#budgetTable td:nth-child(1) {
+  width: 50%;
+}
+
+#budgetTable th:nth-child(2),
+#budgetTable td:nth-child(2) {
+  width: 50%;
+  text-align: center; /* optional for budget values */
+}
+
+@keyframes budgetUpdate {
+  0% { background-color: #0c7925; }  /* light green start */
+  100% { background-color: #f0f0f0; }   /* normal table row background */
+}
+
+.highlight-row {
+  animation: budgetUpdate 4s ease forwards;
+}
+#playerTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f0f0f0; /* dark background to match site */
+  color: #333;
+  border: 1px solid #444;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#playerTable th {
+  background: var(--header-color); /* will match dropdown color */
+  color: white;
+  text-align: left;
+  padding: 10px;
+}
+
+#playerTable td {
+  border-bottom: 1px solid #444;
+  padding: 5px;
+}
+/* highlight style for selected player */
+#playerTable tbody tr.selected {
+  background: linear-gradient(135deg, #50a5d5, #8e44ad);
+  color: #fff;
+  font-weight: bold;
+}
+#playerTable tbody tr {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#playerTable tbody tr:hover {
+  background: #949494;
+}
+.player-card {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 15px 20px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  border: 2px solid #e74c3c;
+  color: black;
+  font-family: 'Kumbh Sans', sans-serif;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.player-card h2 {
+  margin: 0 0 10px;
+  font-size: 1.6rem;
+  color: #e74c3c;
+  text-align: center;
+}
+.player-stats {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+.player-stats div {
+  background: #f0f0f0;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+/* Player list column */
+#playerListContainer {
+  flex: 0 0 250px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* Column 2: Budget + button */
+.budget-column {
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Column 3: Bids + input */
+.bids-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Budget table */
+#budgetTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#budgetTable th, #budgetTable td {
+  padding: 10px 15px;
+  text-align: left;
+}
+
+/* Live bid feed */
+
+
+/* Save & Clear button */
+#saveClearBtn {
+  padding: 12px;
+  width: 400px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #8e44ad, #50a5d5);
+  color: white;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#saveClearBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+/* Highlight winning coach */
+.highlight-row {
+  animation: budgetUpdate 2s ease forwards;
+}
+
+@keyframes budgetUpdate {
+  0% { background-color: #0c7925; color: #fff; }
+  100% { background-color: #f0f0f0; color: #333; }
+}
+
+/* Optional: smooth row transition */
+#budgetTable tbody tr {
+  transition: all 0.5s ease;
+}
+
+</style>
+<body>
+
+  <!-- Navbar Section -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/" id="navbar__logo"><i class="fas fa-gem"></i>NC</a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+      </div>
+      <ul class="navbar__menu">
+        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+        <li class="navbar__item"><a href="/streaming.html" class="navbar__links">Streaming</a></li>
+        <li class="navbar__item"><a href="/podcasts.html" class="navbar__links">Podcasts</a></li>
+        <li class="navbar__item"><a href="/roster.html" class="navbar__links">Info</a></li>
+        <li class="navbar__item"><a href="/spl.html" class="navbar__links">SPL</a></li>
+        <li class="navbar__btn">
+          <a href="https://discord.gg/dzEZA3Jwm5" target="_blank" class="button">Get Notified</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Secondary Nav Bar -->
+  <nav class="sub-navbar">
+    <ul class="sub-navbar__menu">
+      <li><a href="/spl.html">SPL Home</a></li>
+      <li><a href="/spl-stats.html">Stats</a></li>
+      <li><a href="/spl-rosters.html">Rosters</a></li>
+      <li><a href="/splszn2.html">Season 2</a></li>
+    </ul>
+  </nav>
+
+<!-- Dashboard Dropdown -->
+<div class="dashboard-header">
+  <div id="dashboardDropdownContainer">
+    <select id="dashboardDropdown">
+      <option value="">--</option>
+      <option value="SPL">SPL</option>
+      <option value="MLS">MLS</option>
+    </select>
+  </div>
+</div>
+
+<!-- Selected player card -->
+<div id="showSelectedPlayer" class="player-card" style="display:none;"></div>
+
+<div id="draftedRostersContainer"></div>
+
+
+
+<!-- Dashboard container: three columns -->
+<div class="dashboard-container">
+
+  <!-- Column 1: Player list -->
+  <div id="playerListContainer">
+    <table id="playerTable">
+      <thead>
+        <tr><th>Players</th></tr>
+      </thead>
+      <tbody id="playerList"></tbody>
+    </table>
+  </div>
+
+  <!-- Column 2: Budget + Save/Clear button -->
+  <div class="budget-column">
+    <table id="budgetTable">
+      <thead>
+        <tr>
+          <th>Coach</th>
+          <th>Budget</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button id="saveClearBtn" class="submit-btn">Save and Clear</button>
+  </div>
+
+  <!-- Column 3: Live bids + bid input -->
+  <div class="bids-column">
+    <div id="commishBoard" class="dashboard" style="min-height: 50px;"></div>
+    </div>
+  </div>
+
+</div>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getDatabase, ref, get, push, child,onValue, remove,set ,update} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBdFLO9Pt8toDPfq3VUFEjMSfghi47tdio",
+  authDomain: "spldraft.firebaseapp.com",
+  databaseURL: "https://spldraft-default-rtdb.firebaseio.com",
+  projectId: "spldraft",
+  storageBucket: "spldraft.firebasestorage.app",
+  messagingSenderId: "151054562933",
+  appId: "1:151054562933:web:a294092e46475fa627ea3c",
+  measurementId: "G-V8H70EEQTC"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+const bidsContainer = document.getElementById("commishBoard");
+
+const draftsRef = ref(database, "bids"); // match your submission path
+
+let previousBids = new Set();
+
+// Listen for live updatess
+onValue(draftsRef, (snapshot) => {
+  bidsContainer.innerHTML = ""; // clear container
+  if (!snapshot.exists()) return;
+
+  const drafts = snapshot.val();
+  const allBids = [];
+
+  // Collect all bids with coach info
+  for (const coach in drafts) {
+    for (const bidKey in drafts[coach]) {
+      const bidValue = drafts[coach][bidKey].bid;
+      const bidId = `${coach}_${bidKey}`;
+      allBids.push({ coach, bidValue, bidId });
+    }
+  }
+
+  // Sort bids descending by value
+  allBids.sort((a, b) => b.bidValue - a.bidValue);
+
+  // Render bubbles
+  for (const { coach, bidValue, bidId } of allBids) {
+    const bubble = document.createElement("div");
+    bubble.classList.add("submission-bubble");
+
+    if (!previousBids.has(bidId)) {
+      bubble.classList.add("new-bubble");
+      previousBids.add(bidId);
+    }
+
+    bubble.textContent = `${coach} - $${bidValue}`;
+    bidsContainer.appendChild(bubble);
+  }
+});
+
+const saveClearBtn = document.getElementById("saveClearBtn");
+
+saveClearBtn.addEventListener("click", async () => {
+  const league = dropdown.value;
+  if (!league) return;
+
+  saveClearBtn.disabled = true;
+  saveClearBtn.textContent = "Saving...";
+
+  try {
+    // 1️⃣ Fetch current bids and budgets
+    const draftsSnap = await get(ref(database, "bids"));
+    const budgetsSnap = await get(ref(database, `budgets/${league}`));
+
+    const drafts = draftsSnap.exists() ? draftsSnap.val() : {};
+    const budgets = budgetsSnap.exists() ? budgetsSnap.val() : {};
+
+    // 2️⃣ Find the highest bid
+    let highestBid = -Infinity;
+    let winningCoach = null;
+    for (const coach in drafts) {
+      for (const bidKey in drafts[coach]) {
+        const bidValue = drafts[coach][bidKey].bid;
+        if (bidValue > highestBid) {
+          highestBid = bidValue;
+          winningCoach = coach;
+        }
+      }
+    }
+
+    if (!winningCoach) throw new Error("No bids found!");
+
+    // 3️⃣ Subtract highest bid from coach budget
+    budgets[winningCoach] = (budgets[winningCoach] || 0) - highestBid;
+    await update(ref(database, `budgets/${league}`), { [winningCoach]: budgets[winningCoach] });
+
+    // 4️⃣ Get selected player
+    const selectedPlayerSnap = await get(ref(database, "selectedPlayer"));
+    const selectedPlayer = selectedPlayerSnap.val();
+    if (!selectedPlayer) throw new Error("No player selected");
+
+    // 5️⃣ Save drafted player with role
+    const draftedRef = ref(database, `draftedPlayers/${league}/${winningCoach}`);
+    const draftedSnap = await get(draftedRef);
+    const currentDrafted = draftedSnap.exists() ? draftedSnap.val() : [];
+
+const playerSnap = await get(ref(database, `players/${league}/${selectedPlayer.name}`));
+const playerStats = playerSnap.exists() ? playerSnap.val() : { role: "Sidekick" };
+
+const updatedDrafted = [...currentDrafted, {
+  name: selectedPlayer.name,
+  role: playerStats.role || "Sidekick"
+}];
+    await set(draftedRef, updatedDrafted);
+
+    // 6️⃣ Remove player from main player list
+    await remove(ref(database, `players/${league}/${selectedPlayer.name}`));
+
+    // 7️⃣ Send bids to Google Sheets
+    const bidsArray = [];
+    for (const coach in drafts) {
+      for (const bidKey in drafts[coach]) {
+        bidsArray.push({ coach, bid: drafts[coach][bidKey].bid });
+      }
+    }
+    if (bidsArray.length) {
+      fetch("https://script.google.com/macros/s/AKfycbyV2iV-RzfthJ9TnqpDKwEbQaQciQ2MbWaRyC-vABv0gFSrwN1JtGo-2lljuOz0Zsx9fw/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          league,
+          player: { name: selectedPlayer.name, role: selectedPlayer.role },
+          bids: bidsArray
+        })
+      }).then(res => res.text()).then(console.log).catch(console.error);
+    }
+
+    // 8️⃣ Clear all bids from Firebase
+    await remove(ref(database, "bids"));
+
+    // 9️⃣ Update budget table UI
+    budgetTableBody.innerHTML = "";
+    const budgetArray = Object.entries(budgets)
+      .map(([coach, budget]) => ({ coach, budget }))
+      .sort((a, b) => b.budget - a.budget);
+
+    for (const { coach, budget } of budgetArray) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${coach}</td><td>${budget}</td>`;
+      if (coach === winningCoach) tr.classList.add("highlight-row");
+      budgetTableBody.appendChild(tr);
+    }
+
+    // 🔟 Clear selected player div
+    selectedPlayerDiv.style.display = "none";
+
+  } catch (err) {
+    console.error("Error in Save and Clear:", err);
+  } finally {
+    saveClearBtn.disabled = false;
+    saveClearBtn.textContent = "Save and Clear";
+  }
+});
+
+
+
+
+
+const dropdown = document.getElementById("dashboardDropdown");
+const budgetTableBody = document.querySelector("#budgetTable tbody");
+const leagueColors = { "": "#7f8c8d", "SPL": "orangered", "MLS": "teal" };
+
+const db = getDatabase();
+const leagueRef = ref(db, "currentLeague");
+
+// Listen for league changes from Firebase
+onValue(leagueRef, (snapshot) => {
+  const league = snapshot.val();
+  if (!league) return;
+
+  // Update dropdown state
+  dropdown.value = league;
+  dropdown.style.backgroundColor = leagueColors[league] || leagueColors[""];
+
+  // Listen to that league's budgets
+  const leagueBudgetsRef = ref(db, `budgets/${league}`);
+  onValue(leagueBudgetsRef, (snap) => {
+    if (!snap.exists()) {
+      budgetTableBody.innerHTML = "<tr><td colspan='2'>No coaches found</td></tr>";
+      return;
+    }
+    renderBudgetTable(snap.val());
+  });
+});
+
+// Dropdown updates currentLeague in Firebase
+dropdown.addEventListener("change", () => {
+  const league = dropdown.value;
+  dropdown.style.backgroundColor = leagueColors[league] || leagueColors[""];
+  set(leagueRef, league); // save to Firebase
+});
+
+// Render table helper
+function renderBudgetTable(coaches, highlightCoach = null) {
+  budgetTableBody.innerHTML = "";
+
+  Object.entries(coaches)
+    .sort((a, b) => b[1] - a[1]) // highest budget first
+    .forEach(([coach, budget]) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${coach}</td><td>${budget}</td>`;
+      if (coach === highlightCoach) tr.classList.add("highlight-row");
+      budgetTableBody.appendChild(tr);
+    });
+}
+
+const playerListBody = document.getElementById("playerList"); // <--- add this
+
+let currentPlayersListener = null;
+const playerTable = document.getElementById("playerTable"); // define this
+
+
+
+
+onValue(leagueRef, (snapshot) => {
+  const league = snapshot.val();
+  if (!league) return;
+
+  // Update table header color
+  const thead = playerTable.querySelector("thead");
+  thead.style.backgroundColor = leagueColors[league] || leagueColors[""];
+
+  // Remove previous listener
+  if (currentPlayersListener) currentPlayersListener();
+
+  // Listen to players for this league
+  const playersRef = ref(db, `players/${league}`);
+  currentPlayersListener = onValue(playersRef, (snap) => {
+    const data = snap.val();
+    if (!data) {
+      playerListBody.innerHTML = "<tr><td>No players found</td></tr>";
+      return;
+    }
+
+    renderPlayersTable(data, league);
+  });
+});
+
+function renderPlayersTable(playersData, league) {
+  playerListBody.innerHTML = "";
+
+  // Convert object into array of {name, stats} so we can sort by order
+  const playersArray = Object.entries(playersData)
+    .map(([name, stats]) => ({ name, ...stats }))
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  playersArray.forEach(player => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${player.name}</td>`;
+
+    // Click handler for commish page
+    tr.addEventListener("click", () => {
+      // Remove previous selection
+      playerListBody.querySelectorAll("tr").forEach(r => r.classList.remove("selected"));
+      tr.classList.add("selected");
+
+      // Save selected player in Firebase
+      set(ref(db, "selectedPlayer"), {
+        league: league,
+        name: player.name
+      });
+    });
+
+    playerListBody.appendChild(tr);
+  });
+}
+
+const selectedPlayerDiv = document.getElementById("showSelectedPlayer");
+const selectedPlayerRef = ref(db, "selectedPlayer");
+
+
+onValue(selectedPlayerRef, async (snapshot) => {
+  const selected = snapshot.val();
+  if (!selected) {
+    selectedPlayerDiv.style.display = "none"; // hide if no player
+    return;
+  }
+
+  const { league, name } = selected;
+  const playerRef = ref(db, `players/${league}/${name}`);
+  const playerSnap = await get(playerRef);
+
+  if (!playerSnap.exists()) {
+    selectedPlayerDiv.style.display = "none";
+    return;
+  }
+
+  const stats = playerSnap.val();
+  
+  // Make the div visible
+  selectedPlayerDiv.style.display = "block";
+  
+  // Update content
+  selectedPlayerDiv.innerHTML = `
+    <h2>${name} - Career Stats</h2>
+    <div class="player-stats">
+      <div><u>Games</u></b><br>${stats.games}</div>
+      <div><u>Win %</u></b><br>${stats.winp}</div>
+      <div><u>Goals/Game</u></b><br>${stats.goals}</div>
+      <div><u>MS-SS/Game</u></b><br>${stats.msss}</div>
+      <div><u>SI</u></b><br>${stats.si}</div>
+      <div><u>Impact</u></b><br>${stats.impact}</div>
+      <div><u>+/-</u></b><br>${stats.pm}</div>
+    </div>
+  `;
+});
+
+
+const draftedContainer = document.getElementById("draftedRostersContainer");
+
+let draftedListener = null;
+
+onValue(leagueRef, (snapshot) => {
+  const league = snapshot.val();
+  if (!league) return;
+
+  // Remove previous listener
+  if (draftedListener) draftedListener();
+
+  // Listen for drafted players for this league
+  const draftedRef = ref(database, `draftedPlayers/${league}`);
+  draftedListener = onValue(draftedRef, (snap) => {
+    // Get all drafted players data
+    const draftedData = snap.exists() ? snap.val() : {};
+
+    // Always get all coaches from budgets so table is full
+    get(ref(db, `budgets/${league}`)).then(budSnap => {
+      const coaches = budSnap.exists() ? Object.keys(budSnap.val()) : [];
+      renderDraftedTableFull(coaches, draftedData, league);
+    });
+  });
+});
+
+// Render full table with blank rows if needed
+function renderDraftedTableFull(coaches, draftedData, league) {
+  draftedContainer.innerHTML = "";
+
+  const table = document.createElement("table");
+  table.className = "drafted-rosters-table";
+
+  // Header
+  const thead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  coaches.forEach(coach => {
+    const th = document.createElement("th");
+    th.textContent = coach;
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+  headerRow.style.backgroundColor = leagueColors[league] || "#7f8c8d";
+  headerRow.style.color = "#fff";
+
+  const usedPlayers = new Set();
+
+  // 7 rows: 2 captains, 5 sidekicks
+  for (let i = 0; i < 7; i++) {
+    const tr = document.createElement("tr");
+
+    coaches.forEach(coach => {
+      const td = document.createElement("td");
+      const players = draftedData[coach] || [];
+      let player = null;
+
+      if (i < 2) {
+        player = players.find(p => p.role === "Captain" && !usedPlayers.has(`${coach}-${p.name}`));
+      } else {
+        const sidekicks = players.filter(p => p.role === "Sidekick" && !usedPlayers.has(`${coach}-${p.name}`));
+        player = sidekicks[i - 2] || null;
+      }
+
+      if (player) usedPlayers.add(`${coach}-${player.name}`);
+      td.textContent = player ? player.name : "";
+      tr.appendChild(td);
+    });
+
+    table.appendChild(tr);
+  }
+
+  draftedContainer.appendChild(table);
+}
+
+
+
+
+
+
+
+
+/*
+const splBudgetsRef = ref(database, "budgets/SPL");
+set(splBudgetsRef, {
+  Adam: 100,
+  Austin: 100,
+  Danny: 100,
+  Eric: 100,
+  Freddy: 100,
+  Jaco: 100,
+});
+const mlsBudgetsRef = ref(database, "budgets/MLS");
+set(mlsBudgetsRef, {
+  Colin: 100,
+  Dave: 100,
+  Garrett: 100,
+  Hamilton: 100,
+  Jake: 100,
+  Reid: 100,
+});
+
+*/
+
+
+</script>
+

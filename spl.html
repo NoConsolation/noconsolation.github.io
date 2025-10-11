@@ -246,7 +246,22 @@
         color: white;
         justify-content: center;
       }
-
+      
+      .table1 tr:nth-child(1) td{
+        border-bottom: 2px solid green !important;
+      }
+      .table1 tr:nth-child(3) td{
+        border-bottom: 2px solid yellow !important;
+      }
+      .table1 tr:nth-child(5) td{
+        border-bottom: 2px solid red !important;
+      }
+      .table2 tr:nth-child(1) td{
+        border-bottom: 2px solid green !important;
+      }
+      .table2 tr:nth-child(3) td{
+        border-bottom: 2px solid blue !important;
+      }
       
     </style>
 </head>
@@ -355,6 +370,36 @@
   </script>
 
 
+  <div id="playoff-bracket" style="margin: 40px auto; max-width: 200%; overflow-x: auto;color: white">
+    <h2 style="text-align:center;">Playoff Bracket</h2>
+      <div style="
+          width: 900px; 
+          height: 800px;       /* keep or adjust as needed */
+          overflow: hidden; 
+          margin: 0 auto;
+          position: relative;  /* allows precise iframe positioning */
+        ">
+        <iframe
+          id="playoff-iframe"
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pubhtml?gid=1815967254&single=true"
+          width="2000"
+          height="2000"
+          frameborder="0"
+          style="
+            border: none;
+            pointer-events: none;
+
+            /* SCALE IF YOU WANT ZOOM */
+            zoom: 1.2;
+            /* CROP ADJUSTMENTS */
+            position: absolute;
+            top: -30px;        /* crop top */
+            left: -4px;        /* crop left */
+            /* To crop the RIGHT side, don't move right—just rely on overflow:hidden */
+          ">
+        </iframe>
+    </div>
+  </div>
 
   <h1 class="sched-title">Schedule</h1>
   <div id="schedule" style="margin-left: 100px;margin-right: 100px; margin-top: 5px; margin-bottom: 5px;">Loading schedule...</div>

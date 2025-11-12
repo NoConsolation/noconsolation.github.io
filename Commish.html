@@ -152,6 +152,53 @@
 .drafted-rosters-table tbody tr:last-child td:last-child {
   border-bottom-right-radius: 10px;
 }
+.char-count-container {
+  display: flex;
+  flex-direction: column;  /* stack vertically */
+  justify-content: center; /* optional: center the tables horizontally */
+  align-items: center;     /* center horizontally */
+  gap: 12px;               /* space between tables */
+  margin: 20px auto;
+}
+
+.char-count-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 1000px;           /* same width for both tables */
+  max-width: 90%;
+  table-layout: fixed;      /* evenly distribute columns */
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.char-count-table th,
+.char-count-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  /* remove width: 40px; */
+}
+
+
+.char-count-table th {
+  font-weight: 600;
+  color: white;
+}
+
+/* Rounded corners for first and last rows/columns */
+.char-count-table thead th:first-child {
+  border-top-left-radius: 12px;
+}
+.char-count-table thead th:last-child {
+  border-top-right-radius: 12px;
+}
+.char-count-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+.char-count-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
 
 
   </style>
@@ -462,6 +509,9 @@
 <!-- Selected player card -->
 <div id="showSelectedPlayer" class="player-card" style="display:none;"></div>
 
+<div id="charCountContainer" class="char-count-container">
+  <!-- JS will append two tables here -->
+</div>
 <div id="draftedRostersContainer"></div>
 
 
@@ -501,6 +551,11 @@
 
 </div>
 
+<div class="bids-column">
+  <div id="commishBoard" class="dashboard" style="min-height: 50px;"></div>
+  <button id="clearBidsBtn" class="submit-btn" style="margin-top: 10px;">Clear All Bids</button>
+</div>
+
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
@@ -536,30 +591,37 @@ onValue(draftsRef, (snapshot) => {
   const allBids = [];
 
   // Collect all bids with coach info
-  for (const coach in drafts) {
-    for (const bidKey in drafts[coach]) {
-      const bidValue = drafts[coach][bidKey].bid;
-      const bidId = `${coach}_${bidKey}`;
-      allBids.push({ coach, bidValue, bidId });
-    }
+for (const coach in drafts) {
+  for (const bidKey in drafts[coach]) {
+    const bid = drafts[coach][bidKey].bid;           // number
+    const timestamp = drafts[coach][bidKey].timestamp; // timestamp
+    const bidId = `${coach}_${bidKey}`;
+
+    allBids.push({ coach, bid, timestamp, bidId });
   }
+}
+
 
   // Sort bids descending by value
-  allBids.sort((a, b) => b.bidValue - a.bidValue);
+allBids.sort((a, b) => {
+  if (b.bid !== a.bid) return b.bid - a.bid;
+  return a.timestamp - b.timestamp; // earliest first
+});
+
 
   // Render bubbles
-  for (const { coach, bidValue, bidId } of allBids) {
-    const bubble = document.createElement("div");
-    bubble.classList.add("submission-bubble");
+for (const { coach, bid, bidId } of allBids) {
+  const bubble = document.createElement("div");
+  bubble.classList.add("submission-bubble");
 
-    if (!previousBids.has(bidId)) {
-      bubble.classList.add("new-bubble");
-      previousBids.add(bidId);
-    }
-
-    bubble.textContent = `${coach} - $${bidValue}`;
-    bidsContainer.appendChild(bubble);
+  if (!previousBids.has(bidId)) {
+    bubble.classList.add("new-bubble");
+    previousBids.add(bidId);
   }
+
+  bubble.textContent = `${coach} - ${bid} 🟡`;
+  bidsContainer.appendChild(bubble);
+}
 });
 
 const saveClearBtn = document.getElementById("saveClearBtn");
@@ -746,6 +808,7 @@ onValue(leagueRef, (snapshot) => {
     }
 
     renderPlayersTable(data, league);
+     renderCharCountTables(data);
   });
 });
 
@@ -845,6 +908,7 @@ onValue(leagueRef, (snapshot) => {
 });
 
 // Render full table with blank rows if needed
+// Render full table with blank rows if needed
 function renderDraftedTableFull(coaches, draftedData, league) {
   draftedContainer.innerHTML = "";
 
@@ -861,29 +925,29 @@ function renderDraftedTableFull(coaches, draftedData, league) {
   });
   thead.appendChild(headerRow);
   table.appendChild(thead);
+
   headerRow.style.backgroundColor = leagueColors[league] || "#7f8c8d";
   headerRow.style.color = "#fff";
 
-  const usedPlayers = new Set();
-
   // 7 rows: 2 captains, 5 sidekicks
-  for (let i = 0; i < 7; i++) {
+  for (let row = 0; row < 7; row++) {
     const tr = document.createElement("tr");
 
     coaches.forEach(coach => {
       const td = document.createElement("td");
-      const players = draftedData[coach] || [];
-      let player = null;
 
-      if (i < 2) {
-        player = players.find(p => p.role === "Captain" && !usedPlayers.has(`${coach}-${p.name}`));
+      const players = draftedData[coach] || [];
+      const captains = players.filter(p => p.role === "Captain");
+      const sidekicks = players.filter(p => p.role === "Sidekick");
+
+      let playerObj;
+      if (row < 2) {
+        playerObj = captains[row] || null;
       } else {
-        const sidekicks = players.filter(p => p.role === "Sidekick" && !usedPlayers.has(`${coach}-${p.name}`));
-        player = sidekicks[i - 2] || null;
+        playerObj = sidekicks[row - 2] || null;
       }
 
-      if (player) usedPlayers.add(`${coach}-${player.name}`);
-      td.textContent = player ? player.name : "";
+      td.textContent = playerObj?.name || "";
       tr.appendChild(td);
     });
 
@@ -893,9 +957,103 @@ function renderDraftedTableFull(coaches, draftedData, league) {
   draftedContainer.appendChild(table);
 }
 
+const charOrder = [
+  "BJ",
+  "Bowser",
+  "Daisy",
+  "Diddy",
+  "DK",
+  "Luigi",
+  "Mario",
+  "Peach",
+  "Petey",
+  "Wario",
+  "Waluigi",
+  "Yoshi",
+  "Birdo",
+  "Dry Bones",
+  "Boo",
+  "Koopa",
+  "Hammer Bro",
+  "Monty",
+  "Shy Guy",
+  "Toad"
+]
+function renderCharCountTables(playersData) {
+  const charCountContainer = document.getElementById("charCountContainer"); // a wrapper div
+  if (!charCountContainer) return;
 
+  const counts = {};
 
+  // Count remaining players by their char field
+  Object.values(playersData).forEach(player => {
+    const char = player.char || "Unknown";
+    counts[char] = (counts[char] || 0) + 1;
+  });
 
+  // Split charOrder into two arrays
+  const firstHalf = charOrder.slice(0, 12);
+  const secondHalf = charOrder.slice(12);
+
+  charCountContainer.innerHTML = ""; // clear previous tables
+
+  [ firstHalf, secondHalf ].forEach((charGroup, index) => {
+  const table = document.createElement("table");
+  table.classList.add("char-count-table");
+
+  const thead = document.createElement("thead");
+  const trHead = document.createElement("tr");
+
+  // Set different header colors
+  const headerColor = index === 0 ? "#e74c3c" : "#3498db"; // first table orange, second table blue
+
+  charGroup.forEach(char => {
+    const th = document.createElement("th");
+    th.textContent = char;
+    th.style.backgroundColor = headerColor;
+    trHead.appendChild(th);
+  });
+
+  thead.appendChild(trHead);
+  table.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+  const trBody = document.createElement("tr");
+
+  charGroup.forEach(char => {
+    const td = document.createElement("td");
+    td.textContent = counts[char] || 0;
+    trBody.appendChild(td);
+  });
+
+  tbody.appendChild(trBody);
+  table.appendChild(tbody);
+
+  charCountContainer.appendChild(table);
+});
+}
+
+const clearBidsBtn = document.getElementById("clearBidsBtn");
+
+clearBidsBtn.addEventListener("click", async () => {
+  if (!confirm("Are you sure you want to clear all bids?")) return;
+
+  clearBidsBtn.disabled = true;
+  clearBidsBtn.textContent = "Clearing...";
+
+  try {
+    const draftsRef = ref(database, "bids");
+    await remove(draftsRef); // removes all bids
+    previousBids.clear();    // reset new-bubble tracking
+    bidsContainer.innerHTML = ""; // clear UI immediately
+    console.log("All bids cleared!");
+  } catch (err) {
+    console.error("Error clearing bids:", err);
+  } finally {
+    clearBidsBtn.disabled = false;
+    clearBidsBtn.textContent = "Clear All Bids";
+  }
+});
 
 
 
@@ -903,24 +1061,24 @@ function renderDraftedTableFull(coaches, draftedData, league) {
 /*
 const splBudgetsRef = ref(database, "budgets/SPL");
 set(splBudgetsRef, {
-  Adam: 100,
-  Austin: 100,
-  Danny: 100,
-  Eric: 100,
-  Freddy: 100,
-  Jaco: 100,
+  Garrett: 105,
+  Austin: 105,
+  Danny: 105,
+  Eric: 105,
+  Dave: 105,
+  Jaco: 105,
 });
 const mlsBudgetsRef = ref(database, "budgets/MLS");
 set(mlsBudgetsRef, {
-  Colin: 100,
-  Dave: 100,
-  Garrett: 100,
-  Hamilton: 100,
-  Jake: 100,
-  Reid: 100,
+  Colin: 105,
+  Tanya: 105,
+  Freddy: 105,
+  Hamilton: 105,
+  Jake: 105,
+  Reid: 105,
 });
-
 */
+
 
 
 </script>

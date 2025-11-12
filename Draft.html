@@ -265,6 +265,53 @@
   border-bottom-right-radius: 10px;
 }
 
+.char-count-container {
+  display: flex;
+  flex-direction: column;  /* stack vertically */
+  justify-content: center; /* optional: center the tables horizontally */
+  align-items: center;     /* center horizontally */
+  gap: 12px;               /* space between tables */
+  margin: 20px auto;
+}
+
+.char-count-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 1000px;           /* same width for both tables */
+  max-width: 90%;
+  table-layout: fixed;      /* evenly distribute columns */
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.char-count-table th,
+.char-count-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  /* remove width: 40px; */
+}
+
+
+.char-count-table th {
+  font-weight: 600;
+  color: white;
+}
+
+/* Rounded corners for first and last rows/columns */
+.char-count-table thead th:first-child {
+  border-top-left-radius: 12px;
+}
+.char-count-table thead th:last-child {
+  border-top-right-radius: 12px;
+}
+.char-count-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+.char-count-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
   </style>
 </head>
 <body>
@@ -391,6 +438,13 @@
     </div>
   </nav>
 
+
+<div id="charCountContainer" class="char-count-container">
+  <!-- JS will append two tables here -->
+</div>
+
+
+<div id="draftedRostersContainerDrafter"></div>
 <div id="showSelectedPlayer" class="player-card" style="display:none;"></div>
 <div class="dashboard-container">
     <div id="playerListContainer">
@@ -422,14 +476,14 @@
   </div>
 
   <div class="bid-container">
-    <input type="number" id="bid" placeholder="Enter your bid" required min="1" class="bid-input">
+    <input type="number" id="bid" placeholder="Enter your bid" required min="0" class="bid-input">
   </div>
 
 
   <button type="submit" class="submit-btn">Submit</button>
 </div>
 </form>
-<div id="draftedRostersContainerDrafter"></div>
+
 
 
 
@@ -513,14 +567,16 @@ draftForm.addEventListener("submit", async (e) => {
   }
 
   const bid = Number(bidInput.value);
-  if (!bid) {
+
+  // Accept 0 now
+  if (bidInput.value === "" || isNaN(bid)) {
     alert("Please enter a bid!");
     return;
   }
 
   try {
     const coachDraftRef = ref(database, `bids/${coach}`);
-    const snapshot = await get(coachDraftRef); // <-- use imported get()
+    const snapshot = await get(coachDraftRef);
     let bidNumber = 1;
 
     if (snapshot.exists()) {
@@ -529,7 +585,7 @@ draftForm.addEventListener("submit", async (e) => {
 
     const draftKey = `bid${bidNumber}`;
 
-    await set(ref(database, `bids/${coach}/${draftKey}`), { bid });
+    await set(ref(database, `bids/${coach}/${draftKey}`), { bid,timestamp:Date.now() });
 
     alert("Bid submitted!");
     draftForm.reset();
@@ -537,6 +593,7 @@ draftForm.addEventListener("submit", async (e) => {
     console.error("Firebase error:", err);
   }
 });
+
 
 const db = getDatabase(app);
 
@@ -606,6 +663,7 @@ onValue(leagueRef, (snapshot) => {
     }
 
     renderPlayersTable(data);
+    renderCharCountTables(data);
   });
 });
 
@@ -722,7 +780,7 @@ function renderDraftedRostersForContainer(containerId, draftedPlayers, coaches, 
   const tbody = document.createElement("tbody");
 
   // Always 7 roster slots per coach (2 captain, 5 sidekick)
-  for (let row = 0; row < 7; row++) {
+for (let row = 0; row < 7; row++) {
     const tr = document.createElement("tr");
 
     leagueCoaches.forEach((coach) => {
@@ -753,6 +811,85 @@ function renderDraftedRostersForContainer(containerId, draftedPlayers, coaches, 
   table.appendChild(tbody);
   container.appendChild(table);
 }
+
+
+const charOrder = [
+  "BJ",
+  "Bowser",
+  "Daisy",
+  "Diddy",
+  "DK",
+  "Luigi",
+  "Mario",
+  "Peach",
+  "Petey",
+  "Wario",
+  "Waluigi",
+  "Yoshi",
+  "Birdo",
+  "Dry Bones",
+  "Boo",
+  "Koopa",
+  "Hammer Bro",
+  "Monty",
+  "Shy Guy",
+  "Toad"
+]
+function renderCharCountTables(playersData) {
+  const charCountContainer = document.getElementById("charCountContainer"); // a wrapper div
+  if (!charCountContainer) return;
+
+  const counts = {};
+
+  // Count remaining players by their char field
+  Object.values(playersData).forEach(player => {
+    const char = player.char || "Unknown";
+    counts[char] = (counts[char] || 0) + 1;
+  });
+
+  // Split charOrder into two arrays
+  const firstHalf = charOrder.slice(0, 12);
+  const secondHalf = charOrder.slice(12);
+
+  charCountContainer.innerHTML = ""; // clear previous tables
+
+  [ firstHalf, secondHalf ].forEach((charGroup, index) => {
+  const table = document.createElement("table");
+  table.classList.add("char-count-table");
+
+  const thead = document.createElement("thead");
+  const trHead = document.createElement("tr");
+
+  // Set different header colors
+  const headerColor = index === 0 ? "#e74c3c" : "#3498db"; // first table orange, second table blue
+
+  charGroup.forEach(char => {
+    const th = document.createElement("th");
+    th.textContent = char;
+    th.style.backgroundColor = headerColor;
+    trHead.appendChild(th);
+  });
+
+  thead.appendChild(trHead);
+  table.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+  const trBody = document.createElement("tr");
+
+  charGroup.forEach(char => {
+    const td = document.createElement("td");
+    td.textContent = counts[char] || 0;
+    trBody.appendChild(td);
+  });
+
+  tbody.appendChild(trBody);
+  table.appendChild(tbody);
+
+  charCountContainer.appendChild(table);
+});
+}
+
+
 
 
 </script>

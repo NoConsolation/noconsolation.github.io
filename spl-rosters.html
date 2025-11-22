@@ -380,6 +380,37 @@
         cursor: pointer;
     }
 
+      .sub-navbar__menu .dropdown {
+  position: relative;
+}
+
+.sub-navbar__menu .dropdown-menu {
+  display: none;
+  position: absolute;
+  background: #333;      /* Match your navbar color */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  min-width: 150px;
+  z-index: 1000;
+}
+
+.sub-navbar__menu .dropdown-menu li a {
+  display: block;
+  padding: 10px 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.sub-navbar__menu .dropdown-menu li a:hover {
+  background: #555;      /* Hover color */
+}
+
+/* Show dropdown on hover */
+.sub-navbar__menu .dropdown:hover .dropdown-menu {
+  display: block;
+}
+
     </style>
     <!--
    <div class="ticker-wrapper" id="ticker-wrapper">
@@ -422,16 +453,26 @@
   </nav>
 
   <!-- Secondary Nav Bar -->
-  <nav class="sub-navbar">
-    <ul class="sub-navbar__menu">
-      <li><a href="/spl.html">SPL Home</a></li>
-      <li><a href="/spl-stats.html">Stats</a></li>
-      <li><a href="/spl-rosters.html">Rosters</a></li>
-      <li><a href="/splszn2.html">Season 2</a></li>
-    </ul>
-  </nav>
+<!-- Secondary Nav Bar -->
+<nav class="sub-navbar">
+  <ul class="sub-navbar__menu">
+    <li><a href="/spl.html">SPL Home</a></li>
+    <li><a href="/spl-stats.html">Stats</a></li>
+    <li><a href="/spl-rosters.html">Rosters</a></li>
 
-  <div class="button-row">
+    <!-- Dropdown Parent -->
+    <li class="dropdown">
+      <a href="javascript:void(0)">History ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="/splszn2.html">Season 2</a></li>
+        <li><a href="/splszn3.html">Season 3</a></li>
+        <!-- Add more options as needed -->
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<div class="button-row">
     <a
       href="/rostform.html"
       class="big-button"
@@ -444,7 +485,6 @@
       >Submit Waiver</a
     >
   </div>
-
 
   <div id="roster-grid">
     <div class="roster-group" id="top-group">

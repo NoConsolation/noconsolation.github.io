@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>No Consolation</title>
+  <link rel="stylesheet" href="stylesspl.css" />
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+    integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
+    crossorigin="anonymous"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+          .ticker-wrapper {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    top: 0;
+    z-index: 1000;
+    background: repeating-linear-gradient(
+    45deg,
+    orangered 0,
+    orangered 20px,
+    teal 20px,
+    teal 40px
+    );
+    background-size: 56.57px 56.57px; /* length of diagonal stripe pattern */
+    animation: background-scroll 1s linear infinite;
+    display: flex;
+    align-items: center;
+    padding-right: 40px;
+
+    }
+
+    @keyframes background-scroll {
+        0% {
+        background-position: 0 0;
+        }
+        100% {
+        background-position: -56.57px 0; /* scroll left exactly one full pattern */
+        }
+    }
+
+    .ticker {
+        display: inline-block;
+        white-space: nowrap;
+        animation: scroll-left 15s linear infinite;
+        flex-grow: 0;
+        width: auto;
+    }
+
+    .ticker span {
+        display: inline-block;
+        padding: 10px 50px; /* add some horizontal padding */
+        font-weight: bold;
+        font-size: 1rem;
+        white-space: nowrap;
+        color: white;
+        text-shadow:
+        -1px -1px 0 black,
+        1px -1px 0 black,
+        -1px 1px 0 black,
+        1px 1px 0 black;
+    }
+    .ticker-close {
+        position: absolute !important;
+        right: 10px;
+        top: 50%;
+        background-color: transparent;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        border: none !important;
+        color: white !important;
+        font-size: 1.5rem !important;
+        font-weight: bold !important;
+        cursor: pointer !important;
+        user-select: none !important;
+        padding: 0 !important;
+        line-height: 1 !important;
+        text-shadow:
+        -1px -1px 0 black,
+        1px -1px 0 black,
+        -1px  1px 0 black,
+        1px  1px 0 black !important;
+        transition: color 0.3s !important;
+        z-index: 1002 !important;
+    }
+
+    .ticker-close:hover {
+        color: #ddd;
+    }
+
+    /* Animate from 0 to -50% since we have 2 copies */
+    @keyframes scroll-left {
+        0% {
+        transform: translateX(0%);
+        }
+        100% {
+        transform: translateX(-50%);
+        }
+    }
+    .ticker-link {
+        display: flex;
+        flex-grow: 1;
+        text-decoration: none;
+        height: 100%;
+        align-items: center;
+    }
+    .ticker-link:hover {
+        cursor: pointer;
+    }
+/* Basic dropdown container */
+.sub-navbar__menu .dropdown {
+  position: relative;
+}
+
+.sub-navbar__menu .dropdown-menu {
+  display: none;
+  position: absolute;
+  background: #333;      /* Match your navbar color */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  min-width: 150px;
+  z-index: 1000;
+}
+
+.sub-navbar__menu .dropdown-menu li a {
+  display: block;
+  padding: 10px 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.sub-navbar__menu .dropdown-menu li a:hover {
+  background: #555;      /* Hover color */
+}
+
+/* Show dropdown on hover */
+.sub-navbar__menu .dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+    </style>
+    <!--
+   <div class="ticker-wrapper" id="ticker-wrapper">
+    <a href="AllStar.html" target="_blank" rel="noopener noreferrer" class="ticker-link">
+      <div class="ticker">
+        <span>🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE</span>
+        <span>🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR SPL ALL STARS NOW!!🚨CLICK HERE🚨</span>
+      </div>
+    </a>
+    <button class="ticker-close" id="ticker-close" aria-label="Close ticker">X</button>
+    </div>
+    <script>
+          document.querySelector('.ticker-close').addEventListener('click', function(event) {
+        event.stopPropagation(); // prevent link click
+        this.parentElement.style.display = 'none';
+      });
+    </script>
+  -->
+
+    <style>
+      /* Schedule Styles */
+      #schedule {
+        padding: 20px;
+      }
+
+      .week-block {
+        margin-bottom: 40px;
+      }
+
+      .week-title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .matches-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .match {
+        border: 1px solid #ccc;
+        padding: 10px;
+        min-width: 240px;
+        background: #f9f9f9;
+        border-radius: 8px;
+      }
+
+      .team-row {
+        display: flex;
+        gap: 10px;
+        margin: 2px 0;
+      }
+
+      .team-name {
+        width: 80px;
+        font-weight: bold;
+      }
+
+  .table1, .table2{
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .table1 th:nth-child(1),
+  .table1 td:nth-child(1) {width:30%;}
+
+  .table1 th:nth-child(2),
+  .table1 td:nth-child(2) {width:10%;}
+
+  .table1 th:nth-child(3),
+  .table1 td:nth-child(3) {width:10%;}
+
+  .table1 th:nth-child(4),
+  .table1 td:nth-child(4) {width:10%;}
+
+  .table1 th:nth-child(5),
+  .table1 td:nth-child(5) {width:10%;}
+
+  .table1 th:nth-child(6),
+  .table1 td:nth-child(6) {width:10%;}
+
+  .table1 th:nth-child(7),
+  .table1 td:nth-child(7) {width:10%;}
+
+  .table2 th:nth-child(1),
+  .table2 td:nth-child(1) {width:30%;}
+
+  .table2 th:nth-child(2),
+  .table2 td:nth-child(2) {width:10%;}
+
+  .table2 th:nth-child(3),
+  .table2 td:nth-child(3) {width:10%;}
+
+  .table2 th:nth-child(4),
+  .table2 td:nth-child(4) {width:10%;}
+
+  .table2 th:nth-child(5),
+  .table2 td:nth-child(5) {width:10%;}
+
+  .table2 th:nth-child(6),
+  .table2 td:nth-child(6) {width:10%;}
+
+  .table2 th:nth-child(7),
+  .table2 td:nth-child(7) {width:10%;}
+
+
+      #sheet-data table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+      }
+      #sheet-data th, #sheet-data td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+      .table1 thead tr {
+        background-color: orangered;
+        color: white;
+        justify-content: center;
+      }
+      .table2 thead tr {
+        background-color: teal;
+        color: white;
+        justify-content: center;
+      }
+      
+      .table1 tr:nth-child(1) td{
+        border-bottom: 2px solid green !important;
+      }
+      .table1 tr:nth-child(3) td{
+        border-bottom: 2px solid yellow !important;
+      }
+      .table1 tr:nth-child(5) td{
+        border-bottom: 2px solid red !important;
+      }
+      .table2 tr:nth-child(1) td{
+        border-bottom: 2px solid green !important;
+      }
+      .table2 tr:nth-child(3) td{
+        border-bottom: 2px solid blue !important;
+      }
+      
+    </style>
+</head>
+
+
+
+  <!-- Navbar Section -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/" id="navbar__logo"><i class="fas fa-gem"></i>NC</a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+      </div>
+      <ul class="navbar__menu">
+        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+        <li class="navbar__item"><a href="/streaming.html" class="navbar__links">Streaming</a></li>
+        <li class="navbar__item"><a href="/podcasts.html" class="navbar__links">Podcasts</a></li>
+        <li class="navbar__item"><a href="/roster.html" class="navbar__links">Info</a></li>
+        <li class="navbar__item"><a href="/spl.html" class="navbar__links">SPL</a></li>
+        <li class="navbar__btn">
+          <a href="https://discord.gg/dzEZA3Jwm5" target="_blank" class="button">Get Notified</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+<!-- Secondary Nav Bar -->
+<nav class="sub-navbar">
+  <ul class="sub-navbar__menu">
+    <li><a href="/spl.html">SPL Home</a></li>
+    <li><a href="/spl-stats.html">Stats</a></li>
+    <li><a href="/spl-rosters.html">Rosters</a></li>
+
+    <!-- Dropdown Parent -->
+    <li class="dropdown">
+      <a href="javascript:void(0)">History ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="/splszn2.html">Season 2</a></li>
+        <li><a href="/splszn3.html">Season 3</a></li>
+        <!-- Add more options as needed -->
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  <!-- Google Sheet Content -->
+  <div id="sheet-data" style="margin-left: 100px;margin-right: 100px; margin-top: 10px; margin-bottom: 5px;">Loading data...</div>
+
+  <script>
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1520901699&single=true&output=csv';
+
+    function parseCSV(text) {
+      return text.trim().split('\n').map(row => row.split(','));
+    }
+
+    function buildTable(headerRow, bodyRows, tableClass) {
+      const columnIndexes = [0, 1, 3, 4, 7, 5, 6];
+      
+      let html = `<table class="${tableClass}"><thead><tr>`;
+      columnIndexes.forEach(index => {
+        html += `<th>${headerRow[index] || ''}</th>`;
+      });
+      html += `</tr></thead><tbody>`;
+
+      bodyRows.forEach(row => {
+        html += '<tr>';
+        columnIndexes.forEach(index => {
+          html += `<td>${row[index] || ''}</td>`;
+        });
+        html += '</tr>';
+      });
+
+      html += '</tbody></table>';
+      return html;
+    }
+
+
+    fetch(csvUrl)
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.text();
+      })
+      .then(csvText => {
+        const data = parseCSV(csvText);
+
+        // Table 1 header and body
+        const table1Header = data[1];
+        const table1Body = data.slice(2, 8);
+
+        // Table 2 header and body
+        const table2Header = data[9];
+        const table2Body = data.slice(10, 16);
+
+      const html = `
+        <div style="display: block;">
+          <div style="margin-bottom: 20px;">
+            <h3 class="spellcasters-title">SPL</h3>
+            ${buildTable(table1Header, table1Body, 'table1')}
+          </div>
+          <div>
+            <h3 class="mfmk-title">MLS</h3>
+            ${buildTable(table2Header, table2Body, 'table2')}
+          </div>
+        </div>
+      `;
+
+        document.getElementById('sheet-data').innerHTML = html;
+      })
+      .catch(error => {
+        console.error('Error fetching CSV:', error);
+        document.getElementById('sheet-data').textContent = 'Failed to load data.';
+      });
+  </script>
+
+
+  <div id="playoff-bracket" style="margin: 40px auto; max-width: 200%; overflow-x: auto;color: white">
+    <h2 style="text-align:center;">Playoff Bracket</h2>
+      <div style="
+          width: 900px; 
+          height: 800px;       /* keep or adjust as needed */
+          overflow: hidden; 
+          margin: 0 auto;
+          position: relative;  /* allows precise iframe positioning */
+        ">
+        <iframe
+          id="playoff-iframe"
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pubhtml?gid=1815967254&single=true"
+          width="2000"
+          height="2000"
+          frameborder="0"
+          style="
+            border: none;
+            pointer-events: none;
+
+            /* SCALE IF YOU WANT ZOOM */
+            zoom: 1.2;
+            /* CROP ADJUSTMENTS */
+            position: absolute;
+            top: -30px;        /* crop top */
+            left: -4px;        /* crop left */
+            /* To crop the RIGHT side, don't move right—just rely on overflow:hidden */
+          ">
+        </iframe>
+    </div>
+  </div>
+
+  <h1 class="sched-title">Schedule</h1>
+  <div id="schedule" style="margin-left: 100px;margin-right: 100px; margin-top: 5px; margin-bottom: 5px;">Loading schedule...</div>
+ 
+
+  <style>
+    #schedule {
+      padding: 2px;
+    }
+
+    .week-block {
+      margin-bottom: 10px;
+    }
+
+    .week-title {
+      font-size: 1.5em;
+      margin-bottom: 2px;
+      font-weight: bold;
+      color: #ccc;
+    }
+
+    .matches-row {
+      display: grid;
+      justify-content: center;
+      gap: 20px;
+      grid-template-columns: repeat(1,1fr);
+    }
+
+    .match-box {
+      border: 5px solid #000000;
+      background: #686868;
+      border-radius: 0px;
+      padding: 5px;
+      min-width: 200px;
+      box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+    }
+
+    .team-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .team-name {
+      font-weight: normal;
+      min-width: 80px;
+    }
+
+    .team-data {
+      width: 30px;
+      text-align: center;
+    }
+    @media (min-width: 500px) {
+      .matches-row {
+        grid-template-columns: repeat(2, 1fr); /* 3 rows of 2 */
+      }
+    }
+
+    @media (min-width: 768px) {
+      .matches-row {
+        grid-template-columns: repeat(3, 1fr); /* 2 rows of 3 */
+      }
+    }
+
+    @media (min-width: 1000px) {
+      .matches-row {
+        grid-template-columns: repeat(6, 1fr); /* 1 row of 6 */
+      }
+    }
+    .match-box.teal {
+      border-color: teal;
+    }
+
+  .match-box.orangered {
+    border-color: #de451f;
+  }
+    .sched-title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 40px;
+      margin-bottom: 5px;
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(to bottom, rgb(0, 0, 0),rgb(255, 255, 255));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      border: none;
+      outline: none;
+    }
+
+  </style>
+
+
+
+  <script>
+    const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1001386983&single=true&output=csv';
+
+    function parseCSV(text) {
+      return text.trim().split('\n').map(row => row.split(','));
+    }
+
+    function countWins(team, opponent) {
+      let wins = 0;
+      for (let i of [3, 4, 5]) {
+        const val = parseInt(team[i], 10);
+        const oppVal = parseInt(opponent[i], 10);
+        if (!isNaN(val) && !isNaN(oppVal) && val > oppVal) {
+          wins++;
+        }
+      }
+      return wins;
+    }
+
+    function createTeamRow(team, opponent, boldName) {
+      const nameHTML = boldName ? `<strong>${team[2]}</strong>` : team[2];
+
+      const games = [3, 4, 5].map(i => {
+        const val = parseInt(team[i], 10);
+        const oppVal = parseInt(opponent[i], 10);
+        const isHigher = !isNaN(val) && !isNaN(oppVal) && val > oppVal;
+        const value = team[i] === '' ? '' : isHigher ? `<strong>${val}</strong>` : val;
+        return `<div class="team-data">${value}</div>`;
+      });
+
+      return `
+        <div class="team-row">
+          <div class="team-name">${nameHTML}</div>
+          ${games.join('')}
+        </div>
+      `;
+    }
+
+
+    function createMatchBox(team1, team2, colorClass = '') {
+      const team1Wins = countWins(team1, team2);
+      const team2Wins = countWins(team2, team1);
+
+      const boldTeam1 = team1Wins > team2Wins;
+      const boldTeam2 = team2Wins > team1Wins;
+
+      return `
+        <div class="match-box ${colorClass}">
+          ${createTeamRow(team1, team2, boldTeam1)}
+          ${createTeamRow(team2, team1, boldTeam2)}
+        </div>
+      `;
+    }
+
+
+
+
+    function createWeekBlock(weekNumber, matchesHtml) {
+      return `
+        <div class="week-block">
+          <div class="week-title">${weekNumber}</div>
+          <div class="matches-row">${matchesHtml}</div>
+        </div>
+      `;
+    }
+
+    fetch(scheduleCsvUrl)
+      .then(res => res.text())
+      .then(csv => {
+        const rows = parseCSV(csv).slice(29, 149); // A30:F125
+        const weeks = {};
+
+    for (let i = 0; i < rows.length - 1; i += 2) {
+      const row1 = rows[i];
+      const row2 = rows[i + 1];
+
+      const week = row1[0].trim();
+      if (!weeks[week]) weeks[week] = [];
+
+      const matchIndex = weeks[week].length;
+      const colorClass = matchIndex < 3 ? 'teal' : 'orangered';
+
+      weeks[week].push(createMatchBox(row1, row2, colorClass));
+    }
+
+
+        let html = '';
+        Object.keys(weeks).forEach(week => {
+          html += createWeekBlock(week, weeks[week].join(''));
+        });
+
+        document.getElementById('schedule').innerHTML = html;
+      });
+  </script>
+
+
+
+
+
+
+  <!-- Footer Section -->
+  <div class="footer__container">
+    <div class="footer__links">
+      <div class="footer__link--wrapper">
+        <div class="footer__link--items">
+          <h2>About Us</h2>
+          <a href="/info.html">Mission</a>
+          <a href="/info.html">Vision</a>
+          <a href="/info.html">Roster</a>
+        </div>
+        <div class="footer__link--items">
+          <h2>Standings</h2>
+          <a href="/info.html">Statistics</a>
+        </div>
+      </div>
+      <div class="footer__link--wrapper">
+        <div class="footer__link--items">
+          <h2>Contact Us</h2>
+          <a href="https://discord.gg/dzEZA3Jwm5">Discord</a>
+        </div>
+        <div class="footer__link--items">
+          <h2>Social Media</h2>
+          <a href="https://twitch.tv/noconsolation" target="_blank">Twitch</a>
+          <a href="https://www.tiktok.com/@noconsolation?lang=en" target="_blank">TikTok</a>
+          <a href="https://www.youtube.com/@thereisnoconsolation" target="_blank">YouTube</a>
+          <a href="https://twitter.com/NoConsolation_" target="_blank">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <section class="social__media">
+      <div class="social__media--wrap">
+        <div class="footer__logo">
+          <a href="/" id="footer__logo"><i class="fas fa-gem"></i>No Consolation</a>
+        </div>
+        <p class="website__rights">© No Consolation 2023. All rights reserved</p>
+        <div class="social__icons">
+          <a class="social__icon--link" href="https://twitch.tv/noconsolation" target="_blank"><i class="fab fa-twitch"></i></a>
+          <a class="social__icon--link" href="https://discord.gg/dzEZA3Jwm5" target="_blank"><i class="fab fa-discord"></i></a>
+          <a class="social__icon--link" href="https://www.youtube.com/@thereisnoconsolation" target="_blank"><i class="fab fa-youtube"></i></a>
+          <a class="social__icon--link" href="https://twitter.com/NoConsolation_" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a class="social__icon--link" href="https://www.tiktok.com/@noconsolation?lang=en" target="_blank"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+
+</body>
+</html>

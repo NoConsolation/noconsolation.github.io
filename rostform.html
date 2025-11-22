@@ -62,15 +62,21 @@
     font-weight: bold;
     }
 
-    .roster-box td:nth-child(1).one,
-    .roster-box td:nth-child(2).one {
+    .roster-box td:nth-child(1).four,
+    .roster-box td:nth-child(2).four {
     background-color: #fbc02d; /* yellow */
     color: black;
     font-weight: bold;
     }
+    .roster-box td:nth-child(1).five,
+    .roster-box td:nth-child(2).five {
+    background-color: #4285f4; /* blue */
+    color: black;
+    font-weight: bold;
+    }
 
-    .roster-box td:nth-child(1).two,
-    .roster-box td:nth-child(2).two {
+    .roster-box td:nth-child(1).seven,
+    .roster-box td:nth-child(2).seven {
     background-color: #4caf50; /* green */
     color: black;
     font-weight: bold;
@@ -83,13 +89,18 @@
     font-weight: bold;
     }
 
-    .roster-box td:nth-child(3).one {
+    .roster-box td:nth-child(3).three {
     background-color: #fbc02d !important;
     color: black;
     font-weight: bold;
     }
 
-    .roster-box td:nth-child(3).two {
+    .roster-box td:nth-child(3).four {
+    background-color: #4285f4 !important;
+    color: black;
+    font-weight: bold;
+    }
+    .roster-box td:nth-child(3).seven {
     background-color: #4caf50 !important;
     color: black;
     font-weight: bold;
@@ -359,7 +370,6 @@
     <label for="playername">Coach Name:</label>
     <select id="playername" name="playername" required>
       <option value="">Coach Name--</option>
-      <option value="Adam">Adam</option>
       <option value="Austin">Austin</option>
       <option value="Colin">Colin</option>
       <option value="Danny">Danny</option>
@@ -371,7 +381,10 @@
       <option value="Jaco">Jaco</option>
       <option value="Jake">Jake</option>
       <option value="Reid">Reid</option>
+      <option value="Tanya">Tanya</option>
     </select>
+    <label for="teamName">Team Name:</label>
+    <input type="text" id="teamName" name="teamName" placeholder="Enter Team Name Here" />
   </div>
 
 
@@ -420,20 +433,24 @@
         <select id="map3" name="map3" required></select>
     </div>
     <div class="map-slot">
-        <label for="map4">Neutral</label>
+        <label for="map4">4th Choice</label>
         <select id="map4" name="map4" required></select>
     </div>
     <div class="map-slot">
-        <label for="map5">3rd Ban</label>
+        <label for="map5">4th Ban</label>
         <select id="map5" name="map5" required></select>
     </div>
     <div class="map-slot">
-        <label for="map6">2nd Ban</label>
+        <label for="map6">3rd Ban</label>
         <select id="map6" name="map6" required></select>
     </div>
     <div class="map-slot">
-        <label for="map7">1st Ban</label>
+        <label for="map7">2nd Ban</label>
         <select id="map7" name="map7" required></select>
+    </div>
+      <div class="map-slot">
+        <label for="map8">1st Ban</label>
+        <select id="map8" name="map8" required></select>
     </div>
     </div>
     <button type = "submit">Submit</button>
@@ -448,6 +465,7 @@
     const topmid = document.getElementById('topmid').value;
     const botmid = document.getElementById('botmid').value;
     const def = document.getElementById('def').value;
+    const teamName = document.getElementById('teamName').value;
 
     // Access roster data for selected coach
     const roster = rosterDataByCoach[playername];
@@ -466,9 +484,9 @@
         if (!playerRow) continue;
 
         const currentFitness = parseInt(playerRow[1]);
-        const upcomingFitness = currentFitness - 1;
+        const upcomingFitness = currentFitness - 3;
 
-        if (currentFitness === 0 && upcomingFitness === -1) {
+        if (upcomingFitness <= -1) {
         alert(`Player "${player}" is exhausted and cannot be selected.`);
         return;
         }
@@ -484,7 +502,7 @@
 
     // ✅ Check for duplicate maps
     const mapSelections = [];
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 1; i <= 8; i++) {
         const mapValue = document.getElementById(`map${i}`)?.value;
         if (mapValue) mapSelections.push(mapValue);
     }
@@ -514,6 +532,8 @@
         map5: document.getElementById('map5')?.value,
         map6: document.getElementById('map6')?.value,
         map7: document.getElementById('map7')?.value,
+        map8: document.getElementById('map8')?.value,
+        teamName
     };
 
     fetch('https://script.google.com/macros/s/AKfycbznqUaeQDaIsz9kmQsVowb-G7PeOkFN-7safQju32ziP6E9SB-sqflfJDSsNnsisFZB/exec', {
@@ -577,7 +597,7 @@
 
   <script src="app.js"></script>
 <script>
-const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1896446593&single=true&output=csv';
+const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sNy5NcDFMQJC32VQTJlrnNR-zd5_Jk-cAUGVkLhSUGBUoQywXBZHnyIXeLgJ5lLflK--_CEx0E_u/pub?gid=1896446593&single=true&output=csv';
 
 function parseCSV(text) {
   return text.trim().split('\n').map(row => row.split(','));
@@ -591,58 +611,63 @@ function buildRosterHTML(data, selectedPlayers = []) {
   const teamName = data[0][0] || 'Unnamed Team';
   let html = '<div class="roster-box">';
   html += `<div class="team-header">${teamName}</div>`;
-  html += '<table>';
-
   html += `
-    <tr>
-        <th>Players</th>
-        <th>Current Fitness</th>
-        <th>Next Week Fitness</th>
-    </tr>
+    <table>
+      <tr>
+          <th>Players</th>
+          <th>Current Fitness</th>
+          <th>Next Week Fitness</th>
+      </tr>
+  `;
+
+  for (let i = 1; i < data.length; i++) {
+    const label = data[i][0] || '';
+    const value = data[i][1] || '';
+    const isSelected = selectedPlayers.includes(label);
+    const fitness = parseInt(value);
+
+    let upcomingDisplay;
+    let upcomingClass;
+
+    if (isSelected) {
+      // For selected players: show range (fitness - 3) to (fitness - 2)
+      const upper = Math.max(fitness - 2, -2);
+      const upcoming = Math.max(fitness - 3, -2);
+      upcomingDisplay = `${upcoming}-${upper}`;
+
+      if (upcoming <=-1) upcomingClass = 'tired';
+      else if (upcoming <= 2) upcomingClass = 'zero';
+      else if (upcoming === 4) upcomingClass = 'four';
+      else if (upcoming === 3) upcomingClass = 'three';
+      else upcomingClass = 'na';
+    } else {
+      // For unselected players: always show 7
+      upcomingDisplay = '7';
+      upcomingClass = 'seven'; // or 'fresh' if you want a special class
+    }
+
+    // Row class based on current fitness
+    let rowClass = '';
+    if (value <= 2) rowClass = 'zero';
+    else if (value === '4') rowClass = 'four';
+    else if (value === '3') rowClass = 'four';
+    else if (value === '5') rowClass = 'five';
+    else if (value === '7') rowClass = 'seven';
+    else rowClass = 'na';
+
+    html += `
+      <tr class="${rowClass}">
+        <td class="${rowClass}">${label}</td>
+        <td class="${rowClass}">${value}</td>
+        <td class="${upcomingClass}">${upcomingDisplay}</td>
+      </tr>
     `;
-
-    for (let i = 1; i < data.length; i++) {
-        const label = data[i][0] || '';
-        const value = data[i][1] || '';
-        const isSelected = selectedPlayers.includes(label);
-        let fitness = parseInt(value);
-
-        let upcoming = isSelected ? (fitness - 1) : 2;
-        if (fitness === 0 && isSelected) {
-            upcoming = -1; // special code to show string message
-        }
-        upcoming = Math.max(upcoming, -1); // keep -1 as is, clamp minimum
-
-        // Determine display text for upcoming fitness
-        let upcomingDisplay = upcoming === -1 ? "-1" : upcoming;
-
-        // CSS class for styling based on upcoming fitness
-        let upcomingClass = '';
-        if (upcoming === 0) upcomingClass = 'zero';
-        else if (upcoming === 1) upcomingClass = 'one';
-        else if (upcoming === 2) upcomingClass = 'two';
-        else if (upcoming === -1) upcomingClass = 'tired';
-        else upcomingClass = 'na';
-
-        // Row class based on current fitness value
-        let rowClass = '';
-        if (value === '0') rowClass = 'zero';
-        else if (value === '1') rowClass = 'one';
-        else if (value === '2') rowClass = 'two';
-        else rowClass = 'na';
-
-        html += `<tr class="${rowClass}">`;
-        html += `<td class="${rowClass}">${label}</td>`;
-        html += `<td class="${rowClass}">${value}</td>`;
-        html += `<td class="${upcomingClass}">${upcomingDisplay}</td>`;
-        html += '</tr>';
-        }
-
-
+  }
 
   html += '</table></div>';
   return html;
 }
+
 
 let rosterDataByCoach = {};
 
@@ -737,7 +762,6 @@ fetch(sheetUrl)
 
 
         const coachHeaders = {
-        Adam: "Flying Dutchmen",
         Austin: "Super Ario Brothers",
         Colin: "The Colonials",
         Danny: "Spread Triple Option",
@@ -748,7 +772,8 @@ fetch(sheetUrl)
         Hamilton: "Plumbers and Pyromaniacs",
         Jaco: "Come on Mr Monty",
         Jake: "Terio's Disciples",
-        Reid: "Reid Hot Chili Strikers"
+        Reid: "Reid Hot Chili Strikers",
+        Tanya: "Tanya"
     };
 
     function updateRosterDisplay(coach) {
@@ -779,22 +804,24 @@ fetch(sheetUrl)
     'Sand Tomb'
     ];
 
+    /*
     const coachMapBans = {
         'Crystal Canyon': ['Eric','Austin','Danny','Jaco','Freddy','Adam'],
         'Stormship': [ 'Colin','Hamilton','Dave','Reid','Jake','Garrett']
     };
-
-    function getBannedMap(coachName) {
+*/
+  /*  function getBannedMap(coachName) {
         for (const [map, coaches] of Object.entries(coachMapBans)) {
             if (coaches.includes(coachName)) return map;
         }
         return null;
     }
+    */
     function populateMapDropdowns(coachName) {
-        const bannedMap = getBannedMap(coachName);
-        const allowedMaps = allMaps.filter(m => m !== bannedMap);
+        /*const bannedMap = getBannedMap(coachName);*/
+        const allowedMaps = allMaps;
 
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 1; i <= 8; i++) {
         const select = document.getElementById(`map${i}`);
         select.innerHTML = '';
 
@@ -821,7 +848,7 @@ fetch(sheetUrl)
 function grayOutSelectedMaps() {
   // gather selects
   const mapSelects = [];
-  for (let i = 1; i <= 7; i++) {
+  for (let i = 1; i <= 8; i++) {
     const s = document.getElementById(`map${i}`);
     if (s) mapSelects.push(s);
   }
@@ -851,7 +878,7 @@ function grayOutSelectedMaps() {
   });
 }
 
-for (let i = 1; i <= 7; i++) {
+for (let i = 1; i <= 8; i++) {
   const s = document.getElementById(`map${i}`);
   if (s) s.addEventListener('change', grayOutSelectedMaps);
 }
@@ -887,19 +914,19 @@ function validateFormLive() {
   const hasDuplicates = uniquePlayers.size !== selectedPlayers.length;
 
   const mapSelections = [];
-  for (let i = 1; i <= 7; i++) {
+  for (let i = 1; i <= 8; i++) {
     const val = document.getElementById(`map${i}`)?.value;
     if (val) mapSelections.push(val);
   }
   const uniqueMaps = new Set(mapSelections);
-  const mapsValid = uniqueMaps.size === mapSelections.length && mapSelections.length === 7;
+  const mapsValid = uniqueMaps.size === mapSelections.length && mapSelections.length === 8;
 
   const isExhausted = coach && selectedPlayers.some(p => isPlayerExhausted(p, coach));
 
   const allRequiredFilled =
     coach && 
     selectedPlayers.length === 4 &&
-    mapSelections.length === 7;
+    mapSelections.length === 8;
 
   const messages = [];
 
@@ -919,7 +946,7 @@ function validateFormLive() {
   document.getElementById(id).addEventListener('change', validateFormLive)
 );
 
-for (let i = 1; i <= 7; i++) {
+for (let i = 1; i <= 8; i++) {
   document.getElementById(`map${i}`).addEventListener('change', validateFormLive);
 }
 

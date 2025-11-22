@@ -18,6 +18,39 @@
   />
 
 </head>
+<style>
+  .sub-navbar__menu .dropdown {
+  position: relative;
+}
+
+.sub-navbar__menu .dropdown-menu {
+  display: none;
+  position: absolute;
+  background: #333;      /* Match your navbar color */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  min-width: 150px;
+  z-index: 1000;
+}
+
+.sub-navbar__menu .dropdown-menu li a {
+  display: block;
+  padding: 10px 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.sub-navbar__menu .dropdown-menu li a:hover {
+  background: #555;      /* Hover color */
+}
+
+/* Show dropdown on hover */
+.sub-navbar__menu .dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+</style>
 <body>
 
   <!-- Navbar Section -->
@@ -40,22 +73,24 @@
     </div>
   </nav>
 
-  <!-- Secondary Nav Bar -->
-  <nav class="sub-navbar">
-    <ul class="sub-navbar__menu">
-      <li><a href="/spl.html">SPL Home</a></li>
-      <li><a href="/spl-stats.html">Stats</a></li>
-      <li><a href="/spl-rosters.html">Rosters</a></li>
-      <li><a href="/splszn2.html">Season 2</a></li>
-    </ul>
-  </nav>
+<!-- Secondary Nav Bar -->
+<nav class="sub-navbar">
+  <ul class="sub-navbar__menu">
+    <li><a href="/spl.html">SPL Home</a></li>
+    <li><a href="/spl-stats.html">Stats</a></li>
+    <li><a href="/spl-rosters.html">Rosters</a></li>
 
-    <nav class="submenu">
-    <button onclick="showSection('section1')">League Leaders</button>
-    <button onclick="showSection('section2')">Player Stats</button>
-    <button onclick="showSection('section3')">Team Stats</button>
-    <button onclick="showSection('section4')">Map Stats</button>
-    </nav>
+    <!-- Dropdown Parent -->
+    <li class="dropdown">
+      <a href="javascript:void(0)">History ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="/splszn2.html">Season 2</a></li>
+        <li><a href="/splszn3.html">Season 3</a></li>
+        <!-- Add more options as needed -->
+      </ul>
+    </li>
+  </ul>
+</nav>
 
 
 
@@ -164,7 +199,7 @@ let panelIndex = 0;
 
 
 // Initial fetch to build panels grid from A18:H29 (or your actual panel header location)
-fetch("https://script.google.com/macros/s/AKfycbwA1MIAHTAif1_al8IDs6KE3herlDSzZEvD6UqCOjq0sW068RBUzCePncNqaAAsGMk6EQ/exec")
+fetch("https://script.google.com/macros/s/AKfycbxF4jUiEKS-nrPwdADBsvafzDeMMNrrkNm9WcUkX1bUI22k0E-ze66QIB-wnVCH0u9ZFA/exec")
   .then(res => res.json())
   .then(data => {
     for (let row = 0; row <= 8; row += 4) {
@@ -238,7 +273,7 @@ const titles = [
   "Map Goals per Game",
   "Sidekick Goals per Game",
   "Sidekick Impact",
-  "Skill Shot Participation"
+  "Plus/Minus"
 ];
 
 function getRangeData(sheetData, range) {
@@ -257,7 +292,7 @@ function getRangeData(sheetData, range) {
   );
 }
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwA1MIAHTAif1_al8IDs6KE3herlDSzZEvD6UqCOjq0sW068RBUzCePncNqaAAsGMk6EQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF4jUiEKS-nrPwdADBsvafzDeMMNrrkNm9WcUkX1bUI22k0E-ze66QIB-wnVCH0u9ZFA/exec";
 
 function openDetailForPanel(index) {
   fetch(`${SCRIPT_URL}?panel=${index}`)

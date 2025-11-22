@@ -223,7 +223,6 @@
     <label for="coach">Coach:</label>
     <select id="coach" name="coach" aria-label="Select coach">
       <option value="">-- Select Coach --</option>
-      <option value="Adam">Adam</option>
       <option value="Austin">Austin</option>
       <option value="Colin">Colin</option>
       <option value="Danny">Danny</option>
@@ -235,6 +234,7 @@
       <option value="Jaco">Jaco</option>
       <option value="Jake">Jake</option>
       <option value="Reid">Reid</option>
+      <option value="Tanya">Tanya</option>
     </select>
   </div>
 
@@ -266,14 +266,14 @@
 
 
 <script>
-  const group1Coaches = ['Eric','Austin','Danny','Jaco','Freddy','Adam'];
-  const group2Coaches = ['Colin', 'Hamilton', 'Dave', 'Reid', 'Jake', 'Garrett'];
+  const group1Coaches = ['Eric','Austin','Danny','Jaco','Garrett','Dave'];
+  const group2Coaches = ['Colin', 'Hamilton', 'Tanya', 'Reid', 'Jake', 'Freddy'];
 
   const coachOptions = {};
   const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1166432758&single=true&output=csv';
 
   // Roster CSV URL
-  const rosterCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1896446593&single=true&output=csv';
+  const rosterCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sNy5NcDFMQJC32VQTJlrnNR-zd5_Jk-cAUGVkLhSUGBUoQywXBZHnyIXeLgJ5lLflK--_CEx0E_u/pub?gid=1896446593&single=true&output=csv';
 
   function parseCSV(text) {
     return text.trim().split('\n').map(row => row.split(','));

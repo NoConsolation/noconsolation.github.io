@@ -116,6 +116,37 @@
     .ticker-link:hover {
         cursor: pointer;
     }
+/* Basic dropdown container */
+.sub-navbar__menu .dropdown {
+  position: relative;
+}
+
+.sub-navbar__menu .dropdown-menu {
+  display: none;
+  position: absolute;
+  background: #333;      /* Match your navbar color */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  min-width: 150px;
+  z-index: 1000;
+}
+
+.sub-navbar__menu .dropdown-menu li a {
+  display: block;
+  padding: 10px 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.sub-navbar__menu .dropdown-menu li a:hover {
+  background: #555;      /* Hover color */
+}
+
+/* Show dropdown on hover */
+.sub-navbar__menu .dropdown:hover .dropdown-menu {
+  display: block;
+}
 
     </style>
     <!--
@@ -259,7 +290,7 @@
       .table2 tr:nth-child(1) td{
         border-bottom: 2px solid green !important;
       }
-      .table2 tr:nth-child(3) td{
+      .table2 tr:nth-child(4) td{
         border-bottom: 2px solid blue !important;
       }
       
@@ -288,15 +319,24 @@
     </div>
   </nav>
 
-  <!-- Secondary Nav Bar -->
-  <nav class="sub-navbar">
-    <ul class="sub-navbar__menu">
-      <li><a href="/spl.html">SPL Home</a></li>
-      <li><a href="/spl-stats.html">Stats</a></li>
-      <li><a href="/spl-rosters.html">Rosters</a></li>
-      <li><a href="/splszn2.html">Season 2</a></li>
-    </ul>
-  </nav>
+<!-- Secondary Nav Bar -->
+<nav class="sub-navbar">
+  <ul class="sub-navbar__menu">
+    <li><a href="/spl.html">SPL Home</a></li>
+    <li><a href="/spl-stats.html">Stats</a></li>
+    <li><a href="/spl-rosters.html">Rosters</a></li>
+
+    <!-- Dropdown Parent -->
+    <li class="dropdown">
+      <a href="javascript:void(0)">History ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="/splszn2.html">Season 2</a></li>
+        <li><a href="/splszn3.html">Season 3</a></li>
+        <!-- Add more options as needed -->
+      </ul>
+    </li>
+  </ul>
+</nav>
 
 
 
@@ -304,7 +344,7 @@
   <div id="sheet-data" style="margin-left: 100px;margin-right: 100px; margin-top: 10px; margin-bottom: 5px;">Loading data...</div>
 
   <script>
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1520901699&single=true&output=csv';
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sNy5NcDFMQJC32VQTJlrnNR-zd5_Jk-cAUGVkLhSUGBUoQywXBZHnyIXeLgJ5lLflK--_CEx0E_u/pub?gid=1520901699&single=true&output=csv';
 
     function parseCSV(text) {
       return text.trim().split('\n').map(row => row.split(','));
@@ -369,7 +409,7 @@
       });
   </script>
 
-
+<!--
   <div id="playoff-bracket" style="margin: 40px auto; max-width: 200%; overflow-x: auto;color: white">
     <h2 style="text-align:center;">Playoff Bracket</h2>
       <div style="
@@ -400,6 +440,7 @@
         </iframe>
     </div>
   </div>
+-->
 
   <h1 class="sched-title">Schedule</h1>
   <div id="schedule" style="margin-left: 100px;margin-right: 100px; margin-top: 5px; margin-bottom: 5px;">Loading schedule...</div>
@@ -499,7 +540,7 @@
 
 
   <script>
-    const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pub?gid=1001386983&single=true&output=csv';
+    const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sNy5NcDFMQJC32VQTJlrnNR-zd5_Jk-cAUGVkLhSUGBUoQywXBZHnyIXeLgJ5lLflK--_CEx0E_u/pub?gid=1001386983&single=true&output=csv';
 
     function parseCSV(text) {
       return text.trim().split('\n').map(row => row.split(','));

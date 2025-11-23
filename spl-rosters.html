@@ -219,12 +219,15 @@
   color: black;
    }
 
-  td.one {
+  td.three {
     background-color: #fbc02d; /* yellow */
     color: black;
    }
-
-  td.two {
+  td.four {
+    background-color: #4285f4; /* blue */
+    color: black;
+  }
+  td.seven {
     background-color: #4caf50; /* green */
     color: black;
   }
@@ -599,9 +602,12 @@
       const value = data[i][1] || '';
 
       let cellClass = '';
-      if (value === '0') cellClass = 'zero';
-      else if (value === '1') cellClass = 'one';
-      else if (value === '2') cellClass = 'two';
+    if (value <= 2) cellClass = 'zero';
+    else if (value === '4') cellClass = 'four';
+    else if (value === '3') cellClass = 'four';
+    else if (value === '5') cellClass = 'five';
+    else if (value === '7') cellClass = 'seven';
+    else cellClass = 'na';
 
       html += '<tr>';
       html += `<td>${label}</td>`;

@@ -638,7 +638,8 @@ function buildRosterHTML(data, selectedPlayers = []) {
       upcomingDisplay = `${upcoming}-${upper}`;
 
       if (upcoming <=-1) upcomingClass = 'tired';
-      else if (upcoming <= 2) upcomingClass = 'zero';
+      else if (upcoming <=1) upcomingClass = 'zero'
+      else if (upcoming === 2) upcomingClass = 'three';
       else if (upcoming === 4) upcomingClass = 'four';
       else if (upcoming === 3) upcomingClass = 'three';
       else upcomingClass = 'na';

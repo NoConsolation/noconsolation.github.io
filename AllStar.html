@@ -15,318 +15,7 @@
     href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
     rel="stylesheet"
   />
-  <style>
-    .roster-box table {
-    width: 100%;
-    table-layout: fixed;
-    }
-
-    .roster-box td:first-child {
-    width: 50%;
-    padding: 6px;
-    word-wrap: break-word;
-    }
-    .roster-box td:nth-child(2){
-        width:50%;
-        text-align:center
-    }
-
-    .roster-box td:last-child {
-    width: 25%;
-    text-align: center;
-    font-weight: bold;
-    }
-        /* Row coloring based on column 2 value */
-
-    tr.na {
-    background-color: #ddd;
-    color: #555;
-    }
-
-    @media (max-width: 600px) {
-     .roster-box td:first-child {
-    width: 50%;
-    }
-
-    .roster-box td:nth-child(2){
-        width:25%
-    }
-    .roster-box td:last-child {
-    width:25%;
-    }
-}
-    .roster-box td:nth-child(1).zero,
-    .roster-box td:nth-child(2).zero {
-    background-color: #f44336; /* red */
-    color: black;
-    font-weight: bold;
-    }
-
-    .roster-box td:nth-child(1).four,
-    .roster-box td:nth-child(2).four {
-    background-color: #fbc02d; /* yellow */
-    color: black;
-    font-weight: bold;
-    }
-    .roster-box td:nth-child(1).five,
-    .roster-box td:nth-child(2).five {
-    background-color: #4285f4; /* blue */
-    color: black;
-    font-weight: bold;
-    }
-
-    .roster-box td:nth-child(1).seven,
-    .roster-box td:nth-child(2).seven {
-    background-color: #4caf50; /* green */
-    color: black;
-    font-weight: bold;
-    }
-
-    /* For column 3 */
-    .roster-box td:nth-child(3).zero {
-    background-color: #f44336 !important;
-    color: black;
-    font-weight: bold;
-    }
-
-    .roster-box td:nth-child(3).three {
-    background-color: #fbc02d !important;
-    color: black;
-    font-weight: bold;
-    }
-
-    .roster-box td:nth-child(3).four {
-    background-color: #4285f4 !important;
-    color: black;
-    font-weight: bold;
-    }
-    .roster-box td:nth-child(3).seven {
-    background-color: #4caf50 !important;
-    color: black;
-    font-weight: bold;
-    }
-    .roster-box td:nth-child(3).tired{
-    background-color: white !important;
-    color: black;
-    font-weight: bolder;
-    
-    }
-
-  .map-timeline {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin: 20px 0;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .map-slot {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-    min-width: 90px;
-  }
-
-  .map-slot label {
-    font-size: 0.9rem;
-    margin-bottom: 5px;
-    text-align: center;
-    font-weight: bold;
-  }
-
-  .map-slot select {
-    padding: 5px;
-    width: 100%;
-  }
-
-  @media (max-width: 700px) {
-    .map-timeline {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    .map-slot {
-      width: 100%;
-    }
-  }
-
-    /* Light grey for non-table text */
-    body, label, input, select, button, h3 {
-    color: #ccc;
-    font-family: 'Kumbh Sans', sans-serif;
-    }
-
-    /* Larger inputs and selects */
-    #rosterForm input,
-    #rosterForm select {
-    padding: 10px 12px;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: 1px solid #aaa;
-    margin-bottom: 12px;
-    width: 100%;
-    background-color: #222;
-    color: #eee;
-    }
-
-    /* Larger submit button */
-    #rosterForm button {
-    display: block;
-    margin: 30px auto 10px auto;
-    padding: 16px 0;
-    width: 1200px; /* explicitly set width */
-    font-size: 1.2rem;
-    font-weight: bold;
-    background: linear-gradient(135deg, #8e44ad, #50a5d5);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    }
-
-    #rosterForm button:hover {
-    background: linear-gradient(135deg, #8e44ad, #50a5d5);
-    transform: scale(1.05);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
-    }
-
-
-    #rosterForm button:hover {
-    background: linear-gradient(135deg, #9b59b6, #8e44ad);
-    transform: scale(1.05);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
-    }
-
-
-    /* Layout adjustments */
-    #rosterForm {
-    max-width: 900px;
-    margin: 20px auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-    }
-
-    /* Put Coach Name and Team Name on the same row */
-    #rosterForm label[for="playername"],
-    #rosterForm select#playername{
-    flex: 1 1 calc(50% - 10px);
-    min-width: 300px;
-    }
-
-    /* Style for dropdowns and map section */
-    #rosterForm label,
-    #rosterForm select,
-    #rosterForm input {
-    display: block;
-    }
-
-
-        /* Light grey theme */
-    body, label, input, select, button, h3 {
-    color: #ccc;
-    font-family: 'Kumbh Sans', sans-serif;
-    }
-
-    /* Overall form layout */
-    #rosterForm {
-    max-width: 1200px;
-    margin: 20px auto;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    }
-
-    /* Row for name + team name */
-    .form-row {
-    display: flex;
-    gap: 20px;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    }
-
-    /* Group styles for input+label pairs */
-    .form-group {
-    flex: 1;
-    min-width: 250px;
-    }
-
-    /* Inputs and selects */
-    #rosterForm input,
-    #rosterForm select {
-    width: 100%;
-    padding: 10px 12px;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: 1px solid #aaa;
-    background-color: #222;
-    color: #eee;
-    }
-
-    /* Submit button */
-    #rosterForm button {
-    padding: 10px 20px;
-    font-size: 1.1rem;
-    background-color: #444;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 10px;
-    width: fit-content;
-    }
-
-    #rosterForm button:hover {
-    background-color: #666;
-    }
-
-    .form-row {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap; /* allows wrapping on small screens */
-    }
-
-    .form-group {
-    flex: 1;           /* each takes equal available space */
-    min-width: 150px;  /* prevent them from getting too narrow */
-    }
-    #roster-display {
-    max-width: 1200px;
-    width: 90%;
-    margin: 20px auto;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 8px;
-    min-height: 150px;
-    }
-    @media (max-width: 700px) {
-    .form-row {
-        flex-direction: column;
-        gap: 10px;
-    }
-    }
-
-  #rosterForm button:disabled {
-  background: #666 !important;
-  cursor: not-allowed;
-  opacity: 0.5;
-  transform: none;
-  box-shadow: none;
-}
-
-
-.taken-map { color: grey !important; font-style: italic; }
-
-
-
-
-  </style>
 </head>
-
 
 
   <!-- Navbar Section -->
@@ -359,195 +48,521 @@
     </ul>
   </nav>
 
-    <div id="roster-display">
-        <p>Please select a coach to see the roster.</p>
-    </div>
+
+<style>
+  body {
+    font-family: 'Kumbh Sans', sans-serif;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin: 20px auto; /* centers the table */
+    text-align: center;
+    width: 90%;
+    table-layout: fixed; /* equal column width distribution */
+    background-color: #666666; /* table background */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* subtle shadow */
+  }
+
+  th, td {
+    border: 1px solid #000;
+    padding: 8px;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  /* Header colors for first 5 tables (SPL) */
+  .header-spl th {
+    background-color: orangered;
+    color: black;
+  }
+
+  /* Header colors for last 5 tables (MLS) */
+  .header-mls th {
+    background-color: teal;
+    color: black;
+  }
+
+  /* Bold first column */
+  td:first-child {
+    font-weight: bold;
+  }
+    select {
+    padding: 8px 12px;          /* bigger padding for size */
+    font-size: 16px;            /* larger text */
+    background-color: #e0e0e0;  /* light grey background */
+    border: 1px solid #ccc;     /* subtle border */
+    border-radius: 5px;         /* rounded corners */
+    min-width: 150px;           /* consistent width */
+    cursor: pointer;            /* pointer on hover */
+    transition: all 0.2s ease;
+    
+  }
+
+  select:hover {
+    background-color: #d5d5d5;  /* slightly darker on hover */
+  }
+
+  select:focus {
+    outline: none;
+    border-color: #4CAF50;     /* highlight on focus */
+    box-shadow: 0 0 5px rgba(0, 128, 0, 0.5);
+  }
+    option.duplicate {
+    color: #999;          /* light grey text */
+    font-style: italic;   /* italicized */
+  }
+  
+#submitVote {
+  display: block;
+  margin: 30px auto 10px auto;
+  padding: 16px 0;
+  width: 1200px; /* same width as SPL button */
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, #8e44ad, #50a5d5);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+#submitVote:hover {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+#submitVote:disabled {
+  background: #666 !important;
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+
+.major-row-end td {
+  font-weight: bold;           /* bold all cells in bottom row */
+  border-bottom: 4px solid #000; /* keeps thick divider */
+}
 
 
-  <form id="rosterForm">
-    <div class="form-row">
-  <div class="form-group">
-    <label for="playername">Coach Name:</label>
-    <select id="playername" name="playername" required>
-      <option value="">Coach Name--</option>
-      <option value="Austin">Austin</option>
-      <option value="Colin">Colin</option>
-      <option value="Danny">Danny</option>
-      <option value="Dave">Dave</option>
-      <option value="Eric">Eric</option>
-      <option value="Freddy">Freddy</option>
-      <option value="Garrett">Garrett</option>
-      <option value="Hamilton">Hamilton</option>
-      <option value="Jaco">Jaco</option>
-      <option value="Jake">Jake</option>
-      <option value="Reid">Reid</option>
-      <option value="Tanya">Tanya</option>
-    </select>
-    <!--
-    <label for="teamName">Team Name:</label>
-    <input type="text" id="teamName" name="teamName" placeholder="Enter Team Name Here" />
-  -->
+  
+</style>
+
+
+<body>
+  <div style="text-align: center; margin-top: 40px; margin-bottom: 20px;">
+    <h1 style="font-size: 48px; color: #fff; text-decoration: underline;">SPL Season 4 All Star Voting</h1>
+    <p style="font-size: 20px; color: #ccc; margin-top: 10px;">
+      *Select your top 3, at least 2 series played at that position to qualify, minimum 2 nominees per team, 1 vote per coach*
+    </p>
+       <p style="font-size: 20px; color: #ccc; margin-top: 10px;">
+      *Order in the table was randomized*
+    </p>
+    <p style="font-size: 20px; color: #ccc; margin-top: 15px;">
+      *Top <strong>Colored</strong> row is stats at that position | Bottom <strong>Bold</strong> row is full season stats*
+    </p>
   </div>
-
-
-    </div>
-
-    <div class="form-row">
-    <div class="form-group">
-        <label for="captain">Select Captain:</label>
-        <select id="captain" name="captain" required>
-        <option value="" disabled selected hidden> </option>
-</select>
-
-        </select>
-    </div>
-    
-    <div class="form-group">
-        <label for="topmid">Top Midfield:</label>
-        <select id="topmid" name="topmid" required></select>
-    </div>
-    
-    <div class="form-group">
-        <label for="botmid">Bottom Midfield:</label>
-        <select id="botmid" name="botmid" required></select>
-    </div>
-    
-    <div class="form-group">
-        <label for="def">Defender:</label>
-        <select id="def" name="def" required></select>
-    </div>
-    </div>
+<div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin: 20px 0;">
+  <label for="voterSelect" style="color: #ccc; font-size: 1.2rem; display: block; margin-bottom: 8px;">
+    Name:
+  </label>
+  <input
+    type="text" 
+    id="voterSelect" 
+    name="voterSelect" 
+    placeholder="Name goes here..." 
+    style="padding: 10px 12px; font-size: 1rem; border-radius: 6px; border: 1px solid #aaa; background-color: #222; color: #eee; min-width: 200px; width: 50%;"
+  />
+</div>
 
 
 
-        <div class="map-timeline">
-    <div class="map-slot">
-        <label for="map1">1st Choice</label>
-        <select id="map1" name="map1" required></select>
-    </div>
-    <div class="map-slot">
-        <label for="map2">2nd Choice</label>
-        <select id="map2" name="map2" required></select>
+<!-- Example HTML -->
+<table id="SPL_ST" border="1"></table>
+<table id="SPL_TM" border="1"></table>
+<table id="SPL_BM" border="1"></table>
+<table id="SPL_DEF" border="1"></table>
+<table id="SPL_Util" border="1"></table>
+<table id="SPL_MGR" border="1"></table>
+<table id="MLS_ST" border="1"></table>
+<table id="MLS_TM" border="1"></table>
+<table id="MLS_BM" border="1"></table>
+<table id="MLS_DEF" border="1"></table>
+<table id="MLS_Util" border="1"></table>
+<table id="MLS_MGR" border="1"></table>
 
-    </div>
-    <div class="map-slot">
-        <label for="map3">3rd Choice</label>
-        <select id="map3" name="map3" required></select>
-    </div>
-    <div class="map-slot">
-        <label for="map4">4th Choice</label>
-        <select id="map4" name="map4" required></select>
-    </div>
-    <div class="map-slot">
-        <label for="map5">4th Ban</label>
-        <select id="map5" name="map5" required></select>
-    </div>
-    <div class="map-slot">
-        <label for="map6">3rd Ban</label>
-        <select id="map6" name="map6" required></select>
-    </div>
-    <div class="map-slot">
-        <label for="map7">2nd Ban</label>
-        <select id="map7" name="map7" required></select>
-    </div>
-      <div class="map-slot">
-        <label for="map8">1st Ban</label>
-        <select id="map8" name="map8" required></select>
-    </div>
-    </div>
-    <button type = "submit">Submit</button>
-</form>
 
-    <script>
-    document.getElementById('rosterForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+<div style="text-align: center; margin: 40px 0;">
+  <button id="submitVote" type="button">
+    Submit
+  </button>
 
-    const playername = document.getElementById('playername').value;
-    const captain = document.getElementById('captain').value;
-    const topmid = document.getElementById('topmid').value;
-    const botmid = document.getElementById('botmid').value;
-    const def = document.getElementById('def').value;
-    //const teamName = document.getElementById('teamName').value;
 
-    // Access roster data for selected coach
-    const roster = rosterDataByCoach[playername];
-    if (!roster) {
-        alert('Please select a valid coach.');
-        return;
-    }
 
-    const selectedPlayers = [captain, topmid, botmid, def];
+<script>
+const sheetUrl =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vTk_yyYJL6SZMkR56CtCoJLDSnI79GyP0r7Js_vFzLQ0kZEI1Xc96bFIqPdzm7PLA-U40CxvoklFXQc/pub?gid=1784266098&single=true&output=csv";
 
-    // ✅ Check for exhausted players
-    for (const player of selectedPlayers) {
-        if (!player) continue;
+const tables = [
+  {
+    id: "SPL_ST",
+    title: "Striker - SPL", 
+    titleColor: "#ea4335",
+    range: { rowStart: 3, rowEnd: 9, colStart: 1, colEnd: 9 }
+  },
+  {
+  id: "SPL_TM",
+  title: "Top Mid - SPL",
+  titleColor: "#34a853",
+  topRowColor:"#34a853",
+  range: { rowStart: 11, rowEnd: 23, colStart: 1, colEnd: 9 }
+},
+{
+  id: "SPL_BM",
+  title: "Bot Mid - SPL",
+  titleColor: "#4285f4",
+  topRowColor:"#4285f4",
+  range: { rowStart: 25, rowEnd: 37, colStart: 1, colEnd: 9 }
+},
+{
+  id: "SPL_DEF",
+  title: "Defense - SPL",
+  titleColor: "#fbbc04",
+  topRowColor:"#fbbc04",
+  range: { rowStart: 39, rowEnd: 51, colStart: 1, colEnd: 9 }
+},
+{
+  id: "SPL_Util",
+  title: "Utility - SPL",
+  subtitle: "For Each Player, Vote Yes if they Deserve to be an All Star, No if they do not",
+  range:{ rowStart: 53, rowEnd: 59, colStart: 1, colEnd: 10 },
+  type: "utility"
+},
+  { id: "SPL_MGR", title: "Manager - SPL", range: { rowStart: 61, rowEnd: 67, colStart: 0, colEnd: 8 } },
+  {
+    id: "MLS_ST",
+    title: "Striker - MLS", 
+    titleColor: "#ea4335",
+    range: { rowStart: 3, rowEnd: 9, colStart: 11, colEnd: 19 }
+  },
+  {
+  id: "MLS_TM",
+  title: "Top Mid - MLS",
+  titleColor: "#34a853",
+  topRowColor:"#34a853",
+  range: { rowStart: 11, rowEnd: 23, colStart: 11, colEnd: 19 }
+},
+{
+  id: "MLS_BM",
+  title: "Bot Mid - MLS",
+  titleColor: "#4285f4",
+  topRowColor:"#4285f4",
+  range: { rowStart: 25, rowEnd: 37, colStart: 11, colEnd: 19 }
+},
+{
+  id: "MLS_DEF",
+  title: "Defense - MLS",
+  titleColor: "#fbbc04",
+  topRowColor:"#fbbc04",
+  range: { rowStart: 39, rowEnd: 51, colStart: 11, colEnd: 19 }
+},
+{
+  id: "MLS_Util",
+  title: "Utility - MLS",
+  subtitle: "For Each Player, Vote Yes if they Deserve to be an All Star, No if they do not",
+  range:{ rowStart: 53, rowEnd: 59, colStart: 10, colEnd: 19 },
+  type: "utility"
+},
+  { id: "MLS_MGR", title: "Manager - MLS", range: { rowStart: 61, rowEnd: 67, colStart: 10, colEnd: 18 } }
+];
 
-        const playerRow = roster.find(row => row[0] === player);
-        if (!playerRow) continue;
+fetch(sheetUrl)
+  .then(res => res.text())
+  .then(csv => {
+    const rows = csv.split("\n").map(r => r.split(","));
 
-        const currentFitness = parseInt(playerRow[1]);
-        const upcomingFitness = currentFitness - 3;
+    tables.forEach(def => {
+      const table = document.getElementById(def.id);
+      if (!table) return;
+      table.innerHTML = "";
 
-        if (upcomingFitness <= -1) {
-        alert(`Player "${player}" is exhausted and cannot be selected.`);
-        return;
+// --- Table Title ---
+    const title = document.createElement("h3");
+    title.textContent = def.title;
+    title.style.textAlign = "center";
+    title.style.margin = "75px 0 10px";
+    title.style.color = def.titleColor || "#fff";
+    title.style.fontSize = "30px";
+    title.style.textDecoration = "underline";
+    table.parentNode.insertBefore(title, table);
+
+    // --- Subtitle (optional) ---
+    if (def.subtitle) {
+      const subtitle = document.createElement("h4");
+      subtitle.textContent = def.subtitle;
+      subtitle.style.textAlign = "center";
+      subtitle.style.margin = "0 0 15px"; // space below subtitle
+      subtitle.style.color = "#ccc";      // grey subtitle
+      subtitle.style.fontSize = "18px";   // smaller than main title
+      table.parentNode.insertBefore(subtitle, table);
+}
+
+
+      // --- Header styling ---
+      if (def.id.startsWith("SPL")) {
+        table.classList.add("header-spl");
+      } else if (def.id.startsWith("MLS")) {
+        table.classList.add("header-mls");
+      }
+
+      // --- Headers ---
+      const headers = def.id.endsWith("MGR")
+        ? ["Coach","Team", "Points", "Win%", "GF/g", "GA/g", "GD", "Snipes"]
+        : def.type === "utility"
+          ? ["Player", "Series", "Coach", "Win %", "Goals/g", "Striker Index", "Impact", "+/-", "Vote"]
+          : ["Player", "Team", "Series", "Win %", "Goals/g", "Striker Index", "Impact", "+/-"];
+
+      const headerRow = document.createElement("tr");
+      headers.forEach(h => {
+        const th = document.createElement("th");
+        th.textContent = h;
+        headerRow.appendChild(th);
+      });
+      table.appendChild(headerRow);
+
+      // --- Data ---
+      const dataRows = rows.slice(def.range.rowStart, def.range.rowEnd);
+
+      // --- Utility Tables (Yes/No) ---
+      if (def.type === "utility") {
+        dataRows.forEach((row, i) => {
+          const tr = document.createElement("tr");
+          for (let c = def.range.colStart; c < def.range.colEnd - 1; c++) {
+            const td = document.createElement("td");
+            td.textContent = row[c] || "";
+            tr.appendChild(td);
+          }
+          const tdVote = document.createElement("td");
+          const select = document.createElement("select");
+          select.name = def.id.toLowerCase() + "_row" + i;
+          select.required = true;
+
+          ["--", "Yes", "No"].forEach(val => {
+            const option = document.createElement("option");
+            option.value = val === "--" ? "" : val;
+            option.textContent = val;
+            if (val === "--") { option.selected = true; option.disabled = true; }
+            select.appendChild(option);
+          });
+
+          tdVote.appendChild(select);
+          tr.appendChild(tdVote);
+          table.appendChild(tr);
+        });
+      }
+
+      // --- Split-row tables (TM/BM/DEF) ---
+      else if (def.id.includes("_TM") || def.id.includes("_BM") || def.id.includes("_DEF")) {
+        const firstColValues = [];
+
+        for (let i = 0; i < dataRows.length; i += 2) {
+          const rowA = dataRows[i];
+          const rowB = dataRows[i + 1] || [];
+
+          const trTop = document.createElement("tr");
+          const trBottom = document.createElement("tr");
+          trBottom.classList.add("major-row-end");
+
+          for (let c = def.range.colStart; c < def.range.colEnd; c++) {
+            if (c < def.range.colStart + 2) {
+              const td = document.createElement("td");
+              td.textContent = rowA[c] || "";
+              td.rowSpan = 2;
+              trTop.appendChild(td);
+
+              if (c === def.range.colStart && rowA[c]) firstColValues.push(rowA[c]);
+            } else {
+              const tdTop = document.createElement("td");
+              tdTop.textContent = rowA[c] || "";
+              tdTop.style.color = def.topRowColor || "#64b5f6";
+              trTop.appendChild(tdTop);
+
+              const tdBottom = document.createElement("td");
+              tdBottom.textContent = rowB[c] || "";
+              tdBottom.style.fontWeight = "bold";
+              trBottom.appendChild(tdBottom);
+            }
+          }
+
+          table.appendChild(trTop);
+          table.appendChild(trBottom);
         }
+
+        // --- Top-3 dropdowns below table ---
+        const form = document.createElement("form");
+        form.style.display = "flex";
+        form.style.justifyContent = "space-between";
+        form.style.margin = "20px auto";
+        form.style.width = "90%";
+
+        ["First Choice", "Second Choice", "Third Choice"].forEach((labelText, i) => {
+          const box = document.createElement("div");
+          box.style.width = "30%";
+          box.style.textAlign = "center";
+
+          const label = document.createElement("div");
+          label.textContent = labelText;
+          label.style.fontWeight = "bold";
+          label.style.color = "#ccc";
+          label.style.marginBottom = "5px";
+
+          const select = document.createElement("select");
+          select.name = def.id.toLowerCase() + "_" + (i + 1);
+          select.required = true;
+          select.style.width = "100%";
+          select.style.padding = "8px";
+          select.style.fontSize = "16px";
+
+          // Default option
+          const defaultOption = document.createElement("option");
+          defaultOption.value = "";
+          defaultOption.textContent = "-- Select --";
+          defaultOption.selected = true;
+          defaultOption.disabled = true;
+          select.appendChild(defaultOption);
+
+          // First-column values as options
+          firstColValues.forEach(v => {
+            const option = document.createElement("option");
+            option.value = v;
+            option.textContent = v;
+            select.appendChild(option);
+          });
+
+          box.append(label, select);
+          form.appendChild(box);
+        });
+
+        table.parentNode.insertBefore(form, table.nextSibling);
+      }
+
+      // --- Normal tables (like Strikers) ---
+      else {
+        dataRows.forEach(row => {
+          const tr = document.createElement("tr");
+          for (let c = def.range.colStart; c < def.range.colEnd; c++) {
+            const td = document.createElement("td");
+            td.textContent = row[c] || "";
+            tr.appendChild(td);
+          }
+          table.appendChild(tr);
+        });
+
+        // --- Top-3 dropdown ---
+        const firstColValues = dataRows.map(r => r[def.range.colStart] || "");
+        const form = document.createElement("form");
+        form.style.display = "flex";
+        form.style.justifyContent = "space-between";
+        form.style.margin = "20px auto";
+        form.style.width = "90%";
+
+        ["First Choice", "Second Choice", "Third Choice"].forEach((labelText, i) => {
+          const box = document.createElement("div");
+          box.style.width = "30%";
+          box.style.textAlign = "center";
+
+          const label = document.createElement("div");
+          label.textContent = labelText;
+          label.style.fontWeight = "bold";
+          label.style.color = "#ccc";
+          label.style.marginBottom = "5px";
+
+          const select = document.createElement("select");
+          select.name = def.id.toLowerCase() + "_" + (i + 1);
+          select.required = true;
+          select.style.width = "100%";
+          select.style.padding = "8px";
+          select.style.fontSize = "16px";
+
+          select.innerHTML = `<option value="" disabled selected>-- Select --</option>`;
+          firstColValues.forEach(v => {
+            const o = document.createElement("option");
+            o.value = v;
+            o.textContent = v;
+            select.appendChild(o);
+          });
+
+          box.append(label, select);
+          form.appendChild(box);
+        });
+
+        table.parentNode.insertBefore(form, table.nextSibling);
+      }
+    }); // tables.forEach
+  }); // fetch.then
+
+// ---- Submit ----
+document.getElementById("submitVote").addEventListener("click", function () {
+  const btn = this;
+  btn.disabled = true;
+  btn.textContent = "Submitting...";
+
+  const voter = document.getElementById("voterSelect").value || "Missing";
+  const data = { voter };
+
+  // --- Top 3 dropdowns ---
+  [
+    "spl_st","spl_tm","spl_bm","spl_def","spl_mgr",
+    "mls_st","mls_tm","mls_bm","mls_def","mls_mgr"
+  ].forEach(cat => {
+    for (let i = 1; i <= 3; i++) {
+      const sel = document.querySelector(`select[name='${cat}_${i}']`);
+      data[`${cat}_${i}`] = sel?.value || "Missing";
     }
+  });
 
-    // ✅ Check for duplicate players
-    const filtered = selectedPlayers.filter(p => p);
-    const uniquePlayers = new Set(filtered);
-    if (uniquePlayers.size !== filtered.length) {
-        alert('Please ensure all selected players are unique.');
-        return;
-    }
-
-    // ✅ Check for duplicate maps
-    const mapSelections = [];
-    for (let i = 1; i <= 8; i++) {
-        const mapValue = document.getElementById(`map${i}`)?.value;
-        if (mapValue) mapSelections.push(mapValue);
-    }
-
-    const uniqueMaps = new Set(mapSelections);
-    if (uniqueMaps.size !== mapSelections.length) {
-        alert('Please ensure all selected maps are unique.');
-        return;
-    }
-
-      const submitButton = e.target.querySelector('button');
-      submitButton.disabled = true;
-
-    
-    // ✅ If all validations pass, prepare data and submit
-    const data = {
-        playername,
-        captain,
-        topmid,
-        botmid,
-        def,
-        // Optional: include map fields if needed
-        map1: document.getElementById('map1')?.value,
-        map2: document.getElementById('map2')?.value,
-        map3: document.getElementById('map3')?.value,
-        map4: document.getElementById('map4')?.value,
-        map5: document.getElementById('map5')?.value,
-        map6: document.getElementById('map6')?.value,
-        map7: document.getElementById('map7')?.value,
-        map8: document.getElementById('map8')?.value,
-        //teamName
-    };
-
-    fetch('https://script.google.com/macros/s/AKfycbznqUaeQDaIsz9kmQsVowb-G7PeOkFN-7safQju32ziP6E9SB-sqflfJDSsNnsisFZB/exec', {
-        method: 'POST',
-        body: JSON.stringify(data)
-    }).then(res => {
-        if (res.ok) alert('Submitted!');
-        else alert('Submission failed.');
-          submitButton.disabled = false;
+  // --- Utility Yes/No votes ---
+  ["spl_util","mls_util"].forEach(cat => {
+    const selects = document.querySelectorAll(`select[name^='${cat}_row']`);
+    selects.forEach((sel, index) => {
+      data[`${cat}_row${index}`] = sel?.value || "Missing";
     });
+  });
+
+  // --- Send to Apps Script ---
+  fetch("https://script.google.com/macros/s/AKfycbyf_xEElGv7RLnIewiRjmbnrwbzstsLjEMOQH-o85diiISBQ1EjUJxoPt_Jdr3n83nqnA/exec", {
+    method: "POST",
+    body: JSON.stringify(data),
+  })
+    .then(r => r.text())
+    .then(t => {
+      if (t === "Success") {
+        alert("Vote submitted!");
+      } else {
+        alert("Error: " + t);
+      }
+    })
+    .catch(err => {
+      alert("Fetch error: " + err);
+      console.error(err);
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.textContent = "Submit";
     });
-    </script>
+});
+
+</script>
+
+
+
+
+
+
 
 
 
@@ -598,366 +613,6 @@
   </div>
 
   <script src="app.js"></script>
-<script>
-const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sNy5NcDFMQJC32VQTJlrnNR-zd5_Jk-cAUGVkLhSUGBUoQywXBZHnyIXeLgJ5lLflK--_CEx0E_u/pub?gid=1896446593&single=true&output=csv';
 
-function parseCSV(text) {
-  return text.trim().split('\n').map(row => row.split(','));
-}
-
-function extractRange(data, startCol, endCol, startRow, endRow) {
-  return data.slice(startRow, endRow + 1).map(row => row.slice(startCol, endCol + 1));
-}
-
-function buildRosterHTML(data, selectedPlayers = []) {
-  const teamName = data[0][0] || 'Unnamed Team';
-  let html = '<div class="roster-box">';
-  html += `<div class="team-header">${teamName}</div>`;
-  html += `
-    <table>
-      <tr>
-          <th>Players</th>
-          <th>Current Fitness</th>
-          <th>Next Week Fitness</th>
-      </tr>
-  `;
-
-  for (let i = 1; i < data.length; i++) {
-    const label = data[i][0] || '';
-    const value = data[i][1] || '';
-    const isSelected = selectedPlayers.includes(label);
-    const fitness = parseInt(value);
-
-    let upcomingDisplay;
-    let upcomingClass;
-
-    if (isSelected) {
-      // For selected players: show range (fitness - 3) to (fitness - 2)
-      const upper = Math.max(fitness - 2, -2);
-      const upcoming = Math.max(fitness - 3, -2);
-      upcomingDisplay = `${upcoming}-${upper}`;
-
-      if (upcoming <=-1) upcomingClass = 'tired';
-      else if (upcoming <=1) upcomingClass = 'zero'
-      else if (upcoming === 2) upcomingClass = 'three';
-      else if (upcoming === 4) upcomingClass = 'four';
-      else if (upcoming === 3) upcomingClass = 'three';
-      else upcomingClass = 'na';
-    } else {
-      // For unselected players: always show 7
-      upcomingDisplay = '7';
-      upcomingClass = 'seven'; // or 'fresh' if you want a special class
-    }
-
-    // Row class based on current fitness
-    let rowClass = '';
-    if (value <= 2) rowClass = 'zero';
-    else if (value === '4') rowClass = 'four';
-    else if (value === '3') rowClass = 'four';
-    else if (value === '5') rowClass = 'five';
-    else if (value === '7') rowClass = 'seven';
-    else rowClass = 'na';
-
-    html += `
-      <tr class="${rowClass}">
-        <td class="${rowClass}">${label}</td>
-        <td class="${rowClass}">${value}</td>
-        <td class="${upcomingClass}">${upcomingDisplay}</td>
-      </tr>
-    `;
-  }
-
-  html += '</table></div>';
-  return html;
-}
-
-
-let rosterDataByCoach = {};
-
-fetch(sheetUrl)
-  .then(res => res.text())
-  .then(csvText => {
-    const data = parseCSV(csvText);
-
-    for (let rowBox = 0; rowBox < 2; rowBox++) {
-      for (let colBox = 0; colBox < 6; colBox++) {
-        const startCol = 1 + colBox * 2;
-        const endCol = startCol + 1;
-        const startRow = 1 + rowBox * 8;
-        const endRow = startRow + 7;
-
-        const boxData = extractRange(data, startCol, endCol, startRow, endRow);
-        const coachName = boxData[0][0]?.trim();
-
-        if (coachName) {
-          rosterDataByCoach[coachName] = boxData;
-        }
-      }
-    }
-
-    console.log('Loaded coaches:', Object.keys(rosterDataByCoach));
-
-    document.getElementById('playername').addEventListener('change', (e) => {
-      const coach = e.target.value;
-      const displayDiv = document.getElementById('roster-display');
-      const captainDropdown = document.getElementById('captain');
-      const topmidDropdown = document.getElementById('topmid');
-      const botmidDropdown = document.getElementById('botmid');
-      const defDropdown = document.getElementById('def');
-
-      if (!coach || !rosterDataByCoach[coach]) {
-        displayDiv.innerHTML = '<p>Please select a coach to see the roster.</p>';
-        captainDropdown.innerHTML = '<option value="">Select a Captain</option>';
-        topmidDropdown.innerHTML = '<option value="">Select a Player</option>';
-        botmidDropdown.innerHTML = '<option value="">Select a Player</option>';
-        defDropdown.innerHTML = '<option value="">Select a Player</option>';
-        return;
-      }
-
-      const box = rosterDataByCoach[coach];
-
-      captainDropdown.innerHTML = '<option value="">Select a Captain</option>';
-      for (let i = 1; i <= 2; i++) {
-        const player = box[i]?.[0];
-        if (player) {
-          const opt = document.createElement('option');
-          opt.value = player;
-          opt.textContent = player;
-          captainDropdown.appendChild(opt);
-        }
-      }
-
-      const spots = ['topmid', 'botmid', 'def'];
-      spots.forEach(id => {
-        const select = document.getElementById(id);
-        select.innerHTML = '<option value="">Select a Player</option>';
-      });
-
-      for (let i = 3; i <= 7; i++) {
-        const player = box[i]?.[0];
-        if (player) {
-          spots.forEach(id => {
-            const select = document.getElementById(id);
-            const option = document.createElement('option');
-            option.value = player;
-            option.textContent = player;
-            select.appendChild(option);
-          });
-        }
-      }
-
-      updateRosterDisplay(coach);
-      populateMapDropdowns(coach);
-    });
-
-    ['captain', 'topmid', 'botmid', 'def'].forEach(id => {
-      document.getElementById(id).addEventListener('change', () => {
-        const coach = document.getElementById('playername').value;
-        if (coach && rosterDataByCoach[coach]) {
-          updateRosterDisplay(coach);
-        }
-      });
-    });
-  })
-  .catch(err => {
-    console.error('Failed to load roster data:', err);
-  });
-
-
-        const coachHeaders = {
-        Austin: "The Bridesmaids",
-        Colin: "Wariors FC",
-        Danny: "Spread Triple Option",
-        Dave: "HC United IV",
-        Eric: "Goose Crusade",
-        Freddy: "Fredchester United",
-        Garrett: "The Uprising",
-        Hamilton: "Double D(rybone)s",
-        Jaco: "Come on Mr Monty",
-        Jake: "MILWAUKEE BUCKS",
-        Reid: "Reid Hot Chili Strikers",
-        Tanya: "Nepo Babies"
-    };
-
-    function updateRosterDisplay(coach) {
-    const displayDiv = document.getElementById('roster-display');
-    const captain = document.getElementById('captain').value;
-    const topmid = document.getElementById('topmid').value;
-    const botmid = document.getElementById('botmid').value;
-    const def = document.getElementById('def').value;
-
-    const selectedPlayers = [captain, topmid, botmid, def].filter(Boolean);
-
-    const headerText = coachHeaders[coach] || `${coach}'s Roster`;
-
-    displayDiv.innerHTML = `<h3>${headerText}</h3>` + buildRosterHTML(rosterDataByCoach[coach], selectedPlayers);
-    }
-
-
-
-
-    const allMaps = [
-    'Vanilla',
-    'Thunder Island',
-    'Crystal Canyon',
-    'Lava Pit',
-    'Wastelands',
-    'Dump',
-    'Stormship',
-    'Sand Tomb'
-    ];
-
-    /*
-    const coachMapBans = {
-        'Crystal Canyon': ['Eric','Austin','Danny','Jaco','Freddy','Adam'],
-        'Stormship': [ 'Colin','Hamilton','Dave','Reid','Jake','Garrett']
-    };
-*/
-  /*  function getBannedMap(coachName) {
-        for (const [map, coaches] of Object.entries(coachMapBans)) {
-            if (coaches.includes(coachName)) return map;
-        }
-        return null;
-    }
-    */
-    function populateMapDropdowns(coachName) {
-        /*const bannedMap = getBannedMap(coachName);*/
-        const allowedMaps = allMaps;
-
-    for (let i = 1; i <= 8; i++) {
-        const select = document.getElementById(`map${i}`);
-        select.innerHTML = '';
-
-        // Placeholder
-        const placeholder = document.createElement('option');
-        placeholder.value = '';
-        placeholder.textContent = 'Select a map';
-        placeholder.disabled = true;
-        placeholder.selected = true;
-        select.appendChild(placeholder);
-
-        // Actual options
-        allowedMaps.forEach(map => {
-        const option = document.createElement('option');
-        option.value = map;
-        option.textContent = map;
-        select.appendChild(option);
-        });
-    }
-    }
-    const USE_TEXT_FALLBACK = true;
-
-// Call this after your populateMapDropdowns() creates options
-function grayOutSelectedMaps() {
-  // gather selects
-  const mapSelects = [];
-  for (let i = 1; i <= 8; i++) {
-    const s = document.getElementById(`map${i}`);
-    if (s) mapSelects.push(s);
-  }
-  // which maps are chosen right now
-  const selected = mapSelects.map(s => s.value).filter(v => v);
-
-  mapSelects.forEach(select => {
-    Array.from(select.options).forEach(opt => {
-      // store original label so we can restore it
-      if (!opt.dataset.originalLabel) opt.dataset.originalLabel = opt.textContent;
-
-      const takenByOther = opt.value && selected.includes(opt.value) && opt.value !== select.value;
-
-      // try to style the option (works in some browsers)
-      if (takenByOther) {
-        opt.classList.add('taken-map');
-        try { opt.style.color = 'grey'; } catch (e) { /* some browsers ignore styling */ }
-
-        // fallback: append text so users see it's taken
-        if (USE_TEXT_FALLBACK) opt.textContent = opt.dataset.originalLabel;
-      } else {
-        opt.classList.remove('taken-map');
-        opt.style.color = '';
-        opt.textContent = opt.dataset.originalLabel;
-      }
-    });
-  });
-}
-
-for (let i = 1; i <= 8; i++) {
-  const s = document.getElementById(`map${i}`);
-  if (s) s.addEventListener('change', grayOutSelectedMaps);
-}
-
-grayOutSelectedMaps();
-
-
-  document.querySelectorAll('.map-select').forEach(s => {
-    s.addEventListener('change', updateMapStyles);
-  });
-
-
-</script>
-<script>
-const submitButton = document.querySelector('#rosterForm button');
-
-function isPlayerExhausted(player, coach) {
-  const roster = rosterDataByCoach[coach];
-  const playerRow = roster?.find(row => row[0] === player);
-  const fitness = parseInt(playerRow?.[1]);
-  return fitness === 0 && (fitness - 1) === -1;
-}
-
-function validateFormLive() {
-  const coach = document.getElementById('playername').value;
-  const captain = document.getElementById('captain').value;
-  const topmid = document.getElementById('topmid').value;
-  const botmid = document.getElementById('botmid').value;
-  const def = document.getElementById('def').value;
-
-  const selectedPlayers = [captain, topmid, botmid, def].filter(p => p);
-  const uniquePlayers = new Set(selectedPlayers);
-  const hasDuplicates = uniquePlayers.size !== selectedPlayers.length;
-
-  const mapSelections = [];
-  for (let i = 1; i <= 8; i++) {
-    const val = document.getElementById(`map${i}`)?.value;
-    if (val) mapSelections.push(val);
-  }
-  const uniqueMaps = new Set(mapSelections);
-  const mapsValid = uniqueMaps.size === mapSelections.length && mapSelections.length === 8;
-
-  const isExhausted = coach && selectedPlayers.some(p => isPlayerExhausted(p, coach));
-
-  const allRequiredFilled =
-    coach && 
-    selectedPlayers.length === 4 &&
-    mapSelections.length === 8;
-
-  const messages = [];
-
-  if (!allRequiredFilled) messages.push('Please complete all fields');
-  if (isExhausted) messages.push('One or more players have no fitness left');
-  if (hasDuplicates) messages.push('Ensure all selected players are unique');
-  if (!mapsValid) messages.push('Ensure all selected maps are unique');
-
-  const valid = messages.length === 0;
-  submitButton.disabled = !valid;
-  submitButton.title = valid ? '' : messages.join('\n');
-}
-
-
-// Watch inputs for changes
-['playername', 'captain', 'topmid', 'botmid', 'def'].forEach(id =>
-  document.getElementById(id).addEventListener('change', validateFormLive)
-);
-
-for (let i = 1; i <= 8; i++) {
-  document.getElementById(`map${i}`).addEventListener('change', validateFormLive);
-}
-
-// Run once on page load
-validateFormLive();
-</script>
-
-
-   
 </body>
 </html>

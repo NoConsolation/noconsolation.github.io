@@ -323,7 +323,7 @@ fetch(sheetUrl)
       const headers = def.id.endsWith("MGR")
         ? ["Coach","Team", "Points", "Win%", "GF/g", "GA/g", "GD", "Snipes"]
         : def.type === "utility"
-          ? ["Player", "Series", "Coach", "Win %", "Goals/g", "Striker Index", "Impact", "+/-", "Vote"]
+          ? ["Player", "Team", "Series", "Win %", "Goals/g", "Striker Index", "Impact", "+/-", "Vote"]
           : ["Player", "Team", "Series", "Win %", "Goals/g", "Striker Index", "Impact", "+/-"];
 
       const headerRow = document.createElement("tr");

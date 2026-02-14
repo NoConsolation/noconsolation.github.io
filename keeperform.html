@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>No Consolation</title>
+  <link rel="stylesheet" href="stylesspl.css" />
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+    integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
+    crossorigin="anonymous"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    .roster-box table {
+    width: 100%;
+    table-layout: fixed;
+    }
+
+    .roster-box td:first-child {
+    width: 50%;
+    padding: 6px;
+    word-wrap: break-word;
+    }
+    .roster-box td:nth-child(2){
+        width:50%;
+        text-align:center
+    }
+
+    .roster-box td:last-child {
+    width: 25%;
+    text-align: center;
+    font-weight: bold;
+    }
+        /* Row coloring based on column 2 value */
+
+    tr.na {
+    background-color: #2a2a2a;
+    color: #eee;
+    }
+
+    @media (max-width: 600px) {
+     .roster-box td:first-child {
+    width: 50%;
+    }
+
+    .roster-box td:nth-child(2){
+        width:25%
+    }
+    .roster-box td:last-child {
+    width:25%;
+    }
+}
+  
+
+
+    /* Light grey for non-table text */
+    body, label, input, select, button, h3 {
+    color: #ccc;
+    font-family: 'Kumbh Sans', sans-serif;
+    }
+
+    /* Larger inputs and selects */
+    #rosterForm input,
+    #rosterForm select {
+    padding: 10px 12px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #aaa;
+    margin-bottom: 12px;
+    width: 100%;
+    background-color: #222;
+    color: #eee;
+    }
+
+    /* Larger submit button */
+    #rosterForm button {
+    display: block;
+    margin: 30px auto 10px auto;
+    padding: 16px 0;
+    width: 1200px; /* explicitly set width */
+    font-size: 1.2rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #8e44ad, #50a5d5);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    }
+
+    #rosterForm button:hover {
+    background: linear-gradient(135deg, #8e44ad, #50a5d5);
+    transform: scale(1.05);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+    }
+
+
+    #rosterForm button:hover {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    transform: scale(1.05);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+    }
+
+
+    /* Layout adjustments */
+    #rosterForm {
+    max-width: 900px;
+    margin: 20px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    }
+
+    /* Put Coach Name and Team Name on the same row */
+    #rosterForm label[for="playername"],
+    #rosterForm select#playername{
+    flex: 1 1 calc(50% - 10px);
+    min-width: 300px;
+    }
+
+    /* Style for dropdowns and map section */
+    #rosterForm label,
+    #rosterForm select,
+    #rosterForm input {
+    display: block;
+    }
+
+
+        /* Light grey theme */
+    body, label, input, select, button, h3 {
+    color: #ccc;
+    font-family: 'Kumbh Sans', sans-serif;
+    }
+
+    /* Overall form layout */
+    #rosterForm {
+    max-width: 1200px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    }
+
+    /* Row for name + team name */
+    .form-row {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    }
+
+    /* Group styles for input+label pairs */
+    .form-group {
+    flex: 1;
+    min-width: 250px;
+    }
+
+    /* Inputs and selects */
+    #rosterForm input,
+    #rosterForm select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #aaa;
+    background-color: #222;
+    color: #eee;
+    }
+
+    /* Submit button */
+    #rosterForm button {
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: fit-content;
+    }
+
+    #rosterForm button:hover {
+    background-color: #666;
+    }
+
+    .form-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* allows wrapping on small screens */
+    }
+
+    .form-group {
+    flex: 1;           /* each takes equal available space */
+    min-width: 150px;  /* prevent them from getting too narrow */
+    }
+    #roster-display {
+    max-width: 1200px;
+    width: 90%;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    min-height: 150px;
+    }
+    @media (max-width: 700px) {
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    }
+
+  #rosterForm button:disabled {
+  background: #666 !important;
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+
+#instruction-box {
+  max-width: 1200px;
+  width: 90%;
+  margin: 20px auto;
+  padding: 16px 20px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background-color: #1e1e1e;
+  color: #ccc;
+}
+
+#instruction-box h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #eee;
+}
+
+#instruction-box ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+#instruction-box li {
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+
+
+  </style>
+</head>
+
+
+
+  <!-- Navbar Section -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/" id="navbar__logo"><i class="fas fa-gem"></i>NC</a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+      </div>
+      <ul class="navbar__menu">
+        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+        <li class="navbar__item"><a href="/streaming.html" class="navbar__links">Streaming</a></li>
+        <li class="navbar__item"><a href="/podcasts.html" class="navbar__links">Podcasts</a></li>
+        <li class="navbar__item"><a href="/roster.html" class="navbar__links">Info</a></li>
+        <li class="navbar__item"><a href="/spl.html" class="navbar__links">SPL</a></li>
+        <li class="navbar__btn">
+          <a href="https://discord.gg/dzEZA3Jwm5" target="_blank" class="button">Get Notified</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Secondary Nav Bar -->
+  <nav class="sub-navbar">
+    <ul class="sub-navbar__menu">
+      <li><a href="/spl.html">SPL Home</a></li>
+      <li><a href="/spl-stats.html">Stats</a></li>
+      <li><a href="/spl-rosters.html">Rosters</a></li>
+      <li><a href="/splszn2.html">Season 2</a></li>
+    </ul>
+  </nav>
+
+    <div id="roster-display">
+        <p>Please select a coach to see the roster.</p>
+    </div>
+
+<div id="instruction-box">
+  <h3>Instructions</h3>
+  <ul>
+    <li>Select up to <strong>3 players</strong> (limited to 1 Captain) to keep for next season.</li>
+    <li><strong></strong>The player will still go up for auction,</strong> however another player must bid at least <strong>10% higher</strong> than their value in order to release them from your roster</li>
+    <li>You are still eligible to bid on any players that get released</li>
+    
+  </ul>
+</div>
+
+
+
+  <form id="rosterForm">
+    <div class="form-row">
+  <div class="form-group">
+    <label for="playername">Coach Name:</label>
+    <select id="playername" name="playername" required>
+      <option value="">Coach Name--</option>
+      <option value="Austin">Austin</option>
+      <option value="Colin">Colin</option>
+      <option value="Danny">Danny</option>
+      <option value="Dave">Dave</option>
+      <option value="Eric">Eric</option>
+      <option value="Freddy">Freddy</option>
+      <option value="Garrett">Garrett</option>
+      <option value="Hamilton">Hamilton</option>
+      <option value="Jaco">Jaco</option>
+      <option value="Jake">Jake</option>
+      <option value="Reid">Reid</option>
+      <option value="Tanya">Tanya</option>
+    </select>
+    <!--
+    <label for="teamName">Team Name:</label>
+    <input type="text" id="teamName" name="teamName" placeholder="Enter Team Name Here" />
+  -->
+  </div>
+
+
+    </div>
+    <div class="form-row">
+    <div class="form-group">
+        <label for="captain">Select a Captain:</label>
+        <select id="captain" name="captain">
+        <option value="" disabled selected hidden> </option>
+</select>
+
+    </div>
+    
+    <div class="form-group">
+        <label for="topmid">Sidekick 1:</label>
+        <select id="topmid" name="topmid"></select>
+    </div>
+    
+    <div class="form-group">
+        <label for="botmid">Sidekick 2:</label>
+        <select id="botmid" name="botmid"></select>
+    </div>
+    
+    <div class="form-group">
+        <label for="def">Sidekick 3:</label>
+        <select id="def" name="def"></select>
+    </div>
+    </div>
+
+   <button type = "submit">Submit</button>
+</form>
+
+    <script>
+    const submitButton = document.querySelector('#rosterForm button');
+    document.getElementById('rosterForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const playername = document.getElementById('playername').value;
+    const captain = document.getElementById('captain').value;
+    const topmid = document.getElementById('topmid').value;
+    const botmid = document.getElementById('botmid').value;
+    const def = document.getElementById('def').value;
+    //const teamName = document.getElementById('teamName').value;
+
+    // Access roster data for selected coach
+    const roster = rosterDataByCoach[playername];
+    if (!roster) {
+        alert('Please select a valid coach.');
+        return;
+    }
+
+    const selectedPlayers = [captain, topmid, botmid, def];
+
+
+
+    // ✅ Check for duplicate players
+    const filtered = selectedPlayers.filter(p => p);
+    const uniquePlayers = new Set(filtered);
+    if (uniquePlayers.size !== filtered.length) {
+        alert('Please ensure all selected players are unique.');
+        return;
+    }
+
+
+
+    
+    // ✅ If all validations pass, prepare data and submit
+    const data = {
+        playername,
+        captain,
+        topmid,
+        botmid,
+        def,
+    };
+
+    fetch('https://script.google.com/macros/s/AKfycby9HM8MHUemXDt34LlTRVgL--qwuefkKDsTDfUZEMHHq_w97ir1b6f3AGO8xetj95e17w/exec', {
+        method: 'POST',
+        body: JSON.stringify(data)
+    }).then(res => {
+        if (res.ok) alert('Submitted!');
+        else alert('Submission failed.');
+          submitButton.disabled = false;
+    });
+    });
+    </script>
+
+
+
+  <!-- Footer Section -->
+  <div class="footer__container">
+    <div class="footer__links">
+      <div class="footer__link--wrapper">
+        <div class="footer__link--items">
+          <h2>About Us</h2>
+          <a href="/info.html">Mission</a>
+          <a href="/info.html">Vision</a>
+          <a href="/info.html">Roster</a>
+        </div>
+        <div class="footer__link--items">
+          <h2>Standings</h2>
+          <a href="/info.html">Statistics</a>
+        </div>
+      </div>
+      <div class="footer__link--wrapper">
+        <div class="footer__link--items">
+          <h2>Contact Us</h2>
+          <a href="https://discord.gg/dzEZA3Jwm5">Discord</a>
+        </div>
+        <div class="footer__link--items">
+          <h2>Social Media</h2>
+          <a href="https://twitch.tv/noconsolation" target="_blank">Twitch</a>
+          <a href="https://www.tiktok.com/@noconsolation?lang=en" target="_blank">TikTok</a>
+          <a href="https://www.youtube.com/@thereisnoconsolation" target="_blank">YouTube</a>
+          <a href="https://twitter.com/NoConsolation_" target="_blank">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <section class="social__media">
+      <div class="social__media--wrap">
+        <div class="footer__logo">
+          <a href="/" id="footer__logo"><i class="fas fa-gem"></i>No Consolation</a>
+        </div>
+        <p class="website__rights">© No Consolation 2023. All rights reserved</p>
+        <div class="social__icons">
+          <a class="social__icon--link" href="https://twitch.tv/noconsolation" target="_blank"><i class="fab fa-twitch"></i></a>
+          <a class="social__icon--link" href="https://discord.gg/dzEZA3Jwm5" target="_blank"><i class="fab fa-discord"></i></a>
+          <a class="social__icon--link" href="https://www.youtube.com/@thereisnoconsolation" target="_blank"><i class="fab fa-youtube"></i></a>
+          <a class="social__icon--link" href="https://twitter.com/NoConsolation_" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a class="social__icon--link" href="https://www.tiktok.com/@noconsolation?lang=en" target="_blank"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+<script>
+const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sNy5NcDFMQJC32VQTJlrnNR-zd5_Jk-cAUGVkLhSUGBUoQywXBZHnyIXeLgJ5lLflK--_CEx0E_u/pub?gid=1896446593&single=true&output=csv';
+
+function parseCSV(text) {
+  return text.trim().split('\n').map(row => row.split(','));
+}
+
+function extractRange(data, startCol, endCol, startRow, endRow) {
+  return data.slice(startRow, endRow + 1).map(row => row.slice(startCol, endCol + 1));
+}
+
+function buildRosterHTML(data, selectedPlayers = []) {
+  const teamName = data[0][0] || 'Unnamed Team';
+  let html = '<div class="roster-box">';
+  html += `<div class="team-header">${teamName}</div>`;
+  html += `
+    <table>
+      <tr>
+          <th>Players</th>
+          <th>Value</th>
+      </tr>
+  `;
+
+  for (let i = 1; i < data.length; i++) {
+    const label = data[i][0] || '';
+    const value = data[i][1] || '';
+    const isSelected = selectedPlayers.includes(label);
+    const fitness = parseInt(value);
+
+   
+
+    // Row class based on current fitness
+    let rowClass = 'na';
+
+
+    html += `
+      <tr class="${rowClass}">
+        <td class="${rowClass}">${label}</td>
+        <td class="${rowClass}">${value}</td>
+      </tr>
+    `;
+  }
+
+  html += '</table></div>';
+  return html;
+}
+
+
+let rosterDataByCoach = {};
+
+fetch(sheetUrl)
+  .then(res => res.text())
+  .then(csvText => {
+    const data = parseCSV(csvText);
+
+    for (let rowBox = 0; rowBox < 2; rowBox++) {
+      for (let colBox = 0; colBox < 6; colBox++) {
+        const startCol = 1 + colBox * 2;
+        const endCol = startCol + 1;
+        const startRow = 66 + rowBox * 8;
+        const endRow = startRow + 7;
+
+        const boxData = extractRange(data, startCol, endCol, startRow, endRow);
+        const coachName = boxData[0][0]?.trim();
+
+        if (coachName) {
+          rosterDataByCoach[coachName] = boxData;
+        }
+      }
+    }
+
+    console.log('Loaded coaches:', Object.keys(rosterDataByCoach));
+
+    document.getElementById('playername').addEventListener('change', (e) => {
+      const coach = e.target.value;
+      const displayDiv = document.getElementById('roster-display');
+      const captainDropdown = document.getElementById('captain');
+      const topmidDropdown = document.getElementById('topmid');
+      const botmidDropdown = document.getElementById('botmid');
+      const defDropdown = document.getElementById('def');
+
+      if (!coach || !rosterDataByCoach[coach]) {
+        displayDiv.innerHTML = '<p>Please select a coach to see the roster.</p>';
+        captainDropdown.innerHTML = '<option value="">Select a Captain</option>';
+        topmidDropdown.innerHTML = '<option value="">Select a Player</option>';
+        botmidDropdown.innerHTML = '<option value="">Select a Player</option>';
+        defDropdown.innerHTML = '<option value="">Select a Player</option>';
+        return;
+      }
+
+      const box = rosterDataByCoach[coach];
+
+      captainDropdown.innerHTML = '<option value="">Select a Captain</option>';
+      for (let i = 1; i <= 2; i++) {
+        const player = box[i]?.[0];
+        if (player) {
+          const opt = document.createElement('option');
+          opt.value = player;
+          opt.textContent = player;
+          captainDropdown.appendChild(opt);
+        }
+      }
+
+      const spots = ['topmid', 'botmid', 'def'];
+      spots.forEach(id => {
+        const select = document.getElementById(id);
+        select.innerHTML = '<option value="">Select a Player</option>';
+      });
+
+      for (let i = 3; i <= 7; i++) {
+        const player = box[i]?.[0];
+        if (player) {
+          spots.forEach(id => {
+            const select = document.getElementById(id);
+            const option = document.createElement('option');
+            option.value = player;
+            option.textContent = player;
+            select.appendChild(option);
+          });
+        }
+      }
+
+      updateRosterDisplay(coach);
+    });
+
+    ['captain', 'topmid', 'botmid', 'def'].forEach(id => {
+      document.getElementById(id).addEventListener('change', () => {
+        const coach = document.getElementById('playername').value;
+        if (coach && rosterDataByCoach[coach]) {
+          updateRosterDisplay(coach);
+        }
+      });
+    });
+  })
+  .catch(err => {
+    console.error('Failed to load roster data:', err);
+  });
+
+
+        const coachHeaders = {
+        Austin: "The Bridesmaids",
+        Colin: "Wariors FC",
+        Danny: "Spread Triple Option",
+        Dave: "HC United IV",
+        Eric: "Goose Crusade",
+        Freddy: "Fredchester United",
+        Garrett: "The Uprising",
+        Hamilton: "Double D(rybone)s",
+        Jaco: "Come on Mr Monty",
+        Jake: "MILWAUKEE BUCKS",
+        Reid: "Reid Hot Chili Strikers",
+        Tanya: "Nepo Babies"
+    };
+
+    function updateRosterDisplay(coach) {
+    const displayDiv = document.getElementById('roster-display');
+    const captain = document.getElementById('captain').value;
+    const topmid = document.getElementById('topmid').value;
+    const botmid = document.getElementById('botmid').value;
+    const def = document.getElementById('def').value;
+
+    const selectedPlayers = [captain, topmid, botmid, def].filter(Boolean);
+
+    const headerText = coachHeaders[coach] || `${coach}'s Roster`;
+
+    displayDiv.innerHTML = `<h3>${headerText}</h3>` + buildRosterHTML(rosterDataByCoach[coach], selectedPlayers);
+    }
+
+
+    const USE_TEXT_FALLBACK = true;
+
+
+
+
+</script>
+<script>
+
+
+
+
+function validateFormLive() {
+  const coach = document.getElementById('playername').value;
+  const captain = document.getElementById('captain').value;
+  const topmid = document.getElementById('topmid').value;
+  const botmid = document.getElementById('botmid').value;
+  const def = document.getElementById('def').value;
+
+  const selectedPlayers = [captain, topmid, botmid, def].filter(Boolean);
+  const uniquePlayers = new Set(selectedPlayers);
+
+  const messages = [];
+
+  if (!coach) messages.push('Select a coach');
+  if (uniquePlayers.size !== selectedPlayers.length) messages.push('Players must be unique');
+  if (selectedPlayers.length > 3) messages.push('Select no more than 3 players');
+
+  const valid = messages.length === 0;
+  submitButton.disabled = !valid;
+  submitButton.title = valid ? '' : messages.join('\n');
+}
+
+
+
+// Watch inputs for changes
+['playername', 'captain', 'topmid', 'botmid', 'def'].forEach(id =>
+  document.getElementById(id).addEventListener('change', validateFormLive)
+);
+
+
+// Run once on page load
+validateFormLive();
+</script>
+
+
+   
+</body>
+</html>

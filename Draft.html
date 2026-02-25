@@ -24,8 +24,11 @@
     }
 
     /* Navbar and sub-navbar (assumed from your stylesheet, minimal override here) */
-    .navbar, .sub-navbar {
+    .navbar {
       margin-bottom: 20px;
+      height: 150px;
+      padding: 20px 40px;
+      display: flex;
     }
 
 
@@ -159,19 +162,6 @@
   position: relative;
 }
 
-
-.new-bubble {
-  transform: translateX(50%) scale(0.9);
-  opacity: 0;
-  animation: slideFadeScale 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes slideFadeScale {
-  to {
-    transform: translateX(0) scale(1);
-    opacity: 1;
-  }
-}
 .player-card {
   max-width: 1000px;
   margin: 20px auto;
@@ -188,6 +178,14 @@
   font-size: 1.6rem;
   color: #e74c3c;
   text-align: center;
+}
+.player-card.restricted {
+  border-color: #3498db;       /* blue border */
+  color: black;                 /* white text for contrast */
+}
+
+.player-card.restricted h2 {
+  color: #3498db;              /* header text blue */
 }
 .player-stats {
   display: grid;
@@ -209,15 +207,15 @@
 }
 
 .drafted-rosters-table {
-  width: 1010px;
-  margin:0 auto;
+  width: 1000px;
+  max-width: 100%;
+  margin: 0 auto;
   table-layout: fixed; /* evenly spaced columns */
   border-collapse: collapse; /* needed for vertical borders */
   border-radius: 10px;
   overflow: hidden;
   background-color: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  
 }
 
 .drafted-rosters-table th,
@@ -234,15 +232,14 @@
 .drafted-rosters-table td:last-child {
   border-right: none; /* remove border on last column */
 }
-.drafted-rosters-table tbody tr:nth-child(3) td {
-  border-top: 3px solid #ccc; /* thicker border between captains and sidekicks */
+.drafted-rosters-table tr:nth-child(4) td {
+  border-top: 5px solid #a9a9a9; /* thick border between captains & sidekicks */
 }
 
 .drafted-rosters-table th {
   font-weight: 600;
   font-size: .8rem;
   color: #fff;
-  background-color: #e74c3c;
 }
 
 .drafted-rosters-table td {
@@ -384,6 +381,113 @@
   transform: scale(1.05);
   box-shadow: 0 6px 15px rgba(0,0,0,0.3);
 }
+
+/* highlight style for selected player */
+
+#playerListContainer {
+  flex: 0 0 250px;        /* fixed width for the column */
+  max-height: 400px;      /* sets the scrollable height */
+  overflow-y: auto;       /* makes it scrollable */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f0f0f0;
+  padding: 5px;
+}
+
+.submission-bubble {
+  background-color: #c0392b;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: 2px solid #000;
+  width: 200px;
+  margin-bottom: 8px;
+  opacity: 1;
+  transform: translateX(0) scale(1); /* final state */
+}
+
+.new-bubble {
+  animation: slideFadeScale 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+
+@keyframes slideFadeScale {
+  0% {
+    transform: translateX(50%) scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+#globalTimer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* space between the two timers */
+  margin: 40px auto;
+}
+
+/* Restricted Timer (blue) */
+#restrictedTimerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px; /* space from main timer */
+}
+
+#restrictedTimerLabel {
+  font-size: 1rem;
+  color: #3498db;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#restrictedTimerClock {
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 20px;
+  border: 3px solid #3498db; /* blue outline */
+  text-shadow:
+    -2px -2px 0 #3498db,
+     2px -2px 0 #3498db,
+    -2px  2px 0 #3498db,
+     2px  2px 0 #3498db;
+  display: inline-block;
+  background-color: transparent; /* remove background */
+}
+
+/* Main timer formatting (restore your old red styling) */
+#timerClock {
+  font-size: 4rem;
+  font-weight: bold;
+  color: white;
+  text-shadow:
+    -2px -2px 0 #e74c3c,
+     2px -2px 0 #e74c3c,
+    -2px  2px 0 #e74c3c,
+     2px  2px 0 #e74c3c;
+  margin-top: 10px;
+  background-color: rgba(0,0,0,0.5);
+  padding: 20px 40px;
+  border-radius: 20px;
+  display: inline-block;
+  border: 2px solid #e74c3c;
+}
+
+#submitBidBtn:disabled {
+  background: #999 !important;  /* darker grey */
+  color: #eee !important;            /* lighter text for contrast */
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;           /* semi-transparent */
+  border: 2px solid #666 !important; /* optional: darker border */
+}
+
 #playerTable {
   width: 100%;
   border-collapse: collapse;
@@ -406,37 +510,42 @@
   padding: 5px;
 }
 /* highlight style for selected player */
-
-#playerListContainer {
-  flex: 0 0 250px;        /* fixed width for the column */
-  max-height: 400px;      /* sets the scrollable height */
-  overflow-y: auto;       /* makes it scrollable */
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #f0f0f0;
-  padding: 5px;
+#playerTable tbody tr.selected {
+  background: linear-gradient(135deg, #50a5d5, #8e44ad);
+  color: #fff;
+  font-weight: bold;
+}
+#playerTable tbody tr {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#playerTable tbody tr:hover {
+  background: #949494;
 }
 
 </style>
-  <!-- Navbar Section -->
-  <nav class="navbar">
-    <div class="navbar__container">
-      <a href="/" id="navbar__logo"><i class="fas fa-gem"></i>NC</a>
-      <div class="navbar__toggle" id="mobile-menu">
-        <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+
+<nav class="navbar">
+  <div class="navbar__container">
+    <a href="/" id="navbar__logo"><i class="fas fa-gem"></i>NC</a>
+    <div id="globalTimer" class="global-timer">
+      
+      <!-- Restricted timer -->
+      <div id="restrictedTimerContainer">
+        <div id="restrictedTimerLabel">Unlock Timer</div>
+        <div id="restrictedTimerClock">0:30</div>
       </div>
-      <ul class="navbar__menu">
-        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
-        <li class="navbar__item"><a href="/streaming.html" class="navbar__links">Streaming</a></li>
-        <li class="navbar__item"><a href="/podcasts.html" class="navbar__links">Podcasts</a></li>
-        <li class="navbar__item"><a href="/roster.html" class="navbar__links">Info</a></li>
-        <li class="navbar__item"><a href="/spl.html" class="navbar__links">SPL</a></li>
-        <li class="navbar__btn">
-          <a href="https://discord.gg/dzEZA3Jwm5" target="_blank" class="button">Get Notified</a>
-        </li>
-      </ul>
+
+      <!-- Main timer -->
+      <div id="timerContainer">
+        <div id="timerClock">0:00</div>
+      </div>
+
     </div>
-  </nav>
+  </div>
+</nav>
+
+
 
 
 <div id="charCountContainer" class="char-count-container">
@@ -446,19 +555,20 @@
 
 <div id="draftedRostersContainerDrafter"></div>
 <div id="showSelectedPlayer" class="player-card" style="display:none;"></div>
+
+
 <div class="dashboard-container">
     <div id="playerListContainer">
-  <table id="playerTable">
-    <thead>
-      <tr>
-        <th>Players</th>
-      </tr>
-    </thead>
-    <tbody id="playerList">
-      <!-- Filled dynamically -->
-    </tbody>
-  </table>
-</div>
+      <table id="playerTable">
+        <thead>
+          <tr>
+            <th>Players</th>
+          </tr>
+        </thead>
+        <tbody id="playerList"></tbody>
+      </table>
+
+  </div>
   <table id="budgetTable">
     <thead>
       <tr>
@@ -480,22 +590,28 @@
   </div>
 
 
-  <button type="submit" class="submit-btn">Submit</button>
-</div>
+  <button type="submit" class="submit-btn" id="submitBidBtn">Submit</button>
 </form>
+  <div class="bids-column">
+    <div id="DraftBidBoard" class="dashboard" style="min-height: 50px;"></div>
+    </div>
+  </div>
+
+</div>
+
 
 
 
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"; // <-- import set and get
+import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 // Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBdFLO9Pt8toDPfq3VUFEjMSfghi47tdio",
   authDomain: "spldraft.firebaseapp.com",
-  databaseURL: "https://spldraft-default-rtdb.firebaseio.com", // <-- make sure this is included
+  databaseURL: "https://spldraft-default-rtdb.firebaseio.com",
   projectId: "spldraft",
   storageBucket: "spldraft.firebasestorage.app",
   messagingSenderId: "151054562933",
@@ -505,15 +621,30 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+const db = getDatabase(app);
 
+// --- Elements ---
 const coachContainer = document.getElementById("coachContainer");
 const changeCoachBtn = document.getElementById("changeCoachBtn");
 const draftForm = document.getElementById("draftForm");
 const bidInput = document.getElementById("bid");
+const submitBidBtn = document.getElementById("submitBidBtn");
+const draftedContainer = document.getElementById("draftedRostersContainerDrafter");
+const charCountContainer = document.getElementById("charCountContainer");
+const bidsContainer = document.getElementById("DraftBidBoard");
+const selectedPlayerDiv = document.getElementById("showSelectedPlayer");
+const timerClock = document.getElementById("timerClock");
+const timerPlayer = document.getElementById("timerPlayer");
+const playerListBody = document.getElementById("playerList");
 
+// --- Coach Selection ---
 let coach = localStorage.getItem("lastCoach");
-
+  const COACHES = { 
+    SPL: [
+      "Austin","Dave","Eric","Garrett","Reid","Colin"
+    ],
+    MLS: ["Hamilton","Jaco","Danny","Tanya","Jake","Freddy"]
+  };
 function showDropdown() {
   coachContainer.innerHTML = `
     <label for="coach">Coach:</label>
@@ -544,7 +675,6 @@ function showDropdown() {
   });
 }
 
-// Initialize coach UI
 if (coach) {
   coachContainer.innerHTML = `Coach: <strong>${coach}</strong>`;
 } else {
@@ -557,37 +687,39 @@ changeCoachBtn.addEventListener("click", () => {
   showDropdown();
 });
 
-// Submit form
+// --- Draft Form Submission ---
 draftForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  if (!coach) {
-    alert("Please select a coach!");
-    return;
-  }
+  if (!coach) return alert("Please select a coach!");
 
   const bid = Number(bidInput.value);
-
-  // Accept 0 now
-  if (bidInput.value === "" || isNaN(bid)) {
-    alert("Please enter a bid!");
-    return;
-  }
+  if (bidInput.value === "" || isNaN(bid)) return alert("Please enter a bid!");
 
   try {
-    const coachDraftRef = ref(database, `bids/${coach}`);
-    const snapshot = await get(coachDraftRef);
-    let bidNumber = 1;
+    // Get the selected player
+    const selSnap = await get(ref(db, "selectedPlayer"));
+    if (!selSnap.exists()) return alert("No player selected!");
+    const sel = selSnap.val();
+    const playerSnap = await get(ref(db, `players/${sel.league}/${sel.name}`));
+    if (!playerSnap.exists()) return alert("Player not found!");
 
-    if (snapshot.exists()) {
-      bidNumber = Object.keys(snapshot.val()).length + 1;
+    const player = playerSnap.val();
+
+    // Check if player is restricted
+    if (player.status === "Restricted") {
+      const minBid = Math.ceil(player.price * 1.1)+1 ;
+      if (bid < minBid) {
+        return alert(`This player is restricted! Minimum bid: ${minBid}`);
+      }
     }
 
+    // Save bid
+    const coachDraftRef = ref(db, `bids/${coach}`);
+    const snapshot = await get(coachDraftRef);
+    const bidNumber = snapshot.exists() ? Object.keys(snapshot.val()).length + 1 : 1;
     const draftKey = `bid${bidNumber}`;
+    await set(ref(db, `bids/${coach}/${draftKey}`), { bid, timestamp: Date.now() });
 
-    await set(ref(database, `bids/${coach}/${draftKey}`), { bid,timestamp:Date.now() });
-
-    alert("Bid submitted!");
     draftForm.reset();
   } catch (err) {
     console.error("Firebase error:", err);
@@ -595,302 +727,341 @@ draftForm.addEventListener("submit", async (e) => {
 });
 
 
-const db = getDatabase(app);
-
-const budgetTableBody = document.querySelector("#budgetTable tbody");
-
-// Listen for the league selected by the commish
+// --- League ---
 const leagueRef = ref(db, "currentLeague");
+const leagueColors = { "": "#7f8c8d", "SPL": "orangered", "MLS": "teal" };
+let currentPlayersListener = null;
 
-let currentBudgetListener = null;
+// --- Drafted Table ---
+function renderDraftedTableFull(coaches, playersData, league) {
+  draftedContainer.innerHTML = "";
 
+  // Map each coach to their captains and sidekicks
+  const teamMap = {};
+  Object.entries(playersData).forEach(([name, p]) => {
+    if (!p.team) return;
+    if (!teamMap[p.team]) teamMap[p.team] = { captains: [], sidekicks: [] };
+    if (p.role === "Captain") teamMap[p.team].captains.push({ name, ...p });
+    else teamMap[p.team].sidekicks.push({ name, ...p });
+  });
+
+  const table = document.createElement("table");
+  table.className = "drafted-rosters-table";
+
+  // Header
+  const thead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  coaches.forEach(c => {
+    const th = document.createElement("th");
+    th.textContent = c;
+    headerRow.appendChild(th);
+  });
+  headerRow.style.backgroundColor = leagueColors[league] || "#7f8c8d";
+  headerRow.style.color = "#fff";
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  // 2 rows for captains, 5 rows for sidekicks
+  for (let row = 0; row < 7; row++) {
+    const tr = document.createElement("tr");
+
+    coaches.forEach(coach => {
+      const td = document.createElement("td");
+      const team = teamMap[coach] || { captains: [], sidekicks: [] };
+      let player;
+
+      if (row < 2) {
+        // First 2 rows = captains
+        player = team.captains[row];
+      } else {
+        // Next 5 rows = sidekicks
+        player = team.sidekicks[row - 2];
+      }
+
+      if (player) {
+        td.textContent = player.name;
+        if (player.status === "Restricted") {
+          td.innerHTML = `${player.name} - <b>${Math.ceil(player.price*1.1)}</b>`;
+          td.style.color = "#3498db";
+        } else td.style.color = "#000";
+      }
+
+      tr.appendChild(td);
+    });
+
+    table.appendChild(tr);
+  }
+
+  draftedContainer.appendChild(table);
+}
+
+
+// --- Firebase Listener for Players ---
 onValue(leagueRef, (snapshot) => {
   const league = snapshot.val();
   if (!league) return;
+  playerTable.style.setProperty("--header-color", leagueColors[league] || "#7f8c8d");
+  if (currentPlayersListener) currentPlayersListener();
 
-  // Remove previous listener if exists
-  if (currentBudgetListener) currentBudgetListener();
+  const playersRef = ref(db, `players/${league}`);
+  currentPlayersListener = onValue(playersRef, (snap) => {
+    const playersData = snap.val();
+    if (!playersData) return;
 
-  // Listen to that league's budgets
-  const leagueBudgetsRef = ref(db, `budgets/${league}`);
-  currentBudgetListener = onValue(leagueBudgetsRef, (snap) => {
-    if (!snap.exists()) {
-      budgetTableBody.innerHTML = "<tr><td colspan='2'>No coaches found</td></tr>";
-      return;
-    }
-    renderBudgetTable(snap.val());
+    const coaches = COACHES[league];
+
+
+    // --- Render tables ---
+    renderDraftedTableFull(coaches, playersData, league);
+    renderCharCountTables(playersData);
+    renderPlayersTable(playersData, league);
+
+    // --- Render budget table ---
+    const budgets = calculateBudgets(COACHES[league], playersData);
+    renderBudgetTable(budgets);
   });
 });
 
-function renderBudgetTable(coaches, highlightCoach = null) {
+
+// --- Character Count Tables ---
+const charOrder = ["BJ","Bowser","Daisy","Diddy","DK","Luigi","Mario","Peach","Petey","Wario","Waluigi","Yoshi","Birdo","Dry Bones","Boo","Koopa","Hammer Bro","Monty","Shy Guy","Toad"];
+
+function renderCharCountTables(playersData) {
+  if (!charCountContainer) return;
+  const counts = {};
+  Object.values(playersData)
+  .filter(p => p.status !== "Locked") // skip Locked players
+  .forEach(p => counts[p.char || "Unknown"] = (counts[p.char] || 0) + 1);
+
+
+  const halves = [charOrder.slice(0,12), charOrder.slice(12)];
+  charCountContainer.innerHTML = "";
+
+  halves.forEach((group, idx) => {
+    const table = document.createElement("table");
+    table.className = "char-count-table";
+    const thead = document.createElement("thead");
+    const trHead = document.createElement("tr");
+    const color = idx===0?"#e74c3c":"#3498db";
+    group.forEach(char => { const th = document.createElement("th"); th.textContent=char; th.style.backgroundColor=color; trHead.appendChild(th); });
+    thead.appendChild(trHead); table.appendChild(thead);
+
+    const trBody = document.createElement("tr");
+    group.forEach(char => { const td = document.createElement("td"); td.textContent = counts[char]||0; trBody.appendChild(td); });
+    const tbody = document.createElement("tbody"); tbody.appendChild(trBody); table.appendChild(tbody);
+    charCountContainer.appendChild(table);
+  });
+}
+
+// --- Live Bids ---
+let previousBids = new Set();
+onValue(ref(db,"bids"), snapshot => {
+  bidsContainer.innerHTML = "";
+  if (!snapshot.exists()) return;
+  const allBids = [];
+  const drafts = snapshot.val();
+  for (const coach in drafts) {
+    for (const key in drafts[coach]) {
+      allBids.push({ coach, bid: drafts[coach][key].bid, timestamp: drafts[coach][key].timestamp, id:`${coach}_${key}`});
+    }
+  }
+  allBids.sort((a,b)=> b.bid-a.bid || a.timestamp-b.timestamp);
+
+  allBids.forEach(({coach,bid,id})=>{
+    const bubble = document.createElement("div");
+    bubble.className="submission-bubble";
+    bubble.textContent=`${coach} - ${bid} 🟡`;
+    bidsContainer.appendChild(bubble);
+    if(!previousBids.has(id)) { previousBids.add(id); requestAnimationFrame(()=>bubble.classList.add("new-bubble")); }
+  });
+});
+
+// --- Selected Player Stats ---
+const selectedPlayerRef = ref(db,"selectedPlayer");
+onValue(selectedPlayerRef, async snapshot => {
+  const sel = snapshot.val();
+  if (!sel) { 
+    selectedPlayerDiv.style.display = "none"; 
+    return; 
+  }
+
+  try {
+    const playerSnap = await get(ref(db, `players/${sel.league}/${sel.name}`));
+    if (!playerSnap.exists()) { 
+      selectedPlayerDiv.style.display = "none"; 
+      return; 
+    }
+
+    const stats = playerSnap.val();
+    selectedPlayerDiv.style.display = "block";
+
+    // Toggle restricted class
+    if (stats.status === "Restricted") {
+      selectedPlayerDiv.classList.add("restricted");
+    } else {
+      selectedPlayerDiv.classList.remove("restricted");
+    }
+
+    // Build the HTML
+    let restrictedLine = "";
+    if (stats.status === "Restricted") {
+      // Price with 🟡 emoji, rounded if needed
+      const price = stats.price || 0;
+      restrictedLine = `<div style="margin-top:4px; font-size:30px; text-align:center; font-weight:bold; color:#ffd700;">
+                          Restricted: ${stats.team || "Unknown"} - Min Bid: 🟡${Math.ceil(stats.price * 1.1)}
+                        </div>`;
+
+    }
+
+    selectedPlayerDiv.innerHTML = `
+      <h2>${sel.name} - Career Stats</h2>
+      ${restrictedLine}
+      <div class="player-stats">
+        <div><u>Games</u><br>${stats.games}</div>
+        <div><u>Win %</u><br>${stats.winp}</div>
+        <div><u>Goals/Game</u><br>${stats.goals}</div>
+        <div><u>MS-SS/Game</u><br>${stats.msss}</div>
+        <div><u>SI</u><br>${stats.si}</div>
+        <div><u>Impact</u><br>${stats.impact}</div>
+        <div><u>+/-</u><br>${stats.pm}</div>
+      </div>
+    `;
+  } catch (err) {
+    console.error(err);
+    selectedPlayerDiv.style.display = "none";
+  }
+});
+
+
+
+
+// --- Calculate budgets for each coach ---
+function calculateBudgets(coaches, playersData) {
+  const maxBudget = 105; // or whatever your starting budget is
+  const budgets = {};
+  
+  coaches.forEach(coach => {
+    // Sum all drafted player prices for this coach
+    const spent = Object.values(playersData)
+      .filter(p => p.team === coach && p.price)
+      .reduce((sum, p) => sum + Number(p.price || 0), 0);
+    
+    budgets[coach] = maxBudget - spent; // remaining budget
+  });
+
+  return budgets;
+}
+
+// --- Render budget table ---
+const budgetTableBody = document.querySelector("#budgetTable tbody");
+function renderBudgetTable(budgets) {
   budgetTableBody.innerHTML = "";
-  Object.entries(coaches)
-    .sort((a, b) => b[1] - a[1]) // sort descending
-    .forEach(([coach, budget]) => {
+  Object.entries(budgets)
+    .sort((a,b)=>b[1]-a[1]) // highest budget first
+    .forEach(([coach, budget])=>{
       const tr = document.createElement("tr");
       tr.innerHTML = `<td>${coach}</td><td>${budget}</td>`;
-      if (coach === highlightCoach) tr.classList.add("highlight-row");
       budgetTableBody.appendChild(tr);
     });
 }
 
-const playerTable = document.getElementById("playerTable"); // add this
-const playerListBody = document.getElementById("playerList");
+const countdownSeconds = 60;
+const RESTRICTED_WINDOW = 30;
 
-// Define colors for header based on league
-const leagueColors = { "": "#7f8c8d", "SPL": "orangered", "MLS": "teal" };
+let timerInterval = null;
+let restrictedStart = null;
 
-let currentPlayersListener = null;
+onValue(ref(db, "timer"), async (snapshot) => {
+  const data = snapshot.val();
 
-onValue(leagueRef, (snapshot) => {
-  const league = snapshot.val();
-  if (!league) return;
+  if (!data || !data.running) {
+    // Reset display
+    submitBidBtn.disabled = true;
+    document.getElementById("timerClock").textContent = countdownSeconds;
+    document.getElementById("restrictedTimerContainer").style.display = "none";
 
-  // Update table header color
-  const thead = playerTable.querySelector("thead");
-  thead.style.backgroundColor = leagueColors[league] || leagueColors[""];
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = null;
+    return;
+  }
 
-  // Remove previous listener if exists
-  if (currentPlayersListener) currentPlayersListener();
+  const start = data.startTime;
+  restrictedStart = start; // sync restricted timer with main timer start
 
-  // Listen to players for this league
-  const playersRef = ref(db, `players/${league}`);
-  currentPlayersListener = onValue(playersRef, (snap) => {
-    const data = snap.val();
-    if (!data) {
-      playerListBody.innerHTML = "<tr><td>No players found</td></tr>";
-      return;
+  if (timerInterval) clearInterval(timerInterval);
+
+  timerInterval = setInterval(async () => {
+    const now = Date.now();
+    const elapsed = Math.floor((now - start) / 1000);
+    let mainRemaining = countdownSeconds - elapsed;
+    if (mainRemaining < 0) mainRemaining = 0;
+
+    // Update main timer
+    document.getElementById("timerClock").textContent = mainRemaining;
+
+    // Check current player
+    const selSnap = await get(ref(db, "selectedPlayer"));
+    if (!selSnap.exists()) return;
+    const sel = selSnap.val();
+
+    const playerSnap = await get(ref(db, `players/${sel.league}/${sel.name}`));
+    if (!playerSnap.exists()) return;
+    const player = playerSnap.val();
+
+    // ---- RESTRICTED LOGIC ----
+    if (player.status === "Restricted") {
+      const restrictedElapsed = elapsed; // same base as main timer
+      let restrictedRemaining = RESTRICTED_WINDOW - restrictedElapsed;
+      if (restrictedRemaining < 0) restrictedRemaining = 0;
+
+      document.getElementById("restrictedTimerContainer").style.display = "flex";
+      document.getElementById("restrictedTimerClock").textContent = restrictedRemaining + "s";
+
+      const bidSnap = await get(ref(db, "bids"));
+      const hasAnyBid = bidSnap.exists() && Object.keys(bidSnap.val() || {}).length > 0;
+
+      if (restrictedRemaining === 0 && !hasAnyBid) {
+        await update(ref(db, `players/${sel.league}/${sel.name}`), { status: "Locked" });
+        await update(ref(db, "timer"), { running: false }); // stop main timer
+        document.getElementById("restrictedTimerContainer").style.display = "none";
+        clearInterval(timerInterval);
+      }
+
+      if (hasAnyBid) {
+        document.getElementById("restrictedTimerContainer").style.display = "none";
+      }
+    } else {
+      document.getElementById("restrictedTimerContainer").style.display = "none";
     }
 
-    renderPlayersTable(data);
-    renderCharCountTables(data);
-  });
+    // Stop main timer if it reaches 0
+    if (mainRemaining === 0) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+  }, 1000);
 });
 
-function renderPlayersTable(playersData) {
+function renderPlayersTable(playersData, league) {
   playerListBody.innerHTML = "";
 
-  // Sort by order field to match Google Sheet
   const playersArray = Object.entries(playersData)
     .map(([name, stats]) => ({ name, ...stats }))
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
   playersArray.forEach(player => {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${player.name}</td>`; // display player name
+
+    const nameTd = document.createElement("td");
+    nameTd.textContent = player.name;
+
+    tr.appendChild(nameTd);
     playerListBody.appendChild(tr);
   });
 }
 
-const selectedPlayerDiv = document.getElementById("showSelectedPlayer");
-const selectedPlayerRef = ref(database, "selectedPlayer");
-
-onValue(selectedPlayerRef, async (snapshot) => {
-  const selected = snapshot.val();
-  
-  if (!selected) {
-    selectedPlayerDiv.style.display = "none";
-    return;
-  }
-
-  const { league, name } = selected;
-
-  try {
-    const playerSnap = await get(ref(database, `players/${league}/${name}`));
-    if (!playerSnap.exists()) {
-      selectedPlayerDiv.style.display = "none";
-      return;
-    }
-
-    const stats = playerSnap.val();
-
-    selectedPlayerDiv.style.display = "block";
-   selectedPlayerDiv.innerHTML = `
-    <h2>${name} - Career Stats</h2>
-    <div class="player-stats">
-      <div><u>Games</u></b><br>${stats.games}</div>
-      <div><u>Win %</u></b><br>${stats.winp}</div>
-      <div><u>Goals/Game</u></b><br>${stats.goals}</div>
-      <div><u>MS-SS/Game</u></b><br>${stats.msss}</div>
-      <div><u>SI</u></b><br>${stats.si}</div>
-      <div><u>Impact</u></b><br>${stats.impact}</div>
-      <div><u>+/-</u></b><br>${stats.pm}</div>
-    </div>
-    `;
-  } catch (err) {
-    console.error("Error fetching selected player stats:", err);
-    selectedPlayerDiv.style.display = "none";
-  }
-});
-// Listen for drafted players updates
-const draftedPlayersRef = ref(database, "draftedPlayers");
-
-onValue(draftedPlayersRef, (snapshot) => {
-  const draftedPlayers = snapshot.val() || {};
-
-  // get current league
-  get(leagueRef).then((leagueSnap) => {
-    const league = leagueSnap.val();
-    if (!league) return;
-
-    // define your coaches for that league
-    const coaches = [
-      "Austin", "Colin", "Danny", "Dave", "Eric",
-      "Freddy", "Garrett", "Hamilton", "Jaco", "Jake", "Reid","Tanya"
-    ];
-
-    // render for drafter
-    renderDraftedRostersForContainer(
-      "draftedRostersContainerDrafter",
-      draftedPlayers,
-      coaches,
-      league
-    );
-  });
-});
-function renderDraftedRostersForContainer(containerId, draftedPlayers, coaches, league) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  // Filter league coaches
-  let leagueCoaches = [];
-  if (league === "SPL") {
-    leagueCoaches = ["Austin","Danny","Dave","Eric","Garrett","Jaco"];
-  } else if (league === "MLS") {
-    leagueCoaches = ["Colin","Freddy", "Hamilton", "Jake", "Reid","Tanya"];
-  }
-
-  container.innerHTML = "";
-
-  const table = document.createElement("table");
-  table.classList.add("drafted-rosters-table");
-
-  // Header
-  const thead = document.createElement("thead");
-  const headerRow = document.createElement("tr");
-  leagueCoaches.forEach((coach) => {
-    const th = document.createElement("th");
-    th.textContent = coach;
-    headerRow.appendChild(th);
-  });
-  thead.appendChild(headerRow);
-  table.appendChild(thead);
-
-  // Body
-  const tbody = document.createElement("tbody");
-
-  // Always 7 roster slots per coach (2 captain, 5 sidekick)
-for (let row = 0; row < 7; row++) {
-    const tr = document.createElement("tr");
-
-    leagueCoaches.forEach((coach) => {
-      const td = document.createElement("td");
-
-      const players = draftedPlayers[league]?.[coach] || [];
-
-      // Separate captains and sidekicks
-      const captains = players.filter(p => p.role === "Captain");
-      const sidekicks = players.filter(p => p.role === "Sidekick");
-
-      let playerObj = null;
-      if (row < 2) {
-        // Captain rows (0,1)
-        playerObj = captains[row] || null;
-      } else {
-        // Sidekick rows (2-6)
-        playerObj = sidekicks[row - 2] || null;
-      }
-
-      td.textContent = playerObj ? playerObj.name : "";
-      tr.appendChild(td);
-    });
-
-    tbody.appendChild(tr);
-  }
-
-  table.appendChild(tbody);
-  container.appendChild(table);
-}
-
-
-const charOrder = [
-  "BJ",
-  "Bowser",
-  "Daisy",
-  "Diddy",
-  "DK",
-  "Luigi",
-  "Mario",
-  "Peach",
-  "Petey",
-  "Wario",
-  "Waluigi",
-  "Yoshi",
-  "Birdo",
-  "Dry Bones",
-  "Boo",
-  "Koopa",
-  "Hammer Bro",
-  "Monty",
-  "Shy Guy",
-  "Toad"
-]
-function renderCharCountTables(playersData) {
-  const charCountContainer = document.getElementById("charCountContainer"); // a wrapper div
-  if (!charCountContainer) return;
-
-  const counts = {};
-
-  // Count remaining players by their char field
-  Object.values(playersData).forEach(player => {
-    const char = player.char || "Unknown";
-    counts[char] = (counts[char] || 0) + 1;
-  });
-
-  // Split charOrder into two arrays
-  const firstHalf = charOrder.slice(0, 12);
-  const secondHalf = charOrder.slice(12);
-
-  charCountContainer.innerHTML = ""; // clear previous tables
-
-  [ firstHalf, secondHalf ].forEach((charGroup, index) => {
-  const table = document.createElement("table");
-  table.classList.add("char-count-table");
-
-  const thead = document.createElement("thead");
-  const trHead = document.createElement("tr");
-
-  // Set different header colors
-  const headerColor = index === 0 ? "#e74c3c" : "#3498db"; // first table orange, second table blue
-
-  charGroup.forEach(char => {
-    const th = document.createElement("th");
-    th.textContent = char;
-    th.style.backgroundColor = headerColor;
-    trHead.appendChild(th);
-  });
-
-  thead.appendChild(trHead);
-  table.appendChild(thead);
-
-  const tbody = document.createElement("tbody");
-  const trBody = document.createElement("tr");
-
-  charGroup.forEach(char => {
-    const td = document.createElement("td");
-    td.textContent = counts[char] || 0;
-    trBody.appendChild(td);
-  });
-
-  tbody.appendChild(trBody);
-  table.appendChild(tbody);
-
-  charCountContainer.appendChild(table);
-});
-}
-
-
-
 
 </script>
+
 

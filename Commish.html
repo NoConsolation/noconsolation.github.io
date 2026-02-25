@@ -24,8 +24,11 @@
     }
 
     /* Navbar and sub-navbar (assumed from your stylesheet, minimal override here) */
-    .navbar, .sub-navbar {
+    .navbar {
       margin-bottom: 20px;
+      height: 150px;
+      padding: 20px 40px;
+      display: flex;
     }
 
 
@@ -380,6 +383,16 @@
   color: #e74c3c;
   text-align: center;
 }
+/* Restricted player variant */
+.player-card.restricted {
+  border-color: #3498db;       /* blue border */
+  color: black;                 /* white text for contrast */
+}
+
+.player-card.restricted h2 {
+  color: #3498db;              /* header text blue */
+}
+
 .player-stats {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -462,38 +475,112 @@
   transition: all 0.5s ease;
 }
 
+
+/* Make the control column as small as possible */
+#playerTable th:last-child,
+#playerTable td:last-child {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* Push the Start button fully right */
+.start-btn {
+  margin-left: auto;
+}
+
+#globalTimer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* space between the two timers */
+  margin: 40px auto;
+}
+
+/* Restricted Timer (blue) */
+#restrictedTimerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px; /* space from main timer */
+}
+
+#restrictedTimerLabel {
+  font-size: 1rem;
+  color: #3498db;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#restrictedTimerClock {
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 20px;
+  border: 3px solid #3498db; /* blue outline */
+  text-shadow:
+    -2px -2px 0 #3498db,
+     2px -2px 0 #3498db,
+    -2px  2px 0 #3498db,
+     2px  2px 0 #3498db;
+  display: inline-block;
+  background-color: transparent; /* remove background */
+}
+
+/* Main timer formatting (restore your old red styling) */
+#timerClock {
+  font-size: 4rem;
+  font-weight: bold;
+  color: white;
+  text-shadow:
+    -2px -2px 0 #e74c3c,
+     2px -2px 0 #e74c3c,
+    -2px  2px 0 #e74c3c,
+     2px  2px 0 #e74c3c;
+  margin-top: 10px;
+  background-color: rgba(0,0,0,0.5);
+  padding: 20px 40px;
+  border-radius: 20px;
+  display: inline-block;
+  border: 2px solid #e74c3c;
+}
+
+
+
 </style>
 <body>
 
   <!-- Navbar Section -->
-  <nav class="navbar">
-    <div class="navbar__container">
-      <a href="/" id="navbar__logo"><i class="fas fa-gem"></i>NC</a>
-      <div class="navbar__toggle" id="mobile-menu">
-        <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+<nav class="navbar">
+  <div class="navbar__container">
+    <a href="/" id="navbar__logo"><i class="fas fa-gem"></i>NC</a>
+    <div id="globalTimer" class="global-timer">
+      
+      <!-- Restricted timer -->
+      <div id="restrictedTimerContainer">
+        <div id="restrictedTimerLabel">Unlock Timer</div>
+        <div id="restrictedTimerClock">0:30</div>
       </div>
-      <ul class="navbar__menu">
-        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
-        <li class="navbar__item"><a href="/streaming.html" class="navbar__links">Streaming</a></li>
-        <li class="navbar__item"><a href="/podcasts.html" class="navbar__links">Podcasts</a></li>
-        <li class="navbar__item"><a href="/roster.html" class="navbar__links">Info</a></li>
-        <li class="navbar__item"><a href="/spl.html" class="navbar__links">SPL</a></li>
-        <li class="navbar__btn">
-          <a href="https://discord.gg/dzEZA3Jwm5" target="_blank" class="button">Get Notified</a>
-        </li>
-      </ul>
+
+      <!-- Main timer -->
+      <div id="timerContainer">
+        <div id="timerPlayer"></div>
+        <div id="timerClock">0:00</div>
+      </div>
+
+    </div>
+  </div>
+</nav>
+
+
+
+</div>
+
+    
     </div>
   </nav>
 
-  <!-- Secondary Nav Bar -->
-  <nav class="sub-navbar">
-    <ul class="sub-navbar__menu">
-      <li><a href="/spl.html">SPL Home</a></li>
-      <li><a href="/spl-stats.html">Stats</a></li>
-      <li><a href="/spl-rosters.html">Rosters</a></li>
-      <li><a href="/splszn2.html">Season 2</a></li>
-    </ul>
-  </nav>
 
 <!-- Dashboard Dropdown -->
 <div class="dashboard-header">
@@ -517,13 +604,17 @@
 
 
 <!-- Dashboard container: three columns -->
+<!-- Dashboard container: three columns -->
 <div class="dashboard-container">
 
   <!-- Column 1: Player list -->
   <div id="playerListContainer">
     <table id="playerTable">
       <thead>
-        <tr><th>Players</th></tr>
+        <tr>
+          <th>Players</th>
+          <th style="width:120px;">&nbsp;</th>
+        </tr>
       </thead>
       <tbody id="playerList"></tbody>
     </table>
@@ -540,21 +631,25 @@
       </thead>
       <tbody></tbody>
     </table>
-    <button id="saveClearBtn" class="submit-btn">Save and Clear</button>
+
+    <button id="saveClearBtn" class="submit-btn">
+      Save and Clear
+    </button>
   </div>
 
-  <!-- Column 3: Live bids + bid input -->
+  <!-- Column 3: Live bids -->
   <div class="bids-column">
     <div id="commishBoard" class="dashboard" style="min-height: 50px;"></div>
-    </div>
+
+    <button id="clearBidsBtn"
+            class="submit-btn"
+            style="margin-top: 10px;">
+      Clear All Bids
+    </button>
   </div>
 
 </div>
 
-<div class="bids-column">
-  <div id="commishBoard" class="dashboard" style="min-height: 50px;"></div>
-  <button id="clearBidsBtn" class="submit-btn" style="margin-top: 10px;">Clear All Bids</button>
-</div>
 
 
 <script type="module">
@@ -572,11 +667,17 @@ const firebaseConfig = {
   appId: "1:151054562933:web:a294092e46475fa627ea3c",
   measurementId: "G-V8H70EEQTC"
 };
-
+const COACHES = {
+  SPL: ["Austin","Dave","Eric","Garrett","Reid","Colin"],
+  MLS: ["Hamilton","Jaco","Danny","Tanya","Jake","Freddy"]
+};
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 const bidsContainer = document.getElementById("commishBoard");
+let activeTimerInterval = null;
+let activeTimerStart = null;
+let activeTimerCell = null;
 
 const draftsRef = ref(database, "bids"); // match your submission path
 
@@ -623,7 +724,23 @@ for (const { coach, bid, bidId } of allBids) {
   bidsContainer.appendChild(bubble);
 }
 });
+function calculateBudgets(coaches, playersData) {
+  const budgets = {};
 
+  coaches.forEach(coach => {
+    let spent = 0;
+
+    Object.values(playersData).forEach(p => {
+      if (p.team === coach && p.price) {
+        spent += Number(p.price);
+      }
+    });
+
+    budgets[coach] = 105 - spent;
+  });
+
+  return budgets;
+}
 const saveClearBtn = document.getElementById("saveClearBtn");
 
 saveClearBtn.addEventListener("click", async () => {
@@ -636,10 +753,8 @@ saveClearBtn.addEventListener("click", async () => {
   try {
     // 1️⃣ Fetch current bids and budgets
     const draftsSnap = await get(ref(database, "bids"));
-    const budgetsSnap = await get(ref(database, `budgets/${league}`));
-
+   
     const drafts = draftsSnap.exists() ? draftsSnap.val() : {};
-    const budgets = budgetsSnap.exists() ? budgetsSnap.val() : {};
 
     // 2️⃣ Find the highest bid
     let highestBid = -Infinity;
@@ -657,30 +772,22 @@ saveClearBtn.addEventListener("click", async () => {
     if (!winningCoach) throw new Error("No bids found!");
 
     // 3️⃣ Subtract highest bid from coach budget
-    budgets[winningCoach] = (budgets[winningCoach] || 0) - highestBid;
-    await update(ref(database, `budgets/${league}`), { [winningCoach]: budgets[winningCoach] });
+
 
     // 4️⃣ Get selected player
     const selectedPlayerSnap = await get(ref(database, "selectedPlayer"));
     const selectedPlayer = selectedPlayerSnap.val();
     if (!selectedPlayer) throw new Error("No player selected");
 
-    // 5️⃣ Save drafted player with role
-    const draftedRef = ref(database, `draftedPlayers/${league}/${winningCoach}`);
-    const draftedSnap = await get(draftedRef);
-    const currentDrafted = draftedSnap.exists() ? draftedSnap.val() : [];
 
-const playerSnap = await get(ref(database, `players/${league}/${selectedPlayer.name}`));
-const playerStats = playerSnap.exists() ? playerSnap.val() : { role: "Sidekick" };
+    await update(ref(db, `players/${league}/${selectedPlayer.name}`), {
+  team: winningCoach,
+  status: "Locked",
+  price: highestBid
+});
 
-const updatedDrafted = [...currentDrafted, {
-  name: selectedPlayer.name,
-  role: playerStats.role || "Sidekick"
-}];
-    await set(draftedRef, updatedDrafted);
 
-    // 6️⃣ Remove player from main player list
-    await remove(ref(database, `players/${league}/${selectedPlayer.name}`));
+
 
     // 7️⃣ Send bids to Google Sheets
     const bidsArray = [];
@@ -690,7 +797,7 @@ const updatedDrafted = [...currentDrafted, {
       }
     }
     if (bidsArray.length) {
-      fetch("https://script.google.com/macros/s/AKfycbyV2iV-RzfthJ9TnqpDKwEbQaQciQ2MbWaRyC-vABv0gFSrwN1JtGo-2lljuOz0Zsx9fw/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbxWWoX0XVg1yHgHkvC3OaJzlNXceDbC_FRUbeJitQk2K9UyMA_rJNYn3D-jatY_qGmN/exec", {
         method: "POST",
         body: JSON.stringify({
           league,
@@ -703,18 +810,8 @@ const updatedDrafted = [...currentDrafted, {
     // 8️⃣ Clear all bids from Firebase
     await remove(ref(database, "bids"));
 
-    // 9️⃣ Update budget table UI
-    budgetTableBody.innerHTML = "";
-    const budgetArray = Object.entries(budgets)
-      .map(([coach, budget]) => ({ coach, budget }))
-      .sort((a, b) => b.budget - a.budget);
 
-    for (const { coach, budget } of budgetArray) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${coach}</td><td>${budget}</td>`;
-      if (coach === winningCoach) tr.classList.add("highlight-row");
-      budgetTableBody.appendChild(tr);
-    }
+
 
     // 🔟 Clear selected player div
     selectedPlayerDiv.style.display = "none";
@@ -748,14 +845,8 @@ onValue(leagueRef, (snapshot) => {
   dropdown.style.backgroundColor = leagueColors[league] || leagueColors[""];
 
   // Listen to that league's budgets
-  const leagueBudgetsRef = ref(db, `budgets/${league}`);
-  onValue(leagueBudgetsRef, (snap) => {
-    if (!snap.exists()) {
-      budgetTableBody.innerHTML = "<tr><td colspan='2'>No coaches found</td></tr>";
-      return;
-    }
-    renderBudgetTable(snap.val());
-  });
+ 
+
 });
 
 // Dropdown updates currentLeague in Firebase
@@ -800,34 +891,55 @@ onValue(leagueRef, (snapshot) => {
 
   // Listen to players for this league
   const playersRef = ref(db, `players/${league}`);
-  currentPlayersListener = onValue(playersRef, (snap) => {
-    const data = snap.val();
-    if (!data) {
-      playerListBody.innerHTML = "<tr><td>No players found</td></tr>";
-      return;
-    }
+currentPlayersListener = onValue(playersRef, (snap) => {
+  const playersData = snap.val();
+  if (!playersData) return;
 
-    renderPlayersTable(data, league);
-     renderCharCountTables(data);
-  });
+const coaches = COACHES[league];
+
+
+  const budgets = calculateBudgets(coaches, playersData);
+
+  // Filter out locked players for available list
+  const availablePlayers = Object.fromEntries(
+    Object.entries(playersData).filter(([name, stats]) => stats.status !== "Locked")
+  );
+
+  renderPlayersTable(availablePlayers, league); // only free/restricted
+  renderCharCountTables(availablePlayers);     // only free/restricted
+  renderBudgetTable(budgets);
+  renderDraftedTableFull(coaches, playersData, league); // full table still uses all players
+});
+
+
 });
 
 function renderPlayersTable(playersData, league) {
   playerListBody.innerHTML = "";
 
-  // Convert object into array of {name, stats} so we can sort by order
   const playersArray = Object.entries(playersData)
     .map(([name, stats]) => ({ name, ...stats }))
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
   playersArray.forEach(player => {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${player.name}</td>`;
 
-    // Click handler for commish page
+    const nameTd = document.createElement("td");
+    nameTd.textContent = player.name;
+
+    const timerTd = document.createElement("td");
+    timerTd.textContent = ""; // empty until selected
+
+    tr.appendChild(nameTd);
+    tr.appendChild(timerTd);
+
     tr.addEventListener("click", () => {
-      // Remove previous selection
-      playerListBody.querySelectorAll("tr").forEach(r => r.classList.remove("selected"));
+      // Clear previous selection + buttons
+      playerListBody.querySelectorAll("tr").forEach(row => {
+        row.classList.remove("selected");
+        row.querySelector("td:last-child").innerHTML = "";
+      });
+
       tr.classList.add("selected");
 
       // Save selected player in Firebase
@@ -835,82 +947,115 @@ function renderPlayersTable(playersData, league) {
         league: league,
         name: player.name
       });
+
+      // Create Start button
+      const startBtn = document.createElement("button");
+      startBtn.textContent = "Start";
+      startBtn.style.padding = "4px 8px";
+      startBtn.style.cursor = "pointer";
+
+
+  startBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    set(ref(db, "timer"), {
+      league: league,
+      player: player.name,
+      startTime: Date.now(),
+      running: true
+    });
+  });
+
+
+      timerTd.appendChild(startBtn);
+      timerTd.appendChild(timeDisplay);
     });
 
     playerListBody.appendChild(tr);
   });
 }
 
+
 const selectedPlayerDiv = document.getElementById("showSelectedPlayer");
 const selectedPlayerRef = ref(db, "selectedPlayer");
 
 
-onValue(selectedPlayerRef, async (snapshot) => {
-  const selected = snapshot.val();
-  if (!selected) {
-    selectedPlayerDiv.style.display = "none"; // hide if no player
-    return;
+onValue(selectedPlayerRef, async snapshot => {
+  const sel = snapshot.val();
+  if (!sel) { 
+    selectedPlayerDiv.style.display = "none"; 
+    return; 
   }
 
-  const { league, name } = selected;
-  const playerRef = ref(db, `players/${league}/${name}`);
-  const playerSnap = await get(playerRef);
+  try {
+    const playerSnap = await get(ref(db, `players/${sel.league}/${sel.name}`));
+    if (!playerSnap.exists()) { 
+      selectedPlayerDiv.style.display = "none"; 
+      return; 
+    }
 
-  if (!playerSnap.exists()) {
+    const stats = playerSnap.val();
+    selectedPlayerDiv.style.display = "block";
+
+    // Toggle restricted class
+    if (stats.status === "Restricted") {
+      selectedPlayerDiv.classList.add("Restricted");
+    } else {
+      selectedPlayerDiv.classList.remove("Restricted");
+    }
+
+    // Build the HTML
+    let restrictedLine = "";
+    if (stats.status === "Restricted") {
+      // Price with 🟡 emoji, rounded if needed
+      const price = stats.price || 0;
+      restrictedLine = `<div style="margin-top:4px; font-size:30px; text-align:center; font-weight:bold; color:#ffd700;">
+                          Restricted: ${stats.team || "Unknown"} - Min Bid: 🟡${Math.ceil(stats.price * 1.1)}
+                        </div>`;
+
+    }
+
+    selectedPlayerDiv.innerHTML = `
+      <h2>${sel.name} - Career Stats</h2>
+      ${restrictedLine}
+      <div class="player-stats">
+        <div><u>Games</u><br>${stats.games}</div>
+        <div><u>Win %</u><br>${stats.winp}</div>
+        <div><u>Goals/Game</u><br>${stats.goals}</div>
+        <div><u>MS-SS/Game</u><br>${stats.msss}</div>
+        <div><u>SI</u><br>${stats.si}</div>
+        <div><u>Impact</u><br>${stats.impact}</div>
+        <div><u>+/-</u><br>${stats.pm}</div>
+      </div>
+    `;
+  } catch (err) {
+    console.error(err);
     selectedPlayerDiv.style.display = "none";
-    return;
   }
-
-  const stats = playerSnap.val();
-  
-  // Make the div visible
-  selectedPlayerDiv.style.display = "block";
-  
-  // Update content
-  selectedPlayerDiv.innerHTML = `
-    <h2>${name} - Career Stats</h2>
-    <div class="player-stats">
-      <div><u>Games</u></b><br>${stats.games}</div>
-      <div><u>Win %</u></b><br>${stats.winp}</div>
-      <div><u>Goals/Game</u></b><br>${stats.goals}</div>
-      <div><u>MS-SS/Game</u></b><br>${stats.msss}</div>
-      <div><u>SI</u></b><br>${stats.si}</div>
-      <div><u>Impact</u></b><br>${stats.impact}</div>
-      <div><u>+/-</u></b><br>${stats.pm}</div>
-    </div>
-  `;
 });
+
 
 
 const draftedContainer = document.getElementById("draftedRostersContainer");
 
 let draftedListener = null;
 
-onValue(leagueRef, (snapshot) => {
-  const league = snapshot.val();
-  if (!league) return;
 
-  // Remove previous listener
-  if (draftedListener) draftedListener();
-
-  // Listen for drafted players for this league
-  const draftedRef = ref(database, `draftedPlayers/${league}`);
-  draftedListener = onValue(draftedRef, (snap) => {
-    // Get all drafted players data
-    const draftedData = snap.exists() ? snap.val() : {};
-
-    // Always get all coaches from budgets so table is full
-    get(ref(db, `budgets/${league}`)).then(budSnap => {
-      const coaches = budSnap.exists() ? Object.keys(budSnap.val()) : [];
-      renderDraftedTableFull(coaches, draftedData, league);
-    });
-  });
-});
 
 // Render full table with blank rows if needed
 // Render full table with blank rows if needed
-function renderDraftedTableFull(coaches, draftedData, league) {
+function renderDraftedTableFull(coaches, playersData, league) {
+  const draftedContainer = document.getElementById("draftedRostersContainer"); // update if your container id is different
   draftedContainer.innerHTML = "";
+
+  // Map each coach to their captains and sidekicks
+  const teamMap = {};
+  Object.entries(playersData).forEach(([name, p]) => {
+    if (!p.team) return;
+    if (!teamMap[p.team]) teamMap[p.team] = { captains: [], sidekicks: [] };
+    if (p.role === "Captain") teamMap[p.team].captains.push({ name, ...p });
+    else teamMap[p.team].sidekicks.push({ name, ...p });
+  });
 
   const table = document.createElement("table");
   table.className = "drafted-rosters-table";
@@ -918,36 +1063,41 @@ function renderDraftedTableFull(coaches, draftedData, league) {
   // Header
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
-  coaches.forEach(coach => {
+  coaches.forEach(c => {
     const th = document.createElement("th");
-    th.textContent = coach;
+    th.textContent = c;
     headerRow.appendChild(th);
   });
+  headerRow.style.backgroundColor = leagueColors[league] || "#7f8c8d";
+  headerRow.style.color = "#fff";
   thead.appendChild(headerRow);
   table.appendChild(thead);
 
-  headerRow.style.backgroundColor = leagueColors[league] || "#7f8c8d";
-  headerRow.style.color = "#fff";
-
-  // 7 rows: 2 captains, 5 sidekicks
+  // 2 rows for captains, 5 rows for sidekicks
   for (let row = 0; row < 7; row++) {
     const tr = document.createElement("tr");
 
     coaches.forEach(coach => {
       const td = document.createElement("td");
+      const team = teamMap[coach] || { captains: [], sidekicks: [] };
+      let player;
 
-      const players = draftedData[coach] || [];
-      const captains = players.filter(p => p.role === "Captain");
-      const sidekicks = players.filter(p => p.role === "Sidekick");
-
-      let playerObj;
       if (row < 2) {
-        playerObj = captains[row] || null;
+        // First 2 rows = captains
+        player = team.captains[row];
       } else {
-        playerObj = sidekicks[row - 2] || null;
+        // Next 5 rows = sidekicks
+        player = team.sidekicks[row - 2];
       }
 
-      td.textContent = playerObj?.name || "";
+      if (player) {
+        td.textContent = player.name;
+        if (player.status === "Restricted") {
+          td.innerHTML = `${player.name} - <b>${Math.ceil(player.price*1.1)}</b>`;
+          td.style.color = "#3498db";
+        } else td.style.color = "#000";
+      }
+
       tr.appendChild(td);
     });
 
@@ -956,6 +1106,8 @@ function renderDraftedTableFull(coaches, draftedData, league) {
 
   draftedContainer.appendChild(table);
 }
+
+
 
 const charOrder = [
   "BJ",
@@ -1054,6 +1206,111 @@ clearBidsBtn.addEventListener("click", async () => {
     clearBidsBtn.textContent = "Clear All Bids";
   }
 });
+
+let timerInterval = null;
+const countdownSeconds = 60;
+const RESTRICTED_WINDOW = 30;
+
+onValue(ref(db, "timer"), (snapshot) => {
+  const data = snapshot.val();
+
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+
+  if (!data || !data.running) {
+    document.getElementById("timerClock").textContent = countdownSeconds;
+    document.getElementById("restrictedTimerContainer").style.display = "none";
+    return;
+  }
+
+  const start = data.startTime;
+
+  timerInterval = setInterval(async () => {
+    const elapsed = Math.floor((Date.now() - start) / 1000);
+    let remaining = countdownSeconds - elapsed;
+    if (remaining < 0) remaining = 0;
+
+    document.getElementById("timerClock").textContent = remaining;
+
+    try {
+      const selSnap = await get(ref(db, "selectedPlayer"));
+      if (!selSnap.exists()) return;
+      const sel = selSnap.val();
+
+      const playerSnap = await get(ref(db, `players/${sel.league}/${sel.name}`));
+      if (!playerSnap.exists()) return;
+      const player = playerSnap.val();
+
+      // Restricted timer
+      // Restricted timer
+if (player.status === "Restricted") {
+
+  // Get bids + highest bid
+  const bidSnap = await get(ref(db, "bids"));
+  const bidsData = bidSnap.exists() ? bidSnap.val() : null;
+
+  let highestBid = 0;
+  if (bidsData) {
+    for (const coach in bidsData) {
+      for (const bidKey in bidsData[coach]) {
+        const val = Number(bidsData[coach][bidKey].bid);
+        if (val > highestBid) highestBid = val;
+      }
+    }
+  }
+
+  const minFreeBid = Math.ceil(player.price * 1.1);
+
+      // 🔓 Free instantly if bid is high enough
+      if (highestBid >= minFreeBid) {
+      await update(ref(db, `players/${sel.league}/${sel.name}`), {
+        status: "Free",
+        team: "",
+        price: ""
+      });
+
+
+        document.getElementById("restrictedTimerContainer").style.display = "none";
+        return;
+      }
+
+      // Otherwise continue restricted countdown
+      let restrictedRemaining = RESTRICTED_WINDOW - elapsed;
+      if (restrictedRemaining < 0) restrictedRemaining = 0;
+
+      document.getElementById("restrictedTimerContainer").style.display = "flex";
+      document.getElementById("restrictedTimerClock").textContent =
+        restrictedRemaining + "s";
+
+      // Lock if time expires with no bids
+      if (restrictedRemaining === 0 && highestBid === 0) {
+        await update(ref(db, `players/${sel.league}/${sel.name}`), {
+          status: "Locked"
+        });
+
+        await update(ref(db, "timer"), { running: false });
+        document.getElementById("restrictedTimerContainer").style.display = "none";
+      }
+
+    } else {
+      document.getElementById("restrictedTimerContainer").style.display = "none";
+    }
+
+
+    } catch (err) {
+      console.error(err);
+    }
+
+    if (remaining === 0) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+  }, 1000);
+});
+
 
 
 

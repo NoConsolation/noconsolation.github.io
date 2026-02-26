@@ -985,6 +985,8 @@ onValue(ref(db, "timer"), async (snapshot) => {
     return;
   }
 
+  submitBidBtn.disabled = false;
+  
   const start = data.startTime;
   restrictedStart = start; // sync restricted timer with main timer start
 

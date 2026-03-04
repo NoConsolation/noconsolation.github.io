@@ -759,12 +759,20 @@ saveClearBtn.addEventListener("click", async () => {
     // 2️⃣ Find the highest bid
     let highestBid = -Infinity;
     let winningCoach = null;
+    let earliestTimestamp = Infinity;
+
     for (const coach in drafts) {
       for (const bidKey in drafts[coach]) {
-        const bidValue = drafts[coach][bidKey].bid;
-        if (bidValue > highestBid) {
+        const bidValue = Number(drafts[coach][bidKey].bid);
+        const timestamp = drafts[coach][bidKey].timestamp;
+
+        if (
+          bidValue > highestBid ||
+          (bidValue === highestBid && timestamp < earliestTimestamp)
+        ) {
           highestBid = bidValue;
           winningCoach = coach;
+          earliestTimestamp = timestamp;
         }
       }
     }

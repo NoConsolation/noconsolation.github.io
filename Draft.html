@@ -605,7 +605,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -707,7 +707,7 @@ draftForm.addEventListener("submit", async (e) => {
 
     // Check if player is restricted
     if (player.status === "Restricted") {
-      const minBid = Math.ceil(player.price * 1.1)+1 ;
+      const minBid = Math.ceil(player.price * 1.1) ;
       if (bid < minBid) {
         return alert(`This player is restricted! Minimum bid: ${minBid}`);
       }
@@ -744,7 +744,24 @@ function renderDraftedTableFull(coaches, playersData, league) {
     if (p.role === "Captain") teamMap[p.team].captains.push({ name, ...p });
     else teamMap[p.team].sidekicks.push({ name, ...p });
   });
+  Object.values(teamMap).forEach(team => {
 
+  const sorter = (a, b) => {
+    const aRestricted = a.status === "Restricted" || a.status === "Former Restricted";
+    const bRestricted = b.status === "Restricted" || b.status === "Former Restricted";
+
+    // Restricted first
+    if (aRestricted !== bRestricted) {
+      return bRestricted - aRestricted;
+    }
+
+    // Then sort by win timestamp
+    return (a.wonTimestamp || 0) - (b.wonTimestamp || 0);
+  };
+
+  team.captains.sort(sorter);
+  team.sidekicks.sort(sorter);
+});
   const table = document.createElement("table");
   table.className = "drafted-rosters-table";
 
@@ -781,7 +798,7 @@ function renderDraftedTableFull(coaches, playersData, league) {
       if (player) {
         td.textContent = player.name;
         if (player.status === "Restricted") {
-          td.innerHTML = `${player.name} - <b>${Math.ceil(player.price*1.1)}</b>`;
+          td.innerHTML = `${player.name} - <b>${player.price}</b>`;
           td.style.color = "#3498db";
         } else td.style.color = "#000";
       }
@@ -984,9 +1001,6 @@ onValue(ref(db, "timer"), async (snapshot) => {
     timerInterval = null;
     return;
   }
-
-  submitBidBtn.disabled = false;
-  
   const start = data.startTime;
   restrictedStart = start; // sync restricted timer with main timer start
 
@@ -998,6 +1012,7 @@ onValue(ref(db, "timer"), async (snapshot) => {
     let mainRemaining = countdownSeconds - elapsed;
     if (mainRemaining < 0) mainRemaining = 0;
 
+    submitBidBtn.disabled = !(data.running && mainRemaining > 0);
     // Update main timer
     document.getElementById("timerClock").textContent = mainRemaining;
 
@@ -1020,7 +1035,17 @@ onValue(ref(db, "timer"), async (snapshot) => {
       document.getElementById("restrictedTimerClock").textContent = restrictedRemaining + "s";
 
       const bidSnap = await get(ref(db, "bids"));
-      const hasAnyBid = bidSnap.exists() && Object.keys(bidSnap.val() || {}).length > 0;
+      let hasAnyBid = false;
+
+      if (bidSnap.exists()) {
+        const bids = bidSnap.val();
+        for (const coach in bids) {
+          if (Object.keys(bids[coach]).length > 0) {
+            hasAnyBid = true;
+            break;
+          }
+        }
+      }
 
       if (restrictedRemaining === 0 && !hasAnyBid) {
         await update(ref(db, `players/${sel.league}/${sel.name}`), { status: "Locked" });
@@ -1037,10 +1062,11 @@ onValue(ref(db, "timer"), async (snapshot) => {
     }
 
     // Stop main timer if it reaches 0
-    if (mainRemaining === 0) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
+if (mainRemaining === 0) {
+  submitBidBtn.disabled = true;   // 🔥 disable at 0
+  clearInterval(timerInterval);
+  timerInterval = null;
+}
 
   }, 1000);
 });
@@ -1050,6 +1076,9 @@ function renderPlayersTable(playersData, league) {
 
   const playersArray = Object.entries(playersData)
     .map(([name, stats]) => ({ name, ...stats }))
+    .filter(player =>
+      player.status === "Free" || player.status === "Restricted"
+    )
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
   playersArray.forEach(player => {

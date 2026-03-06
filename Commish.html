@@ -1101,7 +1101,7 @@ function renderDraftedTableFull(coaches, playersData, league) {
       if (player) {
         td.textContent = player.name;
         if (player.status === "Restricted") {
-          td.innerHTML = `${player.name} - <b>${Math.ceil(player.price*1.1)}</b>`;
+          td.innerHTML = `${player.name} - <b>${Math.ceil(player.price)}</b>`;
           td.style.color = "#3498db";
         } else td.style.color = "#000";
       }
@@ -1216,8 +1216,8 @@ clearBidsBtn.addEventListener("click", async () => {
 });
 
 let timerInterval = null;
-const countdownSeconds = 45;
-const RESTRICTED_WINDOW = 30;
+const countdownSeconds = 40;
+const RESTRICTED_WINDOW = 20;
 
 onValue(ref(db, "timer"), (snapshot) => {
   const data = snapshot.val();
@@ -1227,11 +1227,17 @@ onValue(ref(db, "timer"), (snapshot) => {
     timerInterval = null;
   }
 
-  if (!data || !data.running) {
-    document.getElementById("timerClock").textContent = countdownSeconds;
-    document.getElementById("restrictedTimerContainer").style.display = "none";
-    return;
-  }
+if (!data || !data.running) {
+  document.getElementById("timerClock").textContent = countdownSeconds;
+
+  // Reset restricted display to 30 whenever timer is not running
+  document.getElementById("restrictedTimerClock").textContent =
+    RESTRICTED_WINDOW + "s";
+
+  document.getElementById("restrictedTimerContainer").style.display = "none";
+
+  return;
+}
 
   const start = data.startTime;
 
@@ -1299,9 +1305,10 @@ if (player.status === "Restricted") {
         });
 
         await update(ref(db, "timer"), { running: false });
+        document.getElementById("restrictedTimerClock").textContent =
+        RESTRICTED_WINDOW + "s";
         document.getElementById("restrictedTimerContainer").style.display = "none";
       }
-
     } else {
       document.getElementById("restrictedTimerContainer").style.display = "none";
     }

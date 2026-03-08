@@ -212,8 +212,8 @@
     }
 
     /* Put Coach Name and Team Name on the same row */
-    #rosterForm label[for="playername"],
-    #rosterForm select#playername{
+    #rosterForm label[for="team"],
+    #rosterForm select#team{
     flex: 1 1 calc(50% - 10px);
     min-width: 300px;
     }
@@ -360,37 +360,51 @@
   </nav>
 
     <div id="roster-display">
-        <p>Please select a coach to see the roster.</p>
+        <p>Please select a team to see the roster.</p>
     </div>
 
 
   <form id="rosterForm">
     <div class="form-row">
   <div class="form-group">
-    <label for="playername">Coach Name:</label>
-    <select id="playername" name="playername" required>
-      <option value="">Coach Name--</option>
+    <label for="team">Team Name:</label>
+    <select id="team" name="team" required>
+      <option value="">Team Name</option>
       <option value="Austin">Austin</option>
-      <option value="Colin">Colin</option>
-      <option value="Danny">Danny</option>
-      <option value="Dave">Dave</option>
-      <option value="Eric">Eric</option>
-      <option value="Freddy">Freddy</option>
-      <option value="Garrett">Garrett</option>
+      <option value="Wariors FC">Wariors FC</option>
+      <option value="Spread Triple Option">Spread Triple Option</option>
+      <option value="Eastwood's Island">Eastwood's Islands</option>
+      <option value="The Spellcasters">The Spellcasters</option>
+      <option value="Fredchester United">Fredchester United</option>
+      <option value="Gurt and the Rats">Gurt and the Rats</option>
       <option value="Hamilton">Hamilton</option>
-      <option value="Jaco">Jaco</option>
+      <option value="Come on Mr Monty">Come on Mr Monty</option>
       <option value="Jake">Jake</option>
       <option value="Reid">Reid</option>
-      <option value="Tanya">Tanya</option>
+      <option value="Lil Shop">Lil Shop</option>
     </select>
-    <!--
-    <label for="teamName">Team Name:</label>
-    <input type="text" id="teamName" name="teamName" placeholder="Enter Team Name Here" />
-  -->
+    
+    <label for="teamName">Choose Team Name:</label>
+    <input type="text" id="teamName" name="teamName" placeholder="Enter Team Name Here - This locks it in for Season 5" />
+
   </div>
 
 
     </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="primaryColor">Primary Team Color:</label>
+        <input type="color" id="primaryColor" name="primaryColor" value="#ff0000">
+      </div>
+
+      <div class="form-group">
+        <label for="secondaryColor">Secondary Team Color:</label>
+        <input type="color" id="secondaryColor" name="secondaryColor" value="#0000ff">
+      </div>
+    </div>
+    <div id="colorPreview" style="height:50px; border-radius:6px; border:1px solid #aaa;"></div>
+
+
 
     <div class="form-row">
     <div class="form-group">
@@ -462,17 +476,20 @@
     document.getElementById('rosterForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    const playername = document.getElementById('playername').value;
+    const team = document.getElementById('team').value;
     const captain = document.getElementById('captain').value;
     const topmid = document.getElementById('topmid').value;
     const botmid = document.getElementById('botmid').value;
     const def = document.getElementById('def').value;
-    //const teamName = document.getElementById('teamName').value;
+    const teamName = document.getElementById('teamName').value;
+    const primaryColor = document.getElementById('primaryColor').value;
+    const secondaryColor = document.getElementById('secondaryColor').value;
 
-    // Access roster data for selected coach
-    const roster = rosterDataByCoach[playername];
+
+    // Access roster data for selected team
+    const roster = rosterDataByTeam[team];
     if (!roster) {
-        alert('Please select a valid coach.');
+        alert('Please select a valid team.');
         return;
     }
 
@@ -521,7 +538,7 @@
     
     // ✅ If all validations pass, prepare data and submit
     const data = {
-        playername,
+        team,
         captain,
         topmid,
         botmid,
@@ -535,9 +552,11 @@
         map6: document.getElementById('map6')?.value,
         map7: document.getElementById('map7')?.value,
         map8: document.getElementById('map8')?.value,
-        //teamName
+        teamName,
+        primaryColor,
+        secondaryColor
     };
-
+    console.log('Submitting data:', data);
     fetch('https://script.google.com/macros/s/AKfycbznqUaeQDaIsz9kmQsVowb-G7PeOkFN-7safQju32ziP6E9SB-sqflfJDSsNnsisFZB/exec', {
         method: 'POST',
         body: JSON.stringify(data)
@@ -547,6 +566,19 @@
           submitButton.disabled = false;
     });
     });
+
+    function updateColorPreview() {
+      const primary = document.getElementById('primaryColor').value;
+      const secondary = document.getElementById('secondaryColor').value;
+      const preview = document.getElementById('colorPreview');
+      preview.style.background = `linear-gradient(90deg, ${primary} 50%, ${secondary} 50%)`;
+    }
+
+    document.getElementById('primaryColor').addEventListener('input', updateColorPreview);
+    document.getElementById('secondaryColor').addEventListener('input', updateColorPreview);
+
+    // Initialize preview
+    updateColorPreview();
     </script>
 
 
@@ -599,7 +631,8 @@
 
   <script src="app.js"></script>
 <script>
-const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sNy5NcDFMQJC32VQTJlrnNR-zd5_Jk-cAUGVkLhSUGBUoQywXBZHnyIXeLgJ5lLflK--_CEx0E_u/pub?gid=1896446593&single=true&output=csv';
+  //Roster Page as .csv
+const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1896446593&single=true&output=csv'; 
 
 function parseCSV(text) {
   return text.trim().split('\n').map(row => row.split(','));
@@ -611,8 +644,9 @@ function extractRange(data, startCol, endCol, startRow, endRow) {
 
 function buildRosterHTML(data, selectedPlayers = []) {
   const teamName = data[0][0] || 'Unnamed Team';
+  const coach = teamCoaches[teamName] || '';
   let html = '<div class="roster-box">';
-  html += `<div class="team-header">${teamName}</div>`;
+  html += `<div class="team-header">${coach}</div>`;
   html += `
     <table>
       <tr>
@@ -672,7 +706,7 @@ function buildRosterHTML(data, selectedPlayers = []) {
 }
 
 
-let rosterDataByCoach = {};
+let rosterDataByTeam = {};
 
 fetch(sheetUrl)
   .then(res => res.text())
@@ -687,26 +721,26 @@ fetch(sheetUrl)
         const endRow = startRow + 7;
 
         const boxData = extractRange(data, startCol, endCol, startRow, endRow);
-        const coachName = boxData[0][0]?.trim();
+        const teamName = boxData[0][0]?.trim();
 
-        if (coachName) {
-          rosterDataByCoach[coachName] = boxData;
+        if (teamName) {
+          rosterDataByTeam[teamName] = boxData;
         }
       }
     }
 
-    console.log('Loaded coaches:', Object.keys(rosterDataByCoach));
+    console.log('Loaded coaches:', Object.keys(rosterDataByTeam));
 
-    document.getElementById('playername').addEventListener('change', (e) => {
-      const coach = e.target.value;
+    document.getElementById('team').addEventListener('change', (e) => {
+      const team = e.target.value;
       const displayDiv = document.getElementById('roster-display');
       const captainDropdown = document.getElementById('captain');
       const topmidDropdown = document.getElementById('topmid');
       const botmidDropdown = document.getElementById('botmid');
       const defDropdown = document.getElementById('def');
 
-      if (!coach || !rosterDataByCoach[coach]) {
-        displayDiv.innerHTML = '<p>Please select a coach to see the roster.</p>';
+      if (!team || !rosterDataByTeam[team]) {
+        displayDiv.innerHTML = '<p>Please select a team to see the roster.</p>';
         captainDropdown.innerHTML = '<option value="">Select a Captain</option>';
         topmidDropdown.innerHTML = '<option value="">Select a Player</option>';
         botmidDropdown.innerHTML = '<option value="">Select a Player</option>';
@@ -714,7 +748,7 @@ fetch(sheetUrl)
         return;
       }
 
-      const box = rosterDataByCoach[coach];
+      const box = rosterDataByTeam[team];
 
       captainDropdown.innerHTML = '<option value="">Select a Captain</option>';
       for (let i = 1; i <= 2; i++) {
@@ -746,15 +780,15 @@ fetch(sheetUrl)
         }
       }
 
-      updateRosterDisplay(coach);
-      populateMapDropdowns(coach);
+      updateRosterDisplay(team);
+      populateMapDropdowns(team);
     });
 
     ['captain', 'topmid', 'botmid', 'def'].forEach(id => {
       document.getElementById(id).addEventListener('change', () => {
-        const coach = document.getElementById('playername').value;
-        if (coach && rosterDataByCoach[coach]) {
-          updateRosterDisplay(coach);
+        const team = document.getElementById('team').value;
+        if (team && rosterDataByTeam[team]) {
+          updateRosterDisplay(team);
         }
       });
     });
@@ -765,22 +799,11 @@ fetch(sheetUrl)
 
 
         const coachHeaders = {
-        Austin: "The Bridesmaids",
-        Colin: "Wariors FC",
-        Danny: "Spread Triple Option",
-        Dave: "HC United IV",
-        Eric: "Goose Crusade",
-        Freddy: "Fredchester United",
-        Garrett: "The Uprising",
-        Hamilton: "Double D(rybone)s",
-        Jaco: "Come on Mr Monty",
-        Jake: "MILWAUKEE BUCKS",
-        Reid: "Reid Hot Chili Strikers",
-        Tanya: "Nepo Babies"
     };
 
-    function updateRosterDisplay(coach) {
+  function updateRosterDisplay(team) {
     const displayDiv = document.getElementById('roster-display');
+
     const captain = document.getElementById('captain').value;
     const topmid = document.getElementById('topmid').value;
     const botmid = document.getElementById('botmid').value;
@@ -788,13 +811,25 @@ fetch(sheetUrl)
 
     const selectedPlayers = [captain, topmid, botmid, def].filter(Boolean);
 
-    const headerText = coachHeaders[coach] || `${coach}'s Roster`;
+    displayDiv.innerHTML =
+      `<h3>${team}</h3>` +
+      buildRosterHTML(rosterDataByTeam[team], selectedPlayers);
+  }
 
-    displayDiv.innerHTML = `<h3>${headerText}</h3>` + buildRosterHTML(rosterDataByCoach[coach], selectedPlayers);
-    }
-
-
-
+    const teamCoaches = {
+      "Austin": "HC: Austin",
+      "Wariors FC": "HC: Colin - AC: Eric P",
+      "Spread Triple Option": "HC: Danny & Brad",
+      "Eastwood's Islands": "HC: Dave",
+      "The Spellcasters": "HC: Eric",
+      "Fredchester United": "HC: Freddy",
+      "Gurt and the Rats": "HC: Garrett",
+      "Hamilton": "HC: Hamilton",
+      "Come on Mr Monty": "HC: Jaco",
+      "Jake": "HC:Jake - AC: Ben",
+      "Reid": "HC: Reid - AC: Charlie & Teddy",
+      "Lil Shop": "HC: Tanya"
+    };
 
     const allMaps = [
     'Vanilla',
@@ -820,7 +855,7 @@ fetch(sheetUrl)
         return null;
     }
     */
-    function populateMapDropdowns(coachName) {
+    function populateMapDropdowns(teamName) {
         /*const bannedMap = getBannedMap(coachName);*/
         const allowedMaps = allMaps;
 
@@ -898,15 +933,15 @@ grayOutSelectedMaps();
 <script>
 const submitButton = document.querySelector('#rosterForm button');
 
-function isPlayerExhausted(player, coach) {
-  const roster = rosterDataByCoach[coach];
+function isPlayerExhausted(player, team) {
+  const roster = rosterDataByTeam[team];
   const playerRow = roster?.find(row => row[0] === player);
   const fitness = parseInt(playerRow?.[1]);
   return fitness === 0 && (fitness - 1) === -1;
 }
 
 function validateFormLive() {
-  const coach = document.getElementById('playername').value;
+  const team = document.getElementById('team').value;
   const captain = document.getElementById('captain').value;
   const topmid = document.getElementById('topmid').value;
   const botmid = document.getElementById('botmid').value;
@@ -924,10 +959,10 @@ function validateFormLive() {
   const uniqueMaps = new Set(mapSelections);
   const mapsValid = uniqueMaps.size === mapSelections.length && mapSelections.length === 8;
 
-  const isExhausted = coach && selectedPlayers.some(p => isPlayerExhausted(p, coach));
+  const isExhausted = team && selectedPlayers.some(p => isPlayerExhausted(p, team));
 
   const allRequiredFilled =
-    coach && 
+    team && 
     selectedPlayers.length === 4 &&
     mapSelections.length === 8;
 
@@ -945,7 +980,7 @@ function validateFormLive() {
 
 
 // Watch inputs for changes
-['playername', 'captain', 'topmid', 'botmid', 'def'].forEach(id =>
+['team', 'captain', 'topmid', 'botmid', 'def'].forEach(id =>
   document.getElementById(id).addEventListener('change', validateFormLive)
 );
 

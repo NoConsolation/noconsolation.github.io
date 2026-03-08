@@ -149,7 +149,7 @@
 }
 
     </style>
-<!--    
+    <!--
    <div class="ticker-wrapper" id="ticker-wrapper">
     <a href="AllStar.html" target="_blank" rel="noopener noreferrer" class="ticker-link">
       <div class="ticker">
@@ -165,7 +165,7 @@
         this.parentElement.style.display = 'none';
       });
     </script>
--->
+  -->
 
     <style>
       /* Schedule Styles */
@@ -203,12 +203,7 @@
         gap: 10px;
         margin: 2px 0;
       }
-
-      .team-name {
-        width: 80px;
-        font-weight: bold;
-      }
-
+    
   .table1, .table2{
     table-layout: fixed;
     width: 100%;
@@ -293,7 +288,38 @@
       .table2 tr:nth-child(4) td{
         border-bottom: 2px solid blue !important;
       }
-      
+      .coaches {
+        width: 100%;
+        border-collapse: collapse;
+        background: #686868;
+        color: white;
+        table-layout: fixed;
+      }
+
+      .coaches th,
+      .coaches td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+
+      /* column widths */
+      .coaches th:nth-child(1),
+      .coaches td:nth-child(1) {
+        width: 40%;
+      }
+
+      .coaches th:nth-child(2),
+      .coaches td:nth-child(2),
+      .coaches th:nth-child(3),
+      .coaches td:nth-child(3),
+      .coaches th:nth-child(4),
+      .coaches td:nth-child(4) {
+        width: 20%;
+      }
+
+
+
     </style>
 </head>
 
@@ -332,6 +358,7 @@
       <ul class="dropdown-menu">
         <li><a href="/splszn2.html">Season 2</a></li>
         <li><a href="/splszn3.html">Season 3</a></li>
+        <li><a href="/splszn4.html">Season 4</a></li>
         <!-- Add more options as needed -->
       </ul>
     </li>
@@ -344,7 +371,7 @@
   <div id="sheet-data" style="margin-left: 100px;margin-right: 100px; margin-top: 10px; margin-bottom: 5px;">Loading data...</div>
 
   <script>
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sNy5NcDFMQJC32VQTJlrnNR-zd5_Jk-cAUGVkLhSUGBUoQywXBZHnyIXeLgJ5lLflK--_CEx0E_u/pub?gid=1520901699&single=true&output=csv';
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1520901699&single=true&output=csv';
 
     function parseCSV(text) {
       return text.trim().split('\n').map(row => row.split(','));
@@ -389,15 +416,13 @@
         const table2Body = data.slice(10, 16);
 
       const html = `
-        <div style="display: block;">
-          <div style="margin-bottom: 20px;">
-            <h3 class="spellcasters-title">SPL</h3>
-            ${buildTable(table1Header, table1Body, 'table1')}
-          </div>
-          <div>
-            <h3 class="mfmk-title">MLS</h3>
-            ${buildTable(table2Header, table2Body, 'table2')}
-          </div>
+        <div style="margin-bottom: 40px;">
+          <h3 class="spellcasters-title">SPL</h3>
+          ${buildTable(table1Header, table1Body, 'table1')}
+        </div>
+        <div>
+          <h3 class="mfmk-title">MLS</h3>
+          ${buildTable(table2Header, table2Body, 'table2')}
         </div>
       `;
 
@@ -409,7 +434,7 @@
       });
   </script>
 
-
+<!--
   <div id="playoff-bracket" style="margin: 40px auto; max-width: 200%; overflow-x: auto;color: white">
     <h2 style="text-align:center;">Playoff Bracket</h2>
       <div style="
@@ -421,7 +446,7 @@
         ">
         <iframe
           id="playoff-iframe"
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sNy5NcDFMQJC32VQTJlrnNR-zd5_Jk-cAUGVkLhSUGBUoQywXBZHnyIXeLgJ5lLflK--_CEx0E_u/pubhtml?gid=1815967254&single=true"
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pubhtml?gid=1815967254&single=true"
           width="2000"
           height="2000"
           frameborder="0"
@@ -440,11 +465,13 @@
         </iframe>
     </div>
   </div>
-
+-->
 
   <h1 class="sched-title">Schedule</h1>
   <div id="schedule" style="margin-left: 100px;margin-right: 100px; margin-top: 5px; margin-bottom: 5px;">Loading schedule...</div>
- 
+
+
+  <div id="coaches" style="margin-left:100px;margin-right:100px;">Loading...</div>
 
   <style>
     #schedule {
@@ -483,11 +510,6 @@
       align-items: center;
       gap: 12px;
       margin-bottom: 4px;
-    }
-
-    .team-name {
-      font-weight: normal;
-      min-width: 80px;
     }
 
     .team-data {
@@ -534,13 +556,63 @@
       border: none;
       outline: none;
     }
+    .match-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
+    .match-table td {
+      text-align: center;      /* center the team names */
+      padding: 6px 0;
+    }
+
+    /* line between the two teams */
+    .match-table tr.team-top td {
+      border-bottom: 1px solid #ccc;
+    }
+    .team-row {
+      display: flex;
+      justify-content: center;   /* centers the whole row */
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+    .team-row {
+      display: grid;
+      grid-template-columns: 1fr 30px 30px 30px; /* name expands, scores fixed */
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .team-name {
+      text-align: center;
+      line-height: 1.2;
+      height: 2.4em;          /* exactly two lines */
+      display: flex;
+      align-items: center;    /* vertical centering */
+      justify-content: center;
+      padding: 0 5px;
+    }
+    .team-data {
+      text-align: center;
+    }
+    .match-box .team-row:first-child {
+      border-bottom: 1px solid rgba(255,255,255,0.4);
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+    }
+    .match-box .team-row:first-child {
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+    }
   </style>
 
 
 
   <script>
-    const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sNy5NcDFMQJC32VQTJlrnNR-zd5_Jk-cAUGVkLhSUGBUoQywXBZHnyIXeLgJ5lLflK--_CEx0E_u/pub?gid=1001386983&single=true&output=csv';
+    const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1001386983&single=true&output=csv';
 
     function parseCSV(text) {
       return text.trim().split('\n').map(row => row.split(','));
@@ -632,6 +704,49 @@
 
         document.getElementById('schedule').innerHTML = html;
       });
+      
+  const displayCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1520901699&single=true&output=csv';
+
+fetch(displayCsvUrl)
+  .then(res => res.text())
+  .then(csv => {
+    const rows = parseCSV(csv);
+
+    const startRow = 17; // Row 18
+    const endRow = 30;   // Row 29
+    const startCol = 11; // Column L
+    const endCol = 15;   // Column O (+1)
+
+    const sliced = rows.slice(startRow, endRow).map(row =>
+      row.slice(startCol, endCol)
+    );
+
+    let html = '<table class="coaches">';
+
+      /* HEADER ROW */
+      html += '<thead><tr>';
+
+      html += `<th>${sliced[0][0]}</th>`;
+      html += `<th>${sliced[0][1]}</th>`;
+      html += `<th colspan="2">${sliced[0][2]}</th>`;  // merge col 3 + 4
+
+      html += '</tr></thead><tbody>';
+
+      /* BODY ROWS */
+      for (let i = 1; i < sliced.length; i++) {
+        html += '<tr>';
+
+        html += `<td>${sliced[i][0] || ''}</td>`;
+        html += `<td>${sliced[i][1] || ''}</td>`;
+        html += `<td>${sliced[i][2] || ''}</td>`;
+        html += `<td>${sliced[i][3] || ''}</td>`;
+
+        html += '</tr>';
+      }
+
+      html += '</tbody></table>';
+    document.getElementById("coaches").innerHTML = html;
+  });
   </script>
 
 

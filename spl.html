@@ -709,10 +709,10 @@ fetch(displayCsvUrl)
   .then(csv => {
     const rows = parseCSV(csv);
 
-    const startRow = 17; // Row 18
-    const endRow = 30;   // Row 29
-    const startCol = 12; 
-    const endCol = 16;  
+    const startRow = 13; // Row 18
+    const endRow = 45;   // Row 29
+    const startCol = 13; 
+    const endCol = 17;  
 
     const sliced = rows.slice(startRow, endRow).map(row =>
       row.slice(startCol, endCol)

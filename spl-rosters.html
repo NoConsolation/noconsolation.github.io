@@ -183,32 +183,42 @@
     text-align:center;
   }
   .team-header {
-  background: #4A90E2; /* default color, can be varied */
-  color: white;
-  padding: 8px 10px;
-  font-weight: bold;
-  text-align: center;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  font-size: 1.1rem;
-  text-shadow: 
-     -1px -1px 0 black,
+    --c1: #4A90E2;
+    --c2: #2c5fa3;
+
+    background: repeating-linear-gradient(
+      135deg,
+      var(--c1) 0px,
+      var(--c1) 30px,
+      var(--c2) 30px,
+      var(--c2) 40px
+    );
+
+    color: white;
+    padding: 8px 10px;
+    font-weight: bold;
+    text-align: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    font-size: 1.1rem;
+    text-shadow:
+    -1px -1px 0 black,
      1px -1px 0 black,
     -1px  1px 0 black,
      1px  1px 0 black;
   }
-  .team-header.the-spellcasters{background-color: darkred;  }
-  .team-header.fredchester-united{background-color: purple;}
-  .team-header.sftbnwh{background-color: cyan;}
-  .team-header.eastwoods-island{background-color: pink;}
-  .team-header.wariors-fc{background-color: #4285f4;}
-  .team-header.gurt-and-the-rats{background-color: #78532e;}
-  .team-header.jake{background-color: #00471b;}
-  .team-header.the-red-scare{background-color: #fbbc04;}
-  .team-header.lil-shop{background-color: #4a1ddc;}
-  .team-header.come-on-mr-monty{background-color: #57bb8a;}
-  .team-header.spread-triple-option{background-color: orange;}
-  .team-header.reid-hot-chili-strikers{background-color: #ea4335;}
+  .team-header.the-spellcasters{ --c1:#00ffff; --c2:#ff00ff;}
+  .team-header.fredchester-united{ --c1:#ff6a00; --c2:#32c759;}
+  .team-header.sftbnwh{ --c1:#030303; --c2:#ffff00;}
+  .team-header.eastwoods-island{ --c1:#000000; --c2:#990000;}
+  .team-header.wariors-fc{ --c1:#0000ff; --c2:#ff6d01;}
+  .team-header.gurt-and-the-rats{ --c1:#5c0701; --c2:#5e30eb;}
+  .team-header.fort-minor-fan-boys{ --c1:#ffffff; --c2:#090900;}
+  .team-header.the-red-scare{ --c1:#a60000; --c2:#ffff95;}
+  .team-header.lil-shop{ --c1:#ff7b00; --c2:#000000;}
+  .team-header.come-on-mr-monty{ --c1:#ff9c00; --c2:#0000ff;}
+  .team-header.spread-triple-option{ --c1:#000000; --c2:#ffff00;}
+  .team-header.reid-hot-chili-strikers{ --c1:#0b6f1c; --c2:#910d0d;}
 
 
 

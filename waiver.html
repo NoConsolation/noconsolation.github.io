@@ -218,23 +218,23 @@
   </div>
 
   <!-- Dropdown form -->
-<form id="coachForm" method="post" action="https://script.google.com/macros/s/AKfycbwmeu8aPdMrIrFEhBbXubYfhn6-WZkFvEwa5oOenPCCGNwJeQohHF97IKjxjkCzXllESw/exec">
+<form id="teamForm" method="post" action="https://script.google.com/macros/s/AKfycbwmeu8aPdMrIrFEhBbXubYfhn6-WZkFvEwa5oOenPCCGNwJeQohHF97IKjxjkCzXllESw/exec">
   <div class="form-row">
-    <label for="coach">Coach:</label>
-    <select id="coach" name="coach" aria-label="Select coach">
-      <option value="">-- Select Coach --</option>
-      <option value="Austin">Austin</option>
-      <option value="Colin">Colin</option>
-      <option value="Danny">Danny</option>
-      <option value="Dave">Dave</option>
-      <option value="Eric">Eric</option>
-      <option value="Freddy">Freddy</option>
-      <option value="Garrett">Garrett</option>
-      <option value="Hamilton">Hamilton</option>
-      <option value="Jaco">Jaco</option>
+    <label for="team">Team:</label>
+    <select id="team" name="team" aria-label="Select team">
+      <option value="">-- Select Team --</option>
+      <option value="The Red Scare">The Red Scare</option>
+      <option value="Wariors FC">Wariors FC</option>
+      <option value="Spread Triple Option">Spread Triple Option</option>
+      <option value="Eastwood's Island">Eastwood's Island</option>
+      <option value="The Spellcasters">The Spellcasters</option>
+      <option value="Fredchester United">Fredchester United</option>
+      <option value="Gurt and the Rats">Gurt and the Rats</option>
+      <option value="S.F.T.B.N.W.H.">S.F.T.B.N.W.H.</option>
+      <option value="Come on Mr Monty">Come on Mr Monty</option>
       <option value="Jake">Jake</option>
-      <option value="Reid">Reid</option>
-      <option value="Tanya">Tanya</option>
+      <option value="Reid Hot Chili Strikers">Reid Hot Chili Strikers</option>
+      <option value="Lil Shop">Lil Shop</option>
     </select>
   </div>
 
@@ -266,14 +266,14 @@
 
 
 <script>
-  const group1Coaches = ['Eric','Austin','Danny','Jaco','Garrett','Dave'];
-  const group2Coaches = ['Colin', 'Hamilton', 'Tanya', 'Reid', 'Jake', 'Freddy'];
+  const group1Teams = ['The Red Scare',"Eastwood's Island",'The Spellcasters','Gurt and the Rats','Reid Hot Chili Strikers','Wariors FC'];
+  const group2Teams = ['Spread Triple Option', 'Come on Mr Monty', 'S.F.T.B.N.W.H.', 'Lil Shop', 'Jake', 'Fredchester United'];
 
-  const coachOptions = {};
-  const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sNy5NcDFMQJC32VQTJlrnNR-zd5_Jk-cAUGVkLhSUGBUoQywXBZHnyIXeLgJ5lLflK--_CEx0E_u/pub?gid=1166432758&single=true&output=csv';
+  const teamOptions = {};
+  const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1166432758&single=true&output=csv';
 
   // Roster CSV URL
-  const rosterCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6sNy5NcDFMQJC32VQTJlrnNR-zd5_Jk-cAUGVkLhSUGBUoQywXBZHnyIXeLgJ5lLflK--_CEx0E_u/pub?gid=1896446593&single=true&output=csv';
+  const rosterCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1896446593&single=true&output=csv';
 
   function parseCSV(text) {
     return text.trim().split('\n').map(row => row.split(','));
@@ -301,11 +301,11 @@
         if (rows[r] && rows[r][colY]) optionsGroup2.push(rows[r][colY].trim());
       });
 
-      group1Coaches.forEach(coach => {
-        coachOptions[coach] = optionsGroup1.slice();
+      group1Teams.forEach(team => {
+        teamOptions[team] = optionsGroup1.slice();
       });
-      group2Coaches.forEach(coach => {
-        coachOptions[coach] = optionsGroup2.slice();
+      group2Teams.forEach(team => {
+        teamOptions[team] = optionsGroup2.slice();
       });
 
       // Fill tables as before
@@ -337,7 +337,7 @@
       fillTable('table4', colY, 5, 6);
 
       // Build rosterDataByCoach from rosterRows
-      const rosterDataByCoach = {};
+      const rosterDataByTeam = {};
       for (let rowBox = 0; rowBox < 2; rowBox++) {
         for (let colBox = 0; colBox < 6; colBox++) {
           const startCol = 1 + colBox * 2;
@@ -346,19 +346,19 @@
           const endRow = startRow + 7;
 
           const boxData = extractRange(rosterRows, startCol, endCol, startRow, endRow);
-          const coachName = boxData[0] && boxData[0][0] ? boxData[0][0].trim() : null;
-          if (coachName) rosterDataByCoach[coachName] = boxData;
+          const teamName = boxData[0] && boxData[0][0] ? boxData[0][0].trim() : null;
+          if (teamName) rosterDataByTeam[teamName] = boxData;
         }
       }
 
       // UI wiring: populate selects on coach change
-      const coachSelect = document.getElementById('coach');
+      const teamSelect = document.getElementById('team');
       const dropContainer = document.getElementById('drop-player-container');
       const droppedPlayerSelect = document.getElementById('droppedPlayer');
 
-      coachSelect.addEventListener('change', function () {
-        const coach = this.value;
-        const options = coachOptions[coach] || [];
+      teamSelect.addEventListener('change', function () {
+        const team = this.value;
+        const options = teamOptions[team] || [];
 
         // Populate option1 & option2 selects
         ['option1', 'option2'].forEach(id => {
@@ -389,7 +389,7 @@
         placeholderDrop.selected = true;
         droppedPlayerSelect.appendChild(placeholderDrop);
 
-        const rosterBox = rosterDataByCoach[coach] || [];
+        const rosterBox = rosterDataByTeam[team] || [];
         const players = rosterBox
           .slice(1)
           .map(r => (r && r[0]) ? r[0].trim() : '')

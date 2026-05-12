@@ -155,7 +155,7 @@
 
 <body>
   <div style="text-align: center; margin-top: 40px; margin-bottom: 20px;">
-    <h1 style="font-size: 48px; color: #fff; text-decoration: underline;">SPL Season 4 All Star Voting</h1>
+    <h1 style="font-size: 48px; color: #fff; text-decoration: underline;">SPL Season 5 All Star Voting</h1>
     <p style="font-size: 20px; color: #ccc; margin-top: 10px;">
       *Select your top 3, at least 2 series played at that position to qualify, minimum 2 nominees per team, 1 vote per coach*
     </p>
@@ -205,7 +205,7 @@
 
 <script>
 const sheetUrl =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vTk_yyYJL6SZMkR56CtCoJLDSnI79GyP0r7Js_vFzLQ0kZEI1Xc96bFIqPdzm7PLA-U40CxvoklFXQc/pub?gid=1784266098&single=true&output=csv";
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1HnHKIj9UH8ZxQ37_LLXkiypQjtKXWOApD-mz44fBTDkcnCaGRiwKYehOmMfOk0oLFaXuL8bFo7B_/pub?gid=1784266098&single=true&output=csv";
 
 const tables = [
   {
@@ -274,7 +274,7 @@ const tables = [
   id: "MLS_Util",
   title: "Utility - MLS",
   subtitle: "For Each Player, Vote Yes if they Deserve to be an All Star, No if they do not",
-  range:{ rowStart: 53, rowEnd: 59, colStart: 11, colEnd: 20 },
+  range:{ rowStart: 53, rowEnd: 59, colStart: 10, colEnd: 19 },
   type: "utility"
 },
   { id: "MLS_MGR", title: "Manager - MLS", range: { rowStart: 61, rowEnd: 67, colStart: 10, colEnd: 18 } }
@@ -323,7 +323,7 @@ fetch(sheetUrl)
       const headers = def.id.endsWith("MGR")
         ? ["Coach","Team", "Points", "Win%", "GF/g", "GA/g", "GD", "Snipes"]
         : def.type === "utility"
-          ? ["Player", "Team", "Series", "Win %", "Goals/g", "Striker Index", "Impact", "+/-", "Vote"]
+          ? ["Player", "Series", "Coach", "Win %", "Goals/g", "Striker Index", "Impact", "+/-", "Vote"]
           : ["Player", "Team", "Series", "Win %", "Goals/g", "Striker Index", "Impact", "+/-"];
 
       const headerRow = document.createElement("tr");

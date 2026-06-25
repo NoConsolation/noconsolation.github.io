@@ -147,9 +147,14 @@
 .sub-navbar__menu .dropdown:hover .dropdown-menu {
   display: block;
 }
+.stream-message {
+  color: white;
+  font-weight: 525;
+}
+
 
     </style>
-<!--
+    <!--
    <div class="ticker-wrapper" id="ticker-wrapper">
     <a href="AllStar.html" target="_blank" rel="noopener noreferrer" class="ticker-link">
       <div class="ticker">
@@ -165,7 +170,7 @@
         this.parentElement.style.display = 'none';
       });
     </script>
--->
+  -->
 
     <style>
       /* Schedule Styles */
@@ -204,13 +209,16 @@
         margin: 2px 0;
       }
     
-  .table1, .table2{
+  .table1, .table2,.table3{
     table-layout: fixed;
     width: 100%;
   }
+  th .short {
+  display: none;
+}
 
   .table1 th:nth-child(1),
-  .table1 td:nth-child(1) {width:30%;}
+  .table1 td:nth-child(1) {width:18%;}
 
   .table1 th:nth-child(2),
   .table1 td:nth-child(2) {width:10%;}
@@ -263,12 +271,17 @@
         text-align: center;
       }
       .table1 thead tr {
-        background-color: orangered;
+        background-color: teal;
         color: white;
         justify-content: center;
       }
       .table2 thead tr {
-        background-color: teal;
+        background-color: orangered;
+        color: white;
+        justify-content: center;
+      }
+      .table3 thead tr{
+        background-color: purple;
         color: white;
         justify-content: center;
       }
@@ -276,14 +289,12 @@
       .table1 tr:nth-child(1) td{
         border-bottom: 2px solid green !important;
       }
-      .table1 tr:nth-child(4) td{
-        border-bottom: 2px solid yellow !important;
-      }
       .table2 tr:nth-child(1) td{
         border-bottom: 2px solid green !important;
       }
-      .table2 tr:nth-child(4) td{
-        border-bottom: 2px solid yellow !important;
+      .table3 tr:nth-child(1) td{
+        border-bottom: 2px solid green !important;
+  
       }
       .coaches {
         width: 100%;
@@ -315,7 +326,90 @@
         width: 20%;
       }
 
+    .league1-title {
+      text-align: center;
+      font-size: 3rem;
+      margin-top: 1px;
+      background-image: linear-gradient(to top, white 0%, teal 100%);
+      background-size: 100%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+        .league2-title {
+      text-align: center;
+      font-size: 3rem;
+      margin-top: 1px;
+      background-image: linear-gradient(to top, white 0%, teal 100%);
+      background-size: 100%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+        .league3-title {
+      text-align: center;
+      font-size: 3rem;
+      margin-top: 1px;
+      background-image: linear-gradient(to top, white 0%, teal 100%);
+      background-size: 100%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .tables-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px; /* space between tables */
+  flex-wrap: wrap; /* allows stacking on small screens */
+  margin-bottom: 40px;
+}
 
+.table-block {
+  flex: 1;
+  min-width: 300px; /* prevents squishing */
+  text-align: center;
+}
+table {
+  width: 100%;
+}
+
+.table-block h3 {
+  margin-bottom: 10px;
+}
+table td {
+  padding: 10px;
+  line-height: 1.4;
+}
+
+table tr {
+  height: 4em; /* ~2 lines of text */
+}
+.league-title {
+  cursor: pointer;
+}
+.tables-container {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.table-block {
+  flex: 1;
+  min-width: 300px;
+  transition: all 0.3s ease;
+}
+
+.table-block.hidden {
+  display: none;
+}
+
+.table-block.active {
+  flex: 100%;
+  max-width: 100%;
+}
 
     </style>
 </head>
@@ -356,30 +450,119 @@
         <li><a href="/splszn2.html">Season 2</a></li>
         <li><a href="/splszn3.html">Season 3</a></li>
         <li><a href="/splszn4.html">Season 4</a></li>
+        <li><a href="/splszn5.html">Season 5</a></li>
         <!-- Add more options as needed -->
       </ul>
     </li>
+    <li><a href="/aboutSPL.html">About</a></li>
   </ul>
 </nav>
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBdFLO9Pt8toDPfq3VUFEjMSfghi47tdio",
+  authDomain: "spldraft.firebaseapp.com",
+  databaseURL: "https://spldraft-default-rtdb.firebaseio.com",
+  projectId: "spldraft",
+  storageBucket: "spldraft.firebasestorage.app",
+  messagingSenderId: "151054562933",
+  appId: "1:151054562933:web:a294092e46475fa3c",
+  measurementId: "G-V8H70EEQTC"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+function formatStreamText(data) {
+  if (!data) return "Next Stream: TBD";
+
+  const day = (data.day || "");
+
+  const date = data.date ? new Date(data.date) : null;
+
+  let dateStr = "";
+  if (date && !isNaN(date.getTime())) {
+    const month = date.getMonth() + 1;
+    const dayNum = date.getDate();
+    dateStr = `${month}/${dayNum}`;
+  }
+
+  let timeStr = "TBD";
+
+  if (data.time) {
+    const timeDate = new Date(data.time);
+
+    if (!isNaN(timeDate.getTime())) {
+      timeStr = timeDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    } else {
+      // fallback if it's already a string like "13:00"
+      timeStr = data.time;
+    }
+  }
+
+  return `Next Stream: ${day} ${dateStr} ${timeStr}`;
+}
+
+window.dispStreamTime = function () {
+  ["League 1", "League 2", "League 3"].forEach((league) => {
+
+    const safeId = league.replace(/\s/g, "");
+
+    onValue(ref(db, `stream_times/${league}`), (snapshot) => {
+      const data = snapshot.val();
+
+      const el = document.getElementById(`streamMessage-${safeId}`);
+      if (el) {
+        el.textContent = formatStreamText(data);
+      }
+    });
+  });
+};
+  </script>
 
 
   <!-- Google Sheet Content -->
   <div id="sheet-data" style="margin-left: 100px;margin-right: 100px; margin-top: 10px; margin-bottom: 5px;">Loading data...</div>
 
   <script>
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1520901699&single=true&output=csv';
+    //Display Published as CSV
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgCY7AFJxG4_LzuYyuQUgE5GHw_aYk9lW9Ua3UKFTb8iiipRxXJSb0TYGrsP5rWgNrfCT9uFX3GKf7/pub?gid=1520901699&single=true&output=csv';
 
     function parseCSV(text) {
       return text.trim().split('\n').map(row => row.split(','));
     }
+    function shortHeader(text) {
+      if (!text) return '';
 
+      const map = {
+        "Team Names": "Team",
+        "Points": "Pts",
+        "Wins": "W",
+        "Losses": "L",
+        "GD": "GD",
+        "GF": "GF",
+        "GA": "GA"
+      };
+
+      return map[text.trim()] || text.trim().charAt(0);
+    }
     function buildTable(headerRow, bodyRows, tableClass) {
       const columnIndexes = [0, 1, 3, 4, 7, 5, 6];
       
       let html = `<table class="${tableClass}"><thead><tr>`;
       columnIndexes.forEach(index => {
-        html += `<th>${headerRow[index] || ''}</th>`;
+      html += `
+        <th data-full="${headerRow[index] || ''}">
+          <span class="full">${headerRow[index] || ''}</span>
+          <span class="short">${shortHeader(headerRow[index])}</span>
+        </th>
+      `;
       });
       html += `</tr></thead><tbody>`;
 
@@ -394,7 +577,22 @@
       html += '</tbody></table>';
       return html;
     }
+function setHeaderMode(mode) {
+  document.querySelectorAll("th").forEach(th => {
+    const full = th.querySelector(".full");
+    const short = th.querySelector(".short");
 
+    if (!full || !short) return;
+
+    if (mode === "short") {
+      full.style.display = "none";
+      short.style.display = "inline";
+    } else {
+      full.style.display = "inline";
+      short.style.display = "none";
+    }
+  });
+}
 
     fetch(csvUrl)
       .then(response => {
@@ -412,30 +610,55 @@
         const table2Header = data[9];
         const table2Body = data.slice(10, 16);
 
-      const html = `
-        <div style="margin-bottom: 40px;">
-          <h3 class="spellcasters-title">SPL</h3>
-          ${buildTable(table1Header, table1Body, 'table1')}
-        </div>
-        <div>
-          <h3 class="mfmk-title">MLS</h3>
-          ${buildTable(table2Header, table2Body, 'table2')}
-        </div>
-      `;
+        // Table 3 header and body
+        const table3Header = data[17];
+        const table3Body=data.slice(18,24);
 
-        document.getElementById('sheet-data').innerHTML = html;
+        const html = `
+          <div class="tables-container">
+            
+            <div class="table-block league1">
+              <h3 class="league-title league1-title" data-league="league1">ATR</h3>
+              <div id="streamMessage-League1" class="stream-message"></div>
+              ${buildTable(table1Header, table1Body, 'table1')}
+            </div>
+
+            <div class="table-block league2">
+              <h3 class="league-title league2-title" data-league="league2">CWP</h3>
+              <div id="streamMessage-League2" class="stream-message"></div>
+              ${buildTable(table2Header, table2Body, 'table2')}
+            </div>
+
+            <div class="table-block league3">
+              <h3 class="league-title league3-title" data-league="league3">BikeBoys</h3>
+              <div id="streamMessage-League3" class="stream-message"></div>
+              ${buildTable(table3Header, table3Body, 'table3')}
+            </div>
+
+          </div>
+        `;
+
+          document.getElementById('sheet-data').innerHTML = html;
+          requestAnimationFrame(() => {
+            setHeaderMode("short");
+          });
+          setTimeout(() => {
+            if (window.dispStreamTime) window.dispStreamTime();
+              updateHeaders();
+          }, 0);
       })
+      
       .catch(error => {
         console.error('Error fetching CSV:', error);
         document.getElementById('sheet-data').textContent = 'Failed to load data.';
       });
   </script>
 
-
+<!--
   <div id="playoff-bracket" style="margin: 40px auto; max-width: 200%; overflow-x: auto;color: white">
     <h2 style="text-align:center;">Playoff Bracket</h2>
       <div style="
-          width: 1300px; 
+          width: 900px; 
           height: 800px;       /* keep or adjust as needed */
           overflow: hidden; 
           margin: 0 auto;
@@ -443,8 +666,8 @@
         ">
         <iframe
           id="playoff-iframe"
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pubhtml?gid=1815967254&single=true"
-          width="3000"
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS-bZX5wR8VLB1uNQmIVTkq9VImHnh1v4sKFKroFPxkfWsi0QGiCDXUrqT1FgDQOTEJwFWZ8-_Wha8O/pubhtml?gid=1815967254&single=true"
+          width="2000"
           height="2000"
           frameborder="0"
           style="
@@ -462,8 +685,7 @@
         </iframe>
     </div>
   </div>
-
-  
+-->
 
   <h1 class="sched-title">Schedule</h1>
   <div id="schedule" style="margin-left: 100px;margin-right: 100px; margin-top: 5px; margin-bottom: 5px;">Loading schedule...</div>
@@ -514,7 +736,7 @@
       width: 30px;
       text-align: center;
     }
-    @media (min-width: 500px) {
+    @media (min-width: 1000px) {
       .matches-row {
         grid-template-columns: repeat(2, 1fr); /* 3 rows of 2 */
       }
@@ -526,17 +748,15 @@
       }
     }
 
-    @media (min-width: 1000px) {
-      .matches-row {
-        grid-template-columns: repeat(6, 1fr); /* 1 row of 6 */
-      }
-    }
-    .match-box.teal {
+    .match-box.league1 {
       border-color: teal;
     }
 
-  .match-box.orangered {
+  .match-box.league2 {
     border-color: #de451f;
+  }
+  .match-box.league3{
+    border-color: purple;
   }
     .sched-title {
       display: flex;
@@ -550,7 +770,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      text-fill-color: transparent;
       border: none;
       outline: none;
     }
@@ -605,12 +824,13 @@
       padding-bottom: 4px;
       margin-bottom: 6px;
     }
+    
   </style>
 
 
 
   <script>
-    const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1001386983&single=true&output=csv';
+    const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgCY7AFJxG4_LzuYyuQUgE5GHw_aYk9lW9Ua3UKFTb8iiipRxXJSb0TYGrsP5rWgNrfCT9uFX3GKf7/pub?gid=1001386983&single=true&output=csv';
 
     function parseCSV(text) {
       return text.trim().split('\n').map(row => row.split(','));
@@ -678,7 +898,7 @@
     fetch(scheduleCsvUrl)
       .then(res => res.text())
       .then(csv => {
-        const rows = parseCSV(csv).slice(29, 149); // A30:F125
+        const rows = parseCSV(csv).slice(41, 221); // A30:F125
         const weeks = {};
 
     for (let i = 0; i < rows.length - 1; i += 2) {
@@ -689,7 +909,8 @@
       if (!weeks[week]) weeks[week] = [];
 
       const matchIndex = weeks[week].length;
-      const colorClass = matchIndex < 3 ? 'teal' : 'orangered';
+      const colorClass = matchIndex < 3 ? 'league1': matchIndex <6 ? 'league2':'league3';
+
 
       weeks[week].push(createMatchBox(row1, row2, colorClass));
     }
@@ -703,49 +924,104 @@
         document.getElementById('schedule').innerHTML = html;
       });
       
-  const displayCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1520901699&single=true&output=csv';
+const tableData = [
+  ["Team", "Coach"], // Header row
+  ["Team 1", "Coach 1"],
+  ["Team 2", "Coach 2"],
+  ["Team 3", "Coach 3"],
+  ["Team 4", "Coach 4"],
+  ["Team 5", "Coach 5"],
+  ["Team 6", "Coach 6"],
+  ["Team 7", "Coach 7"],
+  ["Team 8", "Coach 8"],
+  ["Team 9", "Coach 9"],
+  ["Team 10", "Coach 10"],
+  ["Team 11", "Coach 11"],
+  ["Team 12", "Coach 12"],
+  ["Team 13", "Coach 13"],
+  ["Team 14", "Coach 14"],
+  ["Team 15", "Coach 15"],
+  ["Team 16", "Coach 16"],
+  ["Team 17", "Coach 17"],
+  ["Team 18", "Coach 18"]
+];
 
-fetch(displayCsvUrl)
-  .then(res => res.text())
-  .then(csv => {
-    const rows = parseCSV(csv);
+let html = '<table class="coaches">';
 
-    const startRow = 33; // Row 18
-    const endRow = 45;   // Row 29
-    const startCol = 13; 
-    const endCol = 17;  
+// Header
+html += '<thead><tr>';
+html += `<th>${tableData[0][0]}</th>`;
+html += `<th>${tableData[0][1]}</th>`;
+html += '</tr></thead><tbody>';
 
-    const sliced = rows.slice(startRow, endRow).map(row =>
-      row.slice(startCol, endCol)
-    );
+// Body
+for (let i = 1; i < tableData.length; i++) {
+  html += `
+    <tr>
+      <td>${tableData[i][0]}</td>
+      <td>${tableData[i][1]}</td>
+    </tr>
+  `;
+}
 
-    let html = '<table class="coaches">';
+html += '</tbody></table>';
 
-      /* HEADER ROW */
-      html += '<thead><tr>';
+document.getElementById("coaches").innerHTML = html;
 
-      html += `<th>${sliced[0][0]}</th>`;
-      html += `<th>${sliced[0][1]}</th>`;
-      html += `<th colspan="2">${sliced[0][2]}</th>`;  // merge col 3 + 4
 
-      html += '</tr></thead><tbody>';
+let activeLeague = null;
 
-      /* BODY ROWS */
-      for (let i = 1; i < sliced.length; i++) {
-        html += '<tr>';
+document.addEventListener('click', function (e) {
+  if (!e.target.classList.contains('league-title')) return;
 
-        html += `<td>${sliced[i][0] || ''}</td>`;
-        html += `<td>${sliced[i][1] || ''}</td>`;
-        html += `<td>${sliced[i][2] || ''}</td>`;
-        html += `<td>${sliced[i][3] || ''}</td>`;
+  const league = e.target.dataset.league;
 
-        html += '</tr>';
-      }
+  console.log("Clicked:", league); // debug
 
-      html += '</tbody></table>';
-    document.getElementById("coaches").innerHTML = html;
+  // RESET (show everything)
+  if (activeLeague === league) {
+    activeLeague = null;
+
+    document.querySelectorAll('.table-block').forEach(block => {
+      block.style.display = '';
+    });
+
+    document.querySelectorAll('.league1, .league2, .league3').forEach(el => {
+      el.style.display = '';
+    });
+
+    setHeaderMode("short");
+    return;
+  }
+
+  activeLeague = league;
+
+  // ---- TABLES ----
+    document.querySelectorAll('.table-block').forEach(block => {
+      block.style.display = 'none';
+    });
+
+    // show ONLY the matching table
+    const activeBlock = document.querySelector(`.table-block.${league}`);
+
+    if (activeBlock) {
+      activeBlock.style.display = 'block';
+      activeBlock.style.width = '100%';
+
+        setHeaderMode("long");
+    }
+
+  // ---- MATCHES ----
+  document.querySelectorAll('.league1, .league2, .league3').forEach(el => {
+    if (el.classList.contains(league)) {
+      el.style.display = '';
+    } else {
+      el.style.display = 'none';
+    }
   });
-  </script>
+});
+</script>
+
 
 
 

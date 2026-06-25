@@ -587,8 +587,9 @@
   <div id="dashboardDropdownContainer">
     <select id="dashboardDropdown">
       <option value="">--</option>
-      <option value="SPL">SPL</option>
-      <option value="MLS">MLS</option>
+      <option value="One">One</option>
+      <option value="Two">Two</option>
+      <option value="Bike">Bike</option>
     </select>
   </div>
 </div>
@@ -668,8 +669,9 @@ const firebaseConfig = {
   measurementId: "G-V8H70EEQTC"
 };
 const COACHES = {
-  SPL: ["Austin","Dave","Eric","Garrett","Reid","Colin"],
-  MLS: ["Hamilton","Jaco","Danny","Tanya","Jake","Freddy"]
+  One: ["Colin","Eric P","Jake","Ben","Jaco","Danny"],
+  Two: ["Austin","Garrett","Brandon","Eric A","Tanya","Brad"],
+  Bike: ["Hamilton","Reid","Teddy","Charlie","Dave","Fred"]
 };
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
@@ -838,7 +840,7 @@ saveClearBtn.addEventListener("click", async () => {
 
 const dropdown = document.getElementById("dashboardDropdown");
 const budgetTableBody = document.querySelector("#budgetTable tbody");
-const leagueColors = { "": "#7f8c8d", "SPL": "orangered", "MLS": "teal" };
+const leagueColors = { "": "#7f8c8d", "One": "orangered", "Two": "teal","Bike":"Purple"};
 
 const db = getDatabase();
 const leagueRef = ref(db, "currentLeague");

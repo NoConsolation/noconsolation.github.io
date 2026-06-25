@@ -288,6 +288,10 @@
   color: teal; /* Example: orange */
   text-shadow: 1px 1px 0 black;
 }
+.third-title{
+  color:purple;
+  text-shadow:1px 1px 0 black ;
+}
 
 </style>
 
@@ -510,6 +514,13 @@
       <h2 class = "mls-title">Minor League Strikers</h2>
       <div class="roster-row" id="bottom-teams"></div>
     </div>
+
+    <div class="roster-group" id="third-group">
+      <h2 class = "third-title">Bike boys</h2>
+      <div class="roster-row" id="third-teams"></div>
+    </div>
+
+
   </div>
 
 
@@ -588,7 +599,7 @@
   <script src="app.js"></script>
 
 <script>
-  const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1896446593&single=true&output=csv';
+  const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgCY7AFJxG4_LzuYyuQUgE5GHw_aYk9lW9Ua3UKFTb8iiipRxXJSb0TYGrsP5rWgNrfCT9uFX3GKf7/pub?gid=1896446593&single=true&output=csv';
 
   function parseCSV(text) {
     return text.trim().split('\n').map(row => row.split(','));
@@ -638,8 +649,9 @@
       const data = parseCSV(text);
       const topContainer = document.getElementById('top-teams');
       const bottomContainer = document.getElementById('bottom-teams');
+      const thirdContainer = document.getElementById('third-teams');
 
-      for (let rowBox = 0; rowBox < 2; rowBox++) {
+      for (let rowBox = 0; rowBox < 3; rowBox++) {
         for (let colBox = 0; colBox < 6; colBox++) {
           const startCol = 1 + colBox * 2;
           const endCol = startCol + 1;
@@ -651,8 +663,12 @@
 
           if (rowBox === 0) {
             topContainer.innerHTML += boxHTML;
-          } else {
+          } 
+          else if (rowBox === 1) {
             bottomContainer.innerHTML += boxHTML;
+          } 
+          else {
+            thirdContainer.innerHTML += boxHTML;
           }
         }
       }

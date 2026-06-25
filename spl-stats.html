@@ -50,6 +50,123 @@
   display: block;
 }
 
+.stat-header {
+  position: relative;
+  padding: 10px;
+  background: #222;
+  color: white;
+  border: 1px solid #444;
+  cursor: pointer;
+}
+
+.stat-header:hover {
+  background: #333;
+}
+
+.edit-btn {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  background: transparent;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.edit-btn:hover {
+  color: white;
+}
+
+.stat-header.sorted-asc::after {
+  content: " ▲";
+}
+
+.stat-header.sorted-desc::after {
+  content: " ▼";
+}
+
+/* dropdown panel */
+.stat-picker {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #111;
+  border: 1px solid #444;
+  z-index: 999;
+  display: none;
+  width: 100%;
+}
+
+.stat-picker button {
+  display: block;
+  width: 100%;
+  padding: 6px;
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+}
+
+.stat-picker button:hover {
+  background: #333;
+}
+#statsTable {
+  width: 90%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: #aaa;
+}
+#statsTable th:nth-child(1),
+#statsTable td:nth-child(1) {
+  width: 33%;
+  text-align: left;
+}
+
+#statsTable th:nth-child(2),
+#statsTable td:nth-child(2),
+#statsTable th:nth-child(3),
+#statsTable td:nth-child(3),
+#statsTable th:nth-child(4),
+#statsTable td:nth-child(4) {
+  width: 20%;
+  text-align: center;
+}
+#statsTable th {
+  background: #222;
+  color: white;
+  border: 1px solid #444;
+  padding: 10px;
+  position: relative;
+  font-weight: bold;
+}
+.stat-header.no-edit .edit-btn {
+  display: none;
+}
+.filters {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin: 15px auto;
+  width: 90%;
+  color: white;
+}
+
+.filters select {
+  margin-left: 5px;
+  background: #222;
+  color: white;
+  border: 1px solid #444;
+  padding: 4px;
+}
+.page-view h2 {
+  color: #ddd;
+  text-align: center;
+  margin: 20px 0;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
 </style>
 <body>
 
@@ -86,26 +203,76 @@
       <ul class="dropdown-menu">
         <li><a href="/splszn2.html">Season 2</a></li>
         <li><a href="/splszn3.html">Season 3</a></li>
+        <li><a href="/splszn4.html">Season 4</a></li>
         <!-- Add more options as needed -->
       </ul>
     </li>
   </ul>
 </nav>
 
+<nav class="sub-navbar">
+  <ul class="sub-navbar__menu">
+    <li><a href="#" class="view-link active" data-target="player-stats">Player Stats</a></li>
+    <li><a href="#" class="view-link" data-target="team-stats">Team Stats</a></li>
+  </ul>
+</nav>
 
 
-    <div id="panelContainer" class="grid-container"></div>
-    <div id="detailModal" class="modal">
-    <div class="modal-content">
-        <span id="closeModal" class="close">&times;</span>
-        <div id="detailContent"></div>
-    </div>
-    </div>
+<div id="player-stats" class="page-view" style="display:none;">
+<h2>Player Stats</h2>
+<div class="filters">
+  <label>
+    League:
+    <select id="filter-league">
+    </select>
+  </label>
 
+  <label>
+    Role:
+    <select id="filter-role">
+      <option value="">All</option>
+      <option value="Captain">Captain</option>
+      <option value="Sidekick">Sidekick</option>
+    </select>
+  </label>
 
+  <label>
+    Team:
+    <select id="filter-team">
+      <option value="">All</option>
+      <!-- populate dynamically later -->
+    </select>
+  </label>
+</div>
+  <table id="statsTable">
+  <thead>
+    <tr>
+      <th>Player</th>
 
+      <th class="stat-header" data-col="col2">
+        <span class="label"></span>
+        <button class="edit-btn">⚙</button>
+      </th>
 
+      <th class="stat-header" data-col="col3">
+        <span class="label"></span>
+        <button class="edit-btn">⚙</button>
+      </th>
 
+      <th class="stat-header" data-col="col4">
+        <span class="label"></span>
+        <button class="edit-btn">⚙</button>
+      </th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+</div>
+
+<div id="team-stats" class="page-view" style="display:none;">
+  <h2>Team Stats</h2>
+  <!-- content -->
+</div>
 
   <!-- Footer Section -->
   <div class="footer__container">
@@ -180,379 +347,263 @@
 
     <script src="app.js"></script>
 
-    <script>
-    function showSection(id) {
-        const sections = document.querySelectorAll('.content-section');
-        sections.forEach(section => {
-        section.style.display = section.id === id ? 'block' : 'none';
-        });
-    }
-    </script>
-
-
-
 <script>
-const container = document.getElementById('panelContainer'); // Your main grid container
-let panelIndex = 0;
+document.querySelectorAll(".view-link").forEach(link => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
 
-// Define the 12 ranges for each stat panel (adjust to your real ranges)
+    document.querySelectorAll(".view-link").forEach(l => l.classList.remove("active"));
+    link.classList.add("active");
 
+    const target = link.dataset.target;
 
-// Initial fetch to build panels grid from A18:H29 (or your actual panel header location)
-fetch("https://script.google.com/macros/s/AKfycbxF4jUiEKS-nrPwdADBsvafzDeMMNrrkNm9WcUkX1bUI22k0E-ze66QIB-wnVCH0u9ZFA/exec")
-  .then(res => res.json())
-  .then(data => {
-    for (let row = 0; row <= 8; row += 4) {
-      for (let col = 0; col < 8; col += 2) {
-        const panel = document.createElement('div');
-        panel.className = 'panel';
-        panel.style.cursor = 'pointer';
-
-        const headerData = data[row][col];
-        const header = document.createElement('h3');
-        header.textContent = headerData.value;
-        header.style.backgroundColor = '#333';
-        header.style.color = 'white';
-        panel.appendChild(header);
-
-        const table = document.createElement('table');
-        for (let i = 1; i <= 3; i++) {
-          const tr = document.createElement('tr');
-          for (let j = 0; j < 2; j++) {
-            const cellData = data[row + i][col + j];
-            const td = document.createElement('td');
-            let val = cellData.value;
-            if (typeof val === "number") val = val.toFixed(1);
-            td.textContent = val;
-            td.style.backgroundColor = cellData.bgColor;
-            tr.appendChild(td);
-          }
-          table.appendChild(tr);
-        }
-
-        panel.appendChild(table);
-        panel.setAttribute('data-panel-index', panelIndex);
-        panel.addEventListener('click', () => {
-          const index = panel.getAttribute('data-panel-index');
-          openDetailForPanel(parseInt(index, 10));
-        });
-
-        container.appendChild(panel);
-        panelIndex++;
-      }
-    }
-  })
-  .catch(err => console.error("Error loading panels:", err));
+    document.querySelectorAll(".page-view").forEach(v => v.style.display = "none");
+    document.getElementById(target).style.display = "block";
+  });
+});
 
 
-// Fetch and show detail panel for clicked stat index
-const rangesByPanel = {
-  0: "a3:d8",
-  1: "e3:h7",
-  2: "i3:l7",
-  3: "m3:p7",
-  4: "a11:d16",
-  5: "e11:h15",
-  6: "i11:l15",
-  7: "m11:p15",
-  8: "a18:b25",
-  9: "e19:h23",
-  10: "i19:l23",
-  11: "m19:p23"
+const firebaseUrl = "https://spldraft-default-rtdb.firebaseio.com/p_stats.json";
+
+let playerData = {};
+
+let sortState = {
+  col: "col2",
+  dir: "desc"
 };
 
-const titles = [
-  "Team Goals per Game",
-  "Goals per Game",
-  "Megastrike Goals per Game",
-  "Skill Shot Goals",
-  "Team Goals Against per Game",
-  "Striker Index",
-  "Impact",
-  "Skill Shot Assists",
-  "Map Goals per Game",
-  "Sidekick Goals per Game",
-  "Sidekick Impact",
-  "Plus/Minus"
+const statOptions = [
+  "games",
+  "goals",
+  "goalspergame",
+  "wins",
+  "winper",
+  "msss",
+  "ssa",
+  "si",
+  "impact",
+  "plusminus",
+  "team",
+  "league"
 ];
-
-function getRangeData(sheetData, range) {
-  const colToIndex = col => col.charCodeAt(0) - 'A'.charCodeAt(0);
-  const [start, end] = range.split(':');
-  const startCol = colToIndex(start[0]);
-  const startRow = parseInt(start.slice(1)) - 1;
-  const endCol = colToIndex(end[0]);
-  const endRow = parseInt(end.slice(1)) - 1;
-
-  // if sheetData has .values property, use that
-  const data = Array.isArray(sheetData) ? sheetData : (sheetData.values || []);
-
-  return data.slice(startRow, endRow + 1).map(row =>
-    row.slice(startCol, endCol + 1)
-  );
-}
-
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF4jUiEKS-nrPwdADBsvafzDeMMNrrkNm9WcUkX1bUI22k0E-ze66QIB-wnVCH0u9ZFA/exec";
-
-function openDetailForPanel(index) {
-  fetch(`${SCRIPT_URL}?panel=${index}`)
-    .then(res => res.json())
-    .then(data => {
-      if (index === 8) {
-        // Panel 8: simple 8 rows x 2 cols, no SPL/MLS split
-        const rows = data.map(row => [row[0].value, row[1].value]);
-        showSimpleTableModal({
-          title: titles[index] || "Untitled",
-          rows: rows
-        });
-      } else {
-        // Default: split into SPL and MLS columns
-        const splRows = data.map(row => [row[0].value, row[1].value]);
-        const mlsRows = data.map(row => [row[2].value, row[3].value]);
-        showDetailModal([
-          { title: titles[index] || "Untitled SPL", rows: splRows },
-          { title: titles[index] || "Untitled MLS", rows: mlsRows }
-        ]);
-      }
-    })
-    .catch(err => console.error("Error fetching panel detail:", err));
-}
-
-
-
-// Keep your showDetailModal as is, but when setting textContent:
-// Example:
-// if (typeof value === 'number') value = value.toFixed(1);
-// td.textContent = value;
-
-
-
-// Modal logic and close button
-const modal = document.getElementById("detailModal");
-const closeBtn = document.getElementById("closeModal");
-closeBtn.onclick = () => modal.classList.remove("show");
-
-window.onclick = (event) => {
-  if (event.target === modal){
-    modal.classList.remove("show");
-  }
+const statLabels = {
+  games: "Games",
+  goals: "Goals",
+  goalspergame: "Goals/Game",
+  wins: "Wins",
+  winper: "Win %",
+  msss: "Megastrikes",
+  ssa: "SkillShot Assists",
+  si: "Strikers Index",
+  impact: "Impact",
+  plusminus: "+/-",
+  team: "Team",
+  league: "League"
 };
 
-// Your existing showDetailModal function to render the data nicely
-function showDetailModal(blocks,panelIndex) {
-  if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-    console.warn("Invalid modal data.");
-    return;
-  }
+const columnConfig = {
+  col2: "games",
+  col3: "goals",
+  col4: "winper"
+};
 
-  const container = document.getElementById("detailContent");
-  container.innerHTML = "";
+async function loadStats() {
+  const res = await fetch(firebaseUrl);
+  playerData = await res.json();
 
-  const table = document.createElement("table");
-  table.style.width = "100%";
-  table.style.borderCollapse = "collapse";
-  table.style.tableLayout = "fixed";
-
-  const thead = document.createElement("thead");
-
-  // Big title row spanning all 5 columns
-  const titleRow = document.createElement("tr");
-  const titleCell = document.createElement("th");
-  titleCell.colSpan = 5;
-  titleCell.textContent = blocks[0].title || "Untitled";
-  titleCell.style.textAlign = "center";
-  titleCell.style.fontWeight = "bold";
-  titleCell.style.fontSize = "1.4em";
-  titleCell.style.padding = "10px";
-  titleCell.style.backgroundColor = "#333";
-  titleCell.style.color = "white";
-  titleCell.style.border = "1px solid #ccc";
-  titleRow.appendChild(titleCell);
-  thead.appendChild(titleRow);
-
-  // Header row: #, SPL (colspan=2), MLS (colspan=2)
-  const headerRow1 = document.createElement("tr");
-
-  const thNum = document.createElement("th");
-  thNum.rowSpan = 2;
-  thNum.textContent = "#";
-  thNum.style.border = "1px solid #ccc";
-  thNum.style.padding = "6px";
-  thNum.style.backgroundColor = "#ddd";
-  thNum.style.width = "10%";
-  headerRow1.appendChild(thNum);
-
-  const thSpl = document.createElement("th");
-  thSpl.colSpan = 2;
-  thSpl.textContent = "SPL";
-  thSpl.style.border = "1px solid #ccc";
-  thSpl.style.padding = "6px";
-  thSpl.style.backgroundColor = "orangered";
-  thSpl.style.color = "white";
-  thSpl.style.textAlign = "center";
-  thSpl.style.width = "45%";
-  headerRow1.appendChild(thSpl);
-
-  const thMls = document.createElement("th");
-  thMls.colSpan = 2;
-  thMls.textContent = "MLS";
-  thMls.style.border = "1px solid #ccc";
-  thMls.style.padding = "6px";
-  thMls.style.backgroundColor = "teal";
-  thMls.style.color = "white";
-  thMls.style.textAlign = "center";
-  thMls.style.width = "45%";
-  headerRow1.appendChild(thMls);
-
-  thead.appendChild(headerRow1);
-
-  table.appendChild(thead);
-
-  const tbody = document.createElement("tbody");
-
-const modal = document.getElementById("detailModal");
-
-  // Use the max rows available from SPL or MLS rows for safety
-  const splLength = blocks[0].rows.length;
-  const mlsLength = blocks[1].rows.length;
-  const maxRows = Math.max(splLength, mlsLength);
-
-  // If you want to force 6 rows for panels 0 and 4, otherwise number of rows available:
-  const numRows = (panelIndex === 0 || panelIndex === 4) ? Math.max(6, maxRows) : maxRows;
-
-  // Then loop from 0 to numRows - 1
-  for (let i = 0; i < numRows; i++) {
-    const tr = document.createElement("tr");
-
-    // Row number
-    const tdNum = document.createElement("td");
-    tdNum.textContent = i + 1;
-    tdNum.style.fontWeight = "bold";
-    tdNum.style.border = "1px solid #ccc";
-    tdNum.style.padding = "6px";
-    tdNum.style.backgroundColor = "#f0f0f0";
-    tdNum.style.width = "10%";
-    tdNum.style.textAlign = "center";
-    tr.appendChild(tdNum);
-
-    // SPL Player name
-    const splPlayer = (blocks[0].rows[i] && blocks[0].rows[i][0]) ?? "";
-    const tdSplPlayer = document.createElement("td");
-    tdSplPlayer.textContent = splPlayer;
-    tdSplPlayer.style.border = "1px solid #ccc";
-    tdSplPlayer.style.padding = "6px";
-    tdSplPlayer.style.width = "22.5%";
-    tdSplPlayer.style.backgroundColor = "#f0f0f0";
-    tr.appendChild(tdSplPlayer);
-
-    // SPL Player number
-    let splNum = (blocks[0].rows[i] && blocks[0].rows[i][1]) ?? "";
-    if (typeof splNum === "number") splNum = splNum.toFixed(1);
-    const tdSplNum = document.createElement("td");
-    tdSplNum.textContent = splNum;
-    tdSplNum.style.border = "1px solid #ccc";
-    tdSplNum.style.padding = "6px";
-    tdSplNum.style.width = "22.5%";
-    tdSplNum.style.backgroundColor = "#f0f0f0";
-    tr.appendChild(tdSplNum);
-
-    // MLS Player name
-    const mlsPlayer = (blocks[1].rows[i] && blocks[1].rows[i][0]) ?? "";
-    const tdMlsPlayer = document.createElement("td");
-    tdMlsPlayer.textContent = mlsPlayer;
-    tdMlsPlayer.style.border = "1px solid #ccc";
-    tdMlsPlayer.style.padding = "6px";
-    tdMlsPlayer.style.width = "22.5%";
-    tdMlsPlayer.style.backgroundColor = "#f0f0f0";
-    tr.appendChild(tdMlsPlayer);
-
-    // MLS Player number
-    let mlsNum = (blocks[1].rows[i] && blocks[1].rows[i][1]) ?? "";
-    if (typeof mlsNum === "number") mlsNum = mlsNum.toFixed(1);
-    const tdMlsNum = document.createElement("td");
-    tdMlsNum.textContent = mlsNum;
-    tdMlsNum.style.border = "1px solid #ccc";
-    tdMlsNum.style.padding = "6px";
-    tdMlsNum.style.width = "22.5%";
-    tdMlsNum.style.backgroundColor = "#f0f0f0";
-    tr.appendChild(tdMlsNum);
-
-    tbody.appendChild(tr);
-  }
-
-
-  table.appendChild(tbody);
-  container.appendChild(table);
-
-  modal.classList.add("show");
-}
-
-
-function showSimpleTableModal(block) {
-  const container = document.getElementById("detailContent");
-  container.innerHTML = "";
-
-  const table = document.createElement("table");
-  table.style.width = "100%";
-  table.style.borderCollapse = "collapse";
-
-  const thead = document.createElement("thead");
-
-  // Title row spanning 3 columns (# + 2 data columns)
-  const titleRow = document.createElement("tr");
-  const titleCell = document.createElement("th");
-  titleCell.colSpan = 3;
-  titleCell.textContent = block.title;
-  titleCell.style.textAlign = "center";
-  titleCell.style.backgroundColor = "#333";
-  titleCell.style.color = "white";
-  titleCell.style.padding = "10px";
-  titleRow.appendChild(titleCell);
-  thead.appendChild(titleRow);
-
-  // Header row
-
-  table.appendChild(thead);
-
-  const tbody = document.createElement("tbody");
-
-  block.rows.forEach((row, i) => {
-    const tr = document.createElement("tr");
-
-    // Row number
-    const tdNum = document.createElement("td");
-    tdNum.textContent = i + 1;
-    tdNum.style.border = "1px solid #ccc";
-    tdNum.style.padding = "6px";
-    tdNum.style.backgroundColor = "#f0f0f0";
-    tr.appendChild(tdNum);
-
-    // Column 1
-    const td1 = document.createElement("td");
-    td1.textContent = row[0];
-    td1.style.border = "1px solid #ccc";
-    td1.style.padding = "6px";
-    td1.style.backgroundColor='#f0f0f0';
-    tr.appendChild(td1);
-
-    // Column 2
-    const td2 = document.createElement("td");
-    td2.textContent = row[1];
-    td2.style.border = "1px solid #ccc";
-    td2.style.padding = "6px";
-    td2.style.backgroundColor='#f0f0f0';
-    tr.appendChild(td2);
-
-    tbody.appendChild(tr);
+  document.getElementById("filter-league").addEventListener("change", (e) => {
+    filters.league = e.target.value;
+    renderTable();
   });
 
-  table.appendChild(tbody);
-  container.appendChild(table);
+  document.getElementById("filter-role").addEventListener("change", (e) => {
+    filters.role = e.target.value;
+    renderTable();
+  });
 
-  // Show the modal
-  const modal = document.getElementById("detailModal");
-  modal.classList.add("show");
+  document.getElementById("filter-team").addEventListener("change", (e) => {
+    filters.team = e.target.value;
+    renderTable();
+  });
+
+  buildFiltersFromData();
+  setupHeaders();
+  renderTable();
 }
+
+let activePicker = null;
+
+let filters = {
+  league: "",
+  role: "",
+  team: ""
+};
+
+function setupHeaders() {
+  document.querySelectorAll(".stat-header").forEach(header => {
+    const colId = header.dataset.col;
+    if (colId === "player") return;
+    const label = header.querySelector(".label");
+
+    // set initial label
+    label.textContent = statLabels[columnConfig[colId]] || columnConfig[colId];
+
+    // SORT (click anywhere except button/picker)
+    header.addEventListener("click", (e) => {
+      if (e.target.classList.contains("edit-btn")) return;
+      if (e.target.classList.contains("stat-picker")) return;
+
+      if (sortState.col === colId) {
+        sortState.dir = sortState.dir === "asc" ? "desc" : "asc";
+      } else {
+        sortState.col = colId;
+        sortState.dir = "desc";
+      }
+
+      updateSortUI();
+      renderTable();
+    });
+
+    // OPEN PICKER
+    const btn = header.querySelector(".edit-btn");
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      closePickers();
+
+      const picker = document.createElement("div");
+      picker.className = "stat-picker";
+
+      statOptions.forEach(stat => {
+        const option = document.createElement("button");
+        option.textContent = statLabels[stat] || stat;
+
+        option.onclick = () => {
+          columnConfig[colId] = stat;
+          label.textContent = statLabels[stat] || stat;
+          closePickers();
+          renderTable();
+        };
+
+        picker.appendChild(option);
+      });
+
+      header.appendChild(picker);
+      picker.style.display = "block";
+
+      activePicker = picker;
+    });
+  });
+}
+
+function closePickers() {
+  if (activePicker) {
+    activePicker.remove();
+    activePicker = null;
+  }
+}
+
+function updateSortUI() {
+  document.querySelectorAll(".stat-header").forEach(h => {
+    h.classList.remove("sorted-asc", "sorted-desc");
+  });
+
+  const active = document.querySelector(`[data-col="${sortState.col}"]`);
+
+  if (active) {
+    active.classList.add(
+      sortState.dir === "asc" ? "sorted-asc" : "sorted-desc"
+    );
+  }
+}
+
+function renderTable() {
+  const tbody = document.querySelector("#statsTable tbody");
+  tbody.innerHTML = "";
+
+  const rows = Object.entries(playerData)
+    .map(([name, stats]) => ({
+      name,
+      league: stats.league,
+      role: stats.role,
+      team: stats.team,
+      col2: stats[columnConfig.col2] ?? 0,
+      col3: stats[columnConfig.col3] ?? 0,
+      col4: stats[columnConfig.col4] ?? 0
+    }))
+    .filter(p => {
+      if (filters.league && p.league != filters.league) return false;
+      if (filters.role && p.role != filters.role) return false;
+      if (filters.team && p.team != filters.team) return false;
+      return true;
+    });
+
+  rows.sort((a, b) => {
+    const valA = a[sortState.col];
+    const valB = b[sortState.col];
+
+    if (typeof valA === "string") {
+      return sortState.dir === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    }
+
+    return sortState.dir === "asc"
+      ? valA - valB
+      : valB - valA;
+  });
+
+  rows.forEach(r => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${r.name}</td>
+      <td>${r.col2}</td>
+      <td>${r.col3}</td>
+      <td>${r.col4}</td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+
+function buildFiltersFromData() {
+  const leagueSet = new Set();
+  const teamSet = new Set();
+
+  Object.values(playerData).forEach(p => {
+    if (p.league) leagueSet.add(p.league);
+    if (p.team) teamSet.add(p.team);
+  });
+
+  const leagueSelect = document.getElementById("filter-league");
+  const teamSelect = document.getElementById("filter-team");
+
+  // clear old options except "All"
+  leagueSelect.innerHTML = `<option value="">All</option>`;
+  teamSelect.innerHTML = `<option value="">All</option>`;
+
+  [...leagueSet].sort().forEach(l => {
+    const opt = document.createElement("option");
+    opt.value = l;
+    opt.textContent = `${l}`;
+    leagueSelect.appendChild(opt);
+  });
+
+  [...teamSet].sort().forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t;
+    opt.textContent = t;
+    teamSelect.appendChild(opt);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector('[data-target="player-stats"]').click();
+  loadStats();
+});
+
 
 </script>
 

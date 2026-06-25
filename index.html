@@ -117,9 +117,22 @@
     .ticker-link:hover {
         cursor: pointer;
     }
+.iframeVideo {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+    position: relative;
+}
 
+#youtube-player iframe {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+}
+    
     </style>
-<!--
+   <!-- 
    <div class="ticker-wrapper" id="ticker-wrapper">
     <a href="AllStar.html" target="_blank" rel="noopener noreferrer" class="ticker-link">
       <div class="ticker">
@@ -135,8 +148,7 @@
         this.parentElement.style.display = 'none';
       });
     </script>
--->
-
+    -->
 
 
     <!-- Navbar Section -->
@@ -170,22 +182,26 @@
     </nav>
 
     <!-- Hero Section -->
-    <div class="main">
-      <div class="main__container">
-        <div class="main__content">
-          <h1>No Consolation</h1>
-          <h2>Welcome!</h2>
-          <p>Join the Community</p>
-          <button class="main__btn"><a href= "https://discord.gg/dzEZA3Jwm5" target="_blank">Get Notified</a></button>
-          <div id ="youtube-player" class="iframeVideo"></div>
-        <div class="main__img--container">
-        </div>
-      </div>
+<div class="main">
+  <div class="main__container">
+    <div class="main__content">
+      <h1>No Consolation</h1>
+      <h2>Home of the Strikers Premier League</h2>
+
+      <button class="main__btn">
+        <a href="/spl.html" target="_blank">Enter Now</a>
+      </button>
+
+      <div id="youtube-player" class="iframeVideo"></div>
     </div>
+
+    <div class="main__img--container"></div>
+  </div>
+</div>
 
     <!-- Services Section -->
     <div class="services">
-      <h1>A Ruthless Competition Amongst Friends</h1>
+     <!-- <h1>A Ruthless Competition Amongst Friends</h1>-->
       <div class="services__container">
         <div class="services__card">
           <h2>Highlights</h2>
@@ -311,7 +327,3 @@
 
   </body>
 </html>
-
-
-
-

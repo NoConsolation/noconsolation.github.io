@@ -150,7 +150,32 @@
       width: 100%;
     }
   }
+  .sub-navbar__menu .dropdown-menu {
+    display: none;
+    position: absolute;
+    background: #333;      /* Match your navbar color */
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    min-width: 150px;
+    z-index: 1000;
+  }
 
+  .sub-navbar__menu .dropdown-menu li a {
+    display: block;
+    padding: 10px 15px;
+    color: white;
+    text-decoration: none;
+  }
+
+  .sub-navbar__menu .dropdown-menu li a:hover {
+    background: #555;      /* Hover color */
+  }
+
+  /* Show dropdown on hover */
+  .sub-navbar__menu .dropdown:hover .dropdown-menu {
+    display: block;
+  }
     /* Light grey for non-table text */
     body, label, input, select, button, h3 {
     color: #ccc;
@@ -350,14 +375,25 @@
   </nav>
 
   <!-- Secondary Nav Bar -->
-  <nav class="sub-navbar">
-    <ul class="sub-navbar__menu">
-      <li><a href="/spl.html">SPL Home</a></li>
-      <li><a href="/spl-stats.html">Stats</a></li>
-      <li><a href="/spl-rosters.html">Rosters</a></li>
-      <li><a href="/splszn2.html">Season 2</a></li>
-    </ul>
-  </nav>
+<!-- Secondary Nav Bar -->
+<nav class="sub-navbar">
+  <ul class="sub-navbar__menu">
+    <li><a href="/spl.html">SPL Home</a></li>
+    <li><a href="/spl-stats.html">Stats</a></li>
+    <li><a href="/spl-rosters.html">Rosters</a></li>
+
+    <!-- Dropdown Parent -->
+    <li class="dropdown">
+      <a href="javascript:void(0)">History ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="/splszn2.html">Season 2</a></li>
+        <li><a href="/splszn3.html">Season 3</a></li>
+        <li><a href="/splszn4.html">Season 4</a></li>
+        <!-- Add more options as needed -->
+      </ul>
+    </li>
+  </ul>
+</nav>
 
     <div id="roster-display">
         <p>Please select a team to see the roster.</p>
@@ -633,7 +669,7 @@
   <script src="app.js"></script>
 <script>
   //Roster Page as .csv
-const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1896446593&single=true&output=csv'; 
+const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgCY7AFJxG4_LzuYyuQUgE5GHw_aYk9lW9Ua3UKFTb8iiipRxXJSb0TYGrsP5rWgNrfCT9uFX3GKf7/pub?gid=1896446593&single=true&output=csv'; 
 
 function parseCSV(text) {
   return text.trim().split('\n').map(row => row.split(','));
@@ -714,7 +750,7 @@ fetch(sheetUrl)
   .then(csvText => {
     const data = parseCSV(csvText);
 
-    for (let rowBox = 0; rowBox < 2; rowBox++) {
+    for (let rowBox = 0; rowBox < 3; rowBox++) {
       for (let colBox = 0; colBox < 6; colBox++) {
         const startCol = 1 + colBox * 2;
         const endCol = startCol + 1;

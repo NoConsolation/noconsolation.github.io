@@ -1081,9 +1081,7 @@ function renderPlayersTable(playersData, league) {
 
   const playersArray = Object.entries(playersData)
     .map(([name, stats]) => ({ name, ...stats }))
-    .filter(player =>
-      player.status === "Free" || player.status === "Restricted"
-    )
+    .filter(player => !player.team) // only undrafted players
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
   playersArray.forEach(player => {

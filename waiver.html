@@ -35,7 +35,7 @@
       justify-content: center;
       flex-wrap: wrap;
       margin: 20px auto 40px;
-      max-width: 900px;
+      max-width: 1200px;
     }
 
     /* Table common styles */
@@ -65,12 +65,17 @@
     /* Grouped header colors */
     #table1 thead tr:first-child th,
     #table3 thead tr:first-child th {
-      background-color: orangered; /* Coral/orange */
+      background-color: #9900ff; 
     }
     #table2 thead tr:first-child th,
     #table4 thead tr:first-child th {
-      background-color: teal; /* Teal */
+      background-color: #073763; /*  */
     }
+    #table5 thead tr:first-child th,
+    #table6 thead tr:first-child th {
+      background-color: green; 
+    }
+
 
     /* Table body styles */
     tbody tr:nth-child(odd) td {
@@ -160,6 +165,36 @@
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
   }
 
+.sub-navbar__menu .dropdown {
+  position: relative;
+}
+
+.sub-navbar__menu .dropdown-menu {
+  display: none;
+  position: absolute;
+  background: #333;      /* Match your navbar color */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  min-width: 150px;
+  z-index: 1000;
+}
+
+.sub-navbar__menu .dropdown-menu li a {
+  display: block;
+  padding: 10px 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.sub-navbar__menu .dropdown-menu li a:hover {
+  background: #555;      /* Hover color */
+}
+
+/* Show dropdown on hover */
+.sub-navbar__menu .dropdown:hover .dropdown-menu {
+  display: block;
+}
   </style>
 </head>
 <body>
@@ -185,34 +220,55 @@
   </nav>
 
   <!-- Secondary Nav Bar -->
-  <nav class="sub-navbar">
-    <ul class="sub-navbar__menu">
-      <li><a href="/spl.html">SPL Home</a></li>
-      <li><a href="/spl-stats.html">Stats</a></li>
-      <li><a href="/spl-rosters.html">Rosters</a></li>
-      <li><a href="/splszn2.html">Season 2</a></li>
-    </ul>
-  </nav>
+ <nav class="sub-navbar">
+  <ul class="sub-navbar__menu">
+    <li><a href="/spl.html">SPL Home</a></li>
+    <li><a href="/spl-stats.html">Stats</a></li>
+    <li><a href="/spl-rosters.html">Rosters</a></li>
+
+    <!-- Dropdown Parent -->
+    <li class="dropdown">
+      <a href="javascript:void(0)">History ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="/splszn2.html">Season 2</a></li>
+        <li><a href="/splszn3.html">Season 3</a></li>
+        <li><a href="/splszn4.html">Season 4</a></li>
+        <li><a href="/splszn5.html">Season 5</a></li>
+        <!-- Add more options as needed -->
+      </ul>
+    </li>
+  </ul>
+</nav>
 
   <!-- Top Tables -->
   <div id="top-tables-container">
     <table id="table1" border="0" aria-label="Table 1">
-      <thead><tr><th colspan="2">SPL Waiver Order</th></tr></thead>
+      <thead><tr><th colspan="2">ESL Waiver Order</th></tr></thead>
       <tbody></tbody>
     </table>
 
     <table id="table3" border="0" aria-label="Table 3">
-      <thead><tr><th colspan="2">SPL Free Agents</th></tr></thead>
+      <thead><tr><th colspan="2">ESL Free Agents</th></tr></thead>
       <tbody></tbody>
     </table>
 
     <table id="table2" border="0" aria-label="Table 2">
-      <thead><tr><th colspan="2">MLS Waiver Order</th></tr></thead>
+      <thead><tr><th colspan="2">GSC Waiver Order</th></tr></thead>
       <tbody></tbody>
     </table>
 
     <table id="table4" border="0" aria-label="Table 4">
-      <thead><tr><th colspan="2">MLS Free Agents</th></tr></thead>
+      <thead><tr><th colspan="2">GSC Free Agents</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <table id="table5" border="0" aria-label="Table 5">
+      <thead><tr><th colspan="2">BS Waiver Order</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <table id="table6" border="0" aria-label="Table 6">
+      <thead><tr><th colspan="2">BS Free Agents</th></tr></thead>
       <tbody></tbody>
     </table>
   </div>
@@ -232,7 +288,7 @@
       <option value="Gurt and the Rats">Gurt and the Rats</option>
       <option value="S.F.T.B.N.W.H.">S.F.T.B.N.W.H.</option>
       <option value="Come on Mr Monty">Come on Mr Monty</option>
-      <option value="Fort Minor Fan Boys">Fort Minor Fan Boys</option>
+      <option value="Jake">Jake</option>
       <option value="Reid Hot Chili Strikers">Reid Hot Chili Strikers</option>
       <option value="Lil Shop">Lil Shop</option>
     </select>
@@ -268,12 +324,13 @@
 <script>
   const group1Teams = ['The Red Scare',"Eastwood's Island",'The Spellcasters','Gurt and the Rats','Reid Hot Chili Strikers','Wariors FC'];
   const group2Teams = ['Spread Triple Option', 'Come on Mr Monty', 'S.F.T.B.N.W.H.', 'Lil Shop', 'Jake', 'Fredchester United'];
+  const group3Teams = ['1','2','3','4','5','6'];
 
   const teamOptions = {};
-  const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1166432758&single=true&output=csv';
+  const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgCY7AFJxG4_LzuYyuQUgE5GHw_aYk9lW9Ua3UKFTb8iiipRxXJSb0TYGrsP5rWgNrfCT9uFX3GKf7/pub?gid=1166432758&single=true&output=csv';
 
   // Roster CSV URL
-  const rosterCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTBbsAmgDrEaexoEf4m2B4RDnw_vfzMtgXx111Pxz5GqLKivFdaB-SgBmiJs0-AB3SfZyl8oANoWLA/pub?gid=1896446593&single=true&output=csv';
+  const rosterCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgCY7AFJxG4_LzuYyuQUgE5GHw_aYk9lW9Ua3UKFTb8iiipRxXJSb0TYGrsP5rWgNrfCT9uFX3GKf7/pub?gid=1896446593&single=true&output=csv';
 
   function parseCSV(text) {
     return text.trim().split('\n').map(row => row.split(','));
@@ -335,6 +392,8 @@
       fillTable('table3', colY, 2, 3);
       fillTable('table2', colAJ, 9, 14);
       fillTable('table4', colY, 5, 6);
+      fillTable('table5', colAJ,16,21);
+      fillTable('table6', colY,8,9);
 
       // Build rosterDataByCoach from rosterRows
       const rosterDataByTeam = {};

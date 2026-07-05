@@ -271,18 +271,18 @@
         text-align: center;
       }
       .table1 thead tr {
-        background-color: teal;
-        color: white;
+        background-color:#9900ff;
+        color: lightgrey;
         justify-content: center;
       }
       .table2 thead tr {
-        background-color: orangered;
-        color: white;
+        background-color: #073763;
+        color: lightgrey;
         justify-content: center;
       }
       .table3 thead tr{
-        background-color: purple;
-        color: white;
+        background-color: green;
+        color: lightgrey;
         justify-content: center;
       }
       
@@ -330,7 +330,7 @@
       text-align: center;
       font-size: 3rem;
       margin-top: 1px;
-      background-image: linear-gradient(to top, white 0%, teal 100%);
+      background-image: linear-gradient(to top, white 0%, #9900ff 100%);
       background-size: 100%;
       background-clip: text;
       -webkit-background-clip: text;
@@ -341,7 +341,7 @@
       text-align: center;
       font-size: 3rem;
       margin-top: 1px;
-      background-image: linear-gradient(to top, white 0%, teal 100%);
+      background-image: linear-gradient(to top, white 0%, #073763 100%);
       background-size: 100%;
       background-clip: text;
       -webkit-background-clip: text;
@@ -352,7 +352,7 @@
       text-align: center;
       font-size: 3rem;
       margin-top: 1px;
-      background-image: linear-gradient(to top, white 0%, teal 100%);
+      background-image: linear-gradient(to top, white 0%, green 100%);
       background-size: 100%;
       background-clip: text;
       -webkit-background-clip: text;
@@ -618,19 +618,19 @@ function setHeaderMode(mode) {
           <div class="tables-container">
             
             <div class="table-block league1">
-              <h3 class="league-title league1-title" data-league="league1">ATR</h3>
+              <h3 class="league-title league1-title" data-league="league1">Elite Strikers League</h3>
               <div id="streamMessage-League1" class="stream-message"></div>
               ${buildTable(table1Header, table1Body, 'table1')}
             </div>
 
             <div class="table-block league2">
-              <h3 class="league-title league2-title" data-league="league2">CWP</h3>
+              <h3 class="league-title league2-title" data-league="league2">Galatic Strikers Conference</h3>
               <div id="streamMessage-League2" class="stream-message"></div>
               ${buildTable(table2Header, table2Body, 'table2')}
             </div>
 
             <div class="table-block league3">
-              <h3 class="league-title league3-title" data-league="league3">BikeBoys</h3>
+              <h3 class="league-title league3-title" data-league="league3">Biker<br> Strikers</h3>
               <div id="streamMessage-League3" class="stream-message"></div>
               ${buildTable(table3Header, table3Body, 'table3')}
             </div>
@@ -749,14 +749,14 @@ function setHeaderMode(mode) {
     }
 
     .match-box.league1 {
-      border-color: teal;
+      border-color: #9900ff;
     }
 
   .match-box.league2 {
-    border-color: #de451f;
+    border-color: #073763;
   }
   .match-box.league3{
-    border-color: purple;
+    border-color: green;
   }
     .sched-title {
       display: flex;

@@ -407,34 +407,34 @@
     <label for="team">Team Name:</label>
     <select id="team" name="team" required>
       <option value="">Team Name</option>
-      <option value="Austin">Austin</option>
-      <option value="Ben">Ben</option>
+      <option value="Wicked Inc.">Wicked Inc.</option>
+      <option value="Halloween Town Horrors">Halloween Town Horrors</option>
       <option value="Brad">Brad</option>
-      <option value="Brandon">Brandon</option>
-      <option value="Charlie">Charlie</option>
-      <option value="Colin">Colin</option>
-      <option value="Danny">Danny</option>
-      <option value="Dave">Dave</option>
-      <option value="Eric A">Eric A</option>
-      <option value="Eric P">Eric P</option>
-      <option value="Freddy">Freddy</option>
-      <option value="Garrett">Garrett</option>
-      <option value="Hamilton">Hamilton</option>
-      <option value="Jaco">Jaco</option>
-      <option value="Jake">Jake</option>
-      <option value="Reid">Reid</option>
-      <option value="Tanya">Tanya</option>
-      <option value="Teddy">Teddy</option>
+      <option value="Shy Bonka Koopa">Shy Bonka Koopa</option>
+      <option value="Kongquerors FC">Kongquerors FC</option>
+      <option value="Wariors FC">Wariors FC</option>
+      <option value="Spread Triple Option">Spread Triple Option</option>
+      <option value="Mont-O and the Gals">Mont-O and the Gals</option>
+      <option value="Fiery Flounders">Fiery Flounders</option>
+      <option value="New York Red Boos">New York Red Boos</option>
+      <option value="Fredchester United">Fredchester United</option>
+      <option value="Hubris Manifest">Hubris Manifest</option>
+      <option value="Anchors Down">Anchors Down</option>
+      <option value="Come on Mr. Monty">Come on Mr. Monty</option>
+      <option value="Ferb Fletcher">Ferb Fletcher</option>
+      <option value="Reid Hot Chili Strikers">Reid Hot Chili Strikers</option>
+      <option value="Skull Island">Skull Island</option>
+      <option value="Snout Talk">Snout Talk</option>
     </select>
-  
+  <!--
     <label for="teamName">Choose Team Name:</label>
     <input type="text" id="teamName" name="teamName" placeholder="Enter Team Name Here - This locks it in for Season 5" />
-
+  -->
   </div>
 
 
     </div>
-    
+    <!--
     <div class="form-row">
       <div class="form-group">
         <label for="primaryColor">Primary Team Color:</label>
@@ -447,7 +447,7 @@
       </div>
     </div>
    <div id="colorPreview" style="height:50px; border-radius:6px; border:1px solid #aaa;"></div>-->
-
+  
 
 
     <div class="form-row">
@@ -525,9 +525,9 @@
     const topmid = document.getElementById('topmid').value;
     const botmid = document.getElementById('botmid').value;
     const def = document.getElementById('def').value;
-    const teamName = document.getElementById('teamName').value;
-    const primaryColor = document.getElementById('primaryColor').value;
-    const secondaryColor = document.getElementById('secondaryColor').value;
+    //const teamName = document.getElementById('teamName').value;
+    //const primaryColor = document.getElementById('primaryColor').value;
+    //const secondaryColor = document.getElementById('secondaryColor').value;
 
 
     // Access roster data for selected team
@@ -595,10 +595,10 @@
         map5: document.getElementById('map5')?.value,
         map6: document.getElementById('map6')?.value,
         map7: document.getElementById('map7')?.value,
-        map8: document.getElementById('map8')?.value,
-        teamName,
-        primaryColor,
-        secondaryColor
+        map8: document.getElementById('map8')?.value//,
+        //teamName,
+        //primaryColor,
+        //secondaryColor
     };
     console.log('Submitting data:', data);
     fetch('https://script.google.com/macros/s/AKfycbyfFNi0MfKTLcADvpYXP33Cz2iZjg601p3tg7mIXhvvr5UrUrm5ktsTLSF5Z-NVXMJu/exec', {
@@ -861,24 +861,24 @@ fetch(sheetUrl)
   }
 
     const teamCoaches = {
-      "Austin": "Austin",
-      "Ben": "Ben",
+      "Austin": "Wicked Inc.",
+      "Ben": "Halloween Town Horrors",
       "Brad": "Brad",
-      "Brandon": "Brandon",
-      "Charlie": "Charlie",
-      "Colin": "Colin",
-      "Danny": "Danny",
-      "Dave": "Dave",
-      "Eric A": "Eric A",
-      "Eric P": "Eric P",
-      "Freddy": "Freddy",
-      "Garrett": "Garrett",
-      "Hamilton": "Hamilton",
-      "Jaco": "Jaco",
-      "Jake": "Jake",
-      "Reid": "Reid",
-      "Tanya": "Tanya",
-      "Teddy": "Teddy",
+      "Brandon": "Shy Bonka Koopa",
+      "Charlie": "Kongquerors FC",
+      "Colin": "Wariors FC",
+      "Danny": "Spread Triple Option",
+      "Dave": "Mont-O and the Gals",
+      "Eric A": "Fiery Flounders",
+      "Eric P": "New York Red Boos",
+      "Freddy": "Fredchester United",
+      "Garrett": "Hubris Manifest",
+      "Hamilton": "Anchors Down",
+      "Jaco": "Come on Mr. Monty",
+      "Jake": "Ferb Fletcher",
+      "Reid": "Reid Hot Chili Strikers",
+      "Tanya": "Skull Island",
+      "Teddy": "Snout Talk",
     };
 
     const allMaps = [

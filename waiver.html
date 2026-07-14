@@ -279,18 +279,24 @@
     <label for="team">Team:</label>
     <select id="team" name="team" aria-label="Select team">
       <option value="">-- Select Team --</option>
-      <option value="The Red Scare">The Red Scare</option>
+      <option value="Wicked Inc.">Wicked Inc.</option>
+      <option value="Halloween Town Horrors">Halloween Town Horrors</option>
+      <option value="Brad">Brad</option>
+      <option value="Shy Bonka Koopa">Shy Bonka Koopa</option>
+      <option value="Kongquerors FC">Kongquerors FC</option>
       <option value="Wariors FC">Wariors FC</option>
       <option value="Spread Triple Option">Spread Triple Option</option>
-      <option value="Eastwood's Island">Eastwood's Island</option>
-      <option value="The Spellcasters">The Spellcasters</option>
+      <option value="Mont-O and the Gals">Mont-O and the Gals</option>
+      <option value="Fiery Flounders">Fiery Flounders</option>
+      <option value="New York Red Boos">New York Red Boos</option>
       <option value="Fredchester United">Fredchester United</option>
-      <option value="Gurt and the Rats">Gurt and the Rats</option>
-      <option value="S.F.T.B.N.W.H.">S.F.T.B.N.W.H.</option>
-      <option value="Come on Mr Monty">Come on Mr Monty</option>
-      <option value="Jake">Jake</option>
+      <option value="Hubris Manifest">Hubris Manifest</option>
+      <option value="Anchors Down">Anchors Down</option>
+      <option value="Come on Mr. Monty">Come on Mr. Monty</option>
+      <option value="Ferb Fletcher">Ferb Fletcher</option>
       <option value="Reid Hot Chili Strikers">Reid Hot Chili Strikers</option>
-      <option value="Lil Shop">Lil Shop</option>
+      <option value="Skull Island">Skull Island</option>
+      <option value="Snout Talk">Snout Talk</option>
     </select>
   </div>
 
@@ -322,9 +328,9 @@
 
 
 <script>
-  const group1Teams = ['The Red Scare',"Eastwood's Island",'The Spellcasters','Gurt and the Rats','Reid Hot Chili Strikers','Wariors FC'];
-  const group2Teams = ['Spread Triple Option', 'Come on Mr Monty', 'S.F.T.B.N.W.H.', 'Lil Shop', 'Jake', 'Fredchester United'];
-  const group3Teams = ['1','2','3','4','5','6'];
+  const group1Teams = ['Wicked Inc.',"Fiery Flounders",'Hubris Manifest','Skull Island','Shy Bonka Koopa','Brad'];
+  const group2Teams = ['Spread Triple Option', 'Come on Mr. Monty', 'Wariors FC', 'New York Red Boos', 'Ferb Fletcher', 'Halloween Town Horrors'];
+  const group3Teams = ['Kongquerors FC','Snout Talk','Reid Hot Chili Strikers','Anchors Down','Mont-O and the Gals','Fredchester United'];
 
   const teamOptions = {};
   const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgCY7AFJxG4_LzuYyuQUgE5GHw_aYk9lW9Ua3UKFTb8iiipRxXJSb0TYGrsP5rWgNrfCT9uFX3GKf7/pub?gid=1166432758&single=true&output=csv';
@@ -357,12 +363,22 @@
       [4, 5].forEach(r => {
         if (rows[r] && rows[r][colY]) optionsGroup2.push(rows[r][colY].trim());
       });
+      const optionsGroup3 = [];
+      [7, 8].forEach(r => {
+        if (rows[r] && rows[r][colY]) {
+          optionsGroup3.push(rows[r][colY].trim());
+        }
+      });
+      
 
       group1Teams.forEach(team => {
         teamOptions[team] = optionsGroup1.slice();
       });
       group2Teams.forEach(team => {
         teamOptions[team] = optionsGroup2.slice();
+      });
+      group3Teams.forEach(team => {
+        teamOptions[team] = optionsGroup3.slice();
       });
 
       // Fill tables as before
@@ -397,7 +413,7 @@
 
       // Build rosterDataByCoach from rosterRows
       const rosterDataByTeam = {};
-      for (let rowBox = 0; rowBox < 2; rowBox++) {
+      for (let rowBox = 0; rowBox < 3; rowBox++) {
         for (let colBox = 0; colBox < 6; colBox++) {
           const startCol = 1 + colBox * 2;
           const endCol = startCol + 1;

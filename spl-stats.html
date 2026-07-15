@@ -539,20 +539,28 @@ function renderTable() {
       return true;
     });
 
-  rows.sort((a, b) => {
-    const valA = a[sortState.col];
-    const valB = b[sortState.col];
+rows.sort((a, b) => {
+  let valA = a[sortState.col];
+  let valB = b[sortState.col];
 
-    if (typeof valA === "string") {
-      return sortState.dir === "asc"
-        ? valA.localeCompare(valB)
-        : valB.localeCompare(valA);
-    }
+  const numA = Number(valA);
+  const numB = Number(valB);
+
+  const bothNumeric = !Number.isNaN(numA) || !Number.isNaN(numB);
+
+  if (bothNumeric) {
+    const aValue = Number.isNaN(numA) ? -Infinity : numA;
+    const bValue = Number.isNaN(numB) ? -Infinity : numB;
 
     return sortState.dir === "asc"
-      ? valA - valB
-      : valB - valA;
-  });
+      ? aValue - bValue
+      : bValue - aValue;
+  }
+
+  return sortState.dir === "asc"
+    ? String(valA).localeCompare(String(valB))
+    : String(valB).localeCompare(String(valA));
+});
 
   rows.forEach(r => {
     const row = document.createElement("tr");

@@ -71,15 +71,20 @@
     text-align: center;
   }
 
-  /* Header colors for first 5 tables (SPL) */
-  .header-spl th {
-    background-color: orangered;
+  /* Header colors for first 5 tables (ESL) */
+  .header-esl th {
+    background-color: #9900ff;
     color: black;
   }
 
-  /* Header colors for last 5 tables (MLS) */
-  .header-mls th {
-    background-color: teal;
+  /* Header colors for last 5 tables (GSC) */
+  .header-gsc th {
+    background-color: #073763;
+    color: black;
+  }
+
+  .header-bs th {
+    background-color: green;
     color: black;
   }
 
@@ -155,7 +160,7 @@
 
 <body>
   <div style="text-align: center; margin-top: 40px; margin-bottom: 20px;">
-    <h1 style="font-size: 48px; color: #fff; text-decoration: underline;">SPL Season 5 All Star Voting</h1>
+    <h1 style="font-size: 48px; color: #fff; text-decoration: underline;">No Consolation Strikers Season 6 All Star Voting</h1>
     <p style="font-size: 20px; color: #ccc; margin-top: 10px;">
       *Select your top 3, at least 2 series played at that position to qualify, minimum 2 nominees per team, 1 vote per coach*
     </p>
@@ -182,18 +187,24 @@
 
 
 <!-- Example HTML -->
-<table id="SPL_ST" border="1"></table>
-<table id="SPL_TM" border="1"></table>
-<table id="SPL_BM" border="1"></table>
-<table id="SPL_DEF" border="1"></table>
-<table id="SPL_Util" border="1"></table>
-<table id="SPL_MGR" border="1"></table>
-<table id="MLS_ST" border="1"></table>
-<table id="MLS_TM" border="1"></table>
-<table id="MLS_BM" border="1"></table>
-<table id="MLS_DEF" border="1"></table>
-<table id="MLS_Util" border="1"></table>
-<table id="MLS_MGR" border="1"></table>
+<table id="ESL_ST" border="1"></table>
+<table id="ESL_TM" border="1"></table>
+<table id="ESL_BM" border="1"></table>
+<table id="ESL_DEF" border="1"></table>
+<table id="ESL_Util" border="1"></table>
+<table id="ESL_MGR" border="1"></table>
+<table id="GSC_ST" border="1"></table>
+<table id="GSC_TM" border="1"></table>
+<table id="GSC_BM" border="1"></table>
+<table id="GSC_DEF" border="1"></table>
+<table id="GSC_Util" border="1"></table>
+<table id="GSC_MGR" border="1"></table>
+<table id="BS_ST" border="1"></table>
+<table id="BS_TM" border="1"></table>
+<table id="BS_BM" border="1"></table>
+<table id="BS_DEF" border="1"></table>
+<table id="BS_Util" border="1"></table>
+<table id="BS_MGR" border="1"></table>
 
 
 <div style="text-align: center; margin: 40px 0;">
@@ -205,79 +216,116 @@
 
 <script>
 const sheetUrl =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1HnHKIj9UH8ZxQ37_LLXkiypQjtKXWOApD-mz44fBTDkcnCaGRiwKYehOmMfOk0oLFaXuL8bFo7B_/pub?gid=1784266098&single=true&output=csv";
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vTVd-CJBsAaw-2nKJsf9oxdNY6E2VP33gI78e0xEI38RMSFxT_9SJjxoZRGR05HFpNXozppwABGNq8Z/pub?gid=1784266098&single=true&output=csv";
 
 const tables = [
   {
-    id: "SPL_ST",
-    title: "Striker - SPL", 
+    id: "ESL_ST",
+    title: "Striker - ESL", 
     titleColor: "#ea4335",
     range: { rowStart: 3, rowEnd: 9, colStart: 1, colEnd: 9 }
   },
   {
-  id: "SPL_TM",
-  title: "Top Mid - SPL",
+  id: "ESL_TM",
+  title: "Top Mid - ESL",
   titleColor: "#34a853",
   topRowColor:"#34a853",
   range: { rowStart: 11, rowEnd: 23, colStart: 1, colEnd: 9 }
 },
 {
-  id: "SPL_BM",
-  title: "Bot Mid - SPL",
+  id: "ESL_BM",
+  title: "Bot Mid - ESL",
   titleColor: "#4285f4",
   topRowColor:"#4285f4",
   range: { rowStart: 25, rowEnd: 37, colStart: 1, colEnd: 9 }
 },
 {
-  id: "SPL_DEF",
-  title: "Defense - SPL",
+  id: "ESL_DEF",
+  title: "Defense - ESL",
   titleColor: "#fbbc04",
   topRowColor:"#fbbc04",
   range: { rowStart: 39, rowEnd: 51, colStart: 1, colEnd: 9 }
 },
 {
-  id: "SPL_Util",
-  title: "Utility - SPL",
+  id: "ESL_Util",
+  title: "Utility - ESL",
   subtitle: "For Each Player, Vote Yes if they Deserve to be an All Star, No if they do not",
   range:{ rowStart: 53, rowEnd: 59, colStart: 1, colEnd: 10 },
   type: "utility"
 },
-  { id: "SPL_MGR", title: "Manager - SPL", range: { rowStart: 61, rowEnd: 67, colStart: 0, colEnd: 8 } },
+  { id: "ESL_MGR", title: "Manager - ESL", range: { rowStart: 61, rowEnd: 67, colStart: 0, colEnd: 8 } },
   {
-    id: "MLS_ST",
-    title: "Striker - MLS", 
+    id: "GSC_ST",
+    title: "Striker - GSC", 
     titleColor: "#ea4335",
     range: { rowStart: 3, rowEnd: 9, colStart: 11, colEnd: 19 }
   },
   {
-  id: "MLS_TM",
-  title: "Top Mid - MLS",
+  id: "GSC_TM",
+  title: "Top Mid - GSC",
   titleColor: "#34a853",
   topRowColor:"#34a853",
   range: { rowStart: 11, rowEnd: 23, colStart: 11, colEnd: 19 }
 },
 {
-  id: "MLS_BM",
-  title: "Bot Mid - MLS",
+  id: "GSC_BM",
+  title: "Bot Mid - GSC",
   titleColor: "#4285f4",
   topRowColor:"#4285f4",
   range: { rowStart: 25, rowEnd: 37, colStart: 11, colEnd: 19 }
 },
 {
-  id: "MLS_DEF",
-  title: "Defense - MLS",
+  id: "GSC_DEF",
+  title: "Defense - GSC",
   titleColor: "#fbbc04",
   topRowColor:"#fbbc04",
   range: { rowStart: 39, rowEnd: 51, colStart: 11, colEnd: 19 }
 },
 {
-  id: "MLS_Util",
-  title: "Utility - MLS",
+  id: "GSC_Util",
+  title: "Utility - GSC",
   subtitle: "For Each Player, Vote Yes if they Deserve to be an All Star, No if they do not",
   range:{ rowStart: 53, rowEnd: 59, colStart: 10, colEnd: 19 },
   type: "utility"
 },
-  { id: "MLS_MGR", title: "Manager - MLS", range: { rowStart: 61, rowEnd: 67, colStart: 10, colEnd: 18 } }
+  { id: "GSC_MGR", title: "Manager - GSC", range: { rowStart: 61, rowEnd: 67, colStart: 10, colEnd: 18 } },
+
+  {
+    id: "BS_ST",
+    title: "Striker - BS", 
+    titleColor: "#ea4335",
+    range: { rowStart: 3, rowEnd: 9, colStart: 21, colEnd: 29 }
+  },
+  {
+  id: "BS_TM",
+  title: "Top Mid - BS",
+  titleColor: "#34a853",
+  topRowColor:"#34a853",
+  range: { rowStart: 11, rowEnd: 23, colStart: 21, colEnd: 29 }
+},
+{
+  id: "BS_BM",
+  title: "Bot Mid - BS",
+  titleColor: "#4285f4",
+  topRowColor:"#4285f4",
+  range: { rowStart: 25, rowEnd: 37, colStart: 21, colEnd: 29 }
+},
+{
+  id: "BS_DEF",
+  title: "Defense - BS",
+  titleColor: "#fbbc04",
+  topRowColor:"#fbbc04",
+  range: { rowStart: 39, rowEnd: 51, colStart: 21, colEnd: 29 }
+},
+{
+  id: "BS_Util",
+  title: "Utility - BS",
+  subtitle: "For Each Player, Vote Yes if they Deserve to be an All Star, No if they do not",
+  range:{ rowStart: 53, rowEnd: 59, colStart: 20, colEnd: 29 },
+  type: "utility"
+},
+  { id: "BS_MGR", title: "Manager - BS", range: { rowStart: 61, rowEnd: 67, colStart: 20, colEnd: 28 } }
+
 ];
 
 fetch(sheetUrl)
@@ -313,11 +361,14 @@ fetch(sheetUrl)
 
 
       // --- Header styling ---
-      if (def.id.startsWith("SPL")) {
-        table.classList.add("header-spl");
-      } else if (def.id.startsWith("MLS")) {
-        table.classList.add("header-mls");
-      }
+      if (def.id.startsWith("ESL")) {
+        table.classList.add("header-esl");
+      } else if (def.id.startsWith("GSC")) {
+        table.classList.add("header-gsc");
+      }else if(def.id.startsWith("BS")){
+        table.classList.add("header-bs")
+      };
+    
 
       // --- Headers ---
       const headers = def.id.endsWith("MGR")
@@ -516,8 +567,9 @@ document.getElementById("submitVote").addEventListener("click", function () {
 
   // --- Top 3 dropdowns ---
   [
-    "spl_st","spl_tm","spl_bm","spl_def","spl_mgr",
-    "mls_st","mls_tm","mls_bm","mls_def","mls_mgr"
+    "esl_st","esl_tm","esl_bm","esl_def","esl_mgr",
+    "gsc_st","gsc_tm","gsc_bm","gsc_def","gsc_mgr",
+    "bs_st","bs_tm","bs_bm","bs_def","bs_mgr"
   ].forEach(cat => {
     for (let i = 1; i <= 3; i++) {
       const sel = document.querySelector(`select[name='${cat}_${i}']`);
@@ -526,7 +578,7 @@ document.getElementById("submitVote").addEventListener("click", function () {
   });
 
   // --- Utility Yes/No votes ---
-  ["spl_util","mls_util"].forEach(cat => {
+  ["esl_util","gsc_util","bs_util"].forEach(cat => {
     const selects = document.querySelectorAll(`select[name^='${cat}_row']`);
     selects.forEach((sel, index) => {
       data[`${cat}_row${index}`] = sel?.value || "Missing";
@@ -534,7 +586,7 @@ document.getElementById("submitVote").addEventListener("click", function () {
   });
 
   // --- Send to Apps Script ---
-  fetch("https://script.google.com/macros/s/AKfycbx4chP2rWzc3z_Muyo0hglcrVS3Ps0V2HmI6k1H1SgBZjMEOH_6etezzIfGQDlgOg6V/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbwwI5EFyAuMHfNynzALfay0iqIDX9OfNIn1REf__CmDaV5VFm_CvjYzrE-caH1peArh/exec", {
     method: "POST",
     body: JSON.stringify(data),
   })

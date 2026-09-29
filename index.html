@@ -134,21 +134,22 @@
 }
     
     </style>
-   <div class="ticker-wrapper" id="ticker-wrapper">
-    <a href="AllStar.html" target="_blank" rel="noopener noreferrer" class="ticker-link">
-      <div class="ticker">
-      <div class="ticker">
-        <span>🚨VOTE FOR ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR ALL STARS NOW!!🚨CLICK HERE</span>
-        <span>🚨VOTE FOR ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR ALL STARS NOW!!🚨CLICK HERE🚨VOTE FOR ALL STARS NOW!!🚨CLICK HERE🚨</span>
-      </div>
-    </a>
-    <button class="ticker-close" id="ticker-close" aria-label="Close ticker">X</button>
+    <div class="ticker-wrapper" id="ticker-wrapper">
+      <a href="AllStar.html" target="_blank" rel="noopener noreferrer" class="ticker-link">
+        <div class="ticker">
+          <span>🚨 VOTE FOR ALL STARS NOW!! 🚨 CLICK HERE 🚨 VOTE FOR ALL STARS NOW!! 🚨 CLICK HERE 🚨 VOTE FOR ALL STARS NOW!! 🚨 CLICK HERE</span>
+          <span>🚨 VOTE FOR ALL STARS NOW!! 🚨 CLICK HERE 🚨 VOTE FOR ALL STARS NOW!! 🚨 CLICK HERE 🚨 VOTE FOR ALL STARS NOW!! 🚨 CLICK HERE 🚨</span>
+        </div>
+      </a>
+
+      <button class="ticker-close" id="ticker-close" aria-label="Close ticker">X</button>
     </div>
+
     <script>
-          document.querySelector('.ticker-close').addEventListener('click', function(event) {
-        event.stopPropagation(); // prevent link click
-        this.parentElement.style.display = 'none';
-      });
+    document.querySelector('.ticker-close').addEventListener('click', function(event) {
+      event.stopPropagation();
+      document.getElementById('ticker-wrapper').style.display = 'none';
+    });
     </script>
     
 

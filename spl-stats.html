@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stats · No Consolation</title>
+  <meta name="description" content="Player and team stats for the Strikers Premier League.">
+  <meta name="theme-color" content="#120B2A">
+  <link rel="icon" href="images/favicon.png">
+  <meta property="og:title" content="Stats · No Consolation">
+  <meta property="og:description" content="Player and team stats for the Strikers Premier League.">
+  <meta property="og:image" content="https://noconsolation.github.io/images/og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="config.js" defer></script>
+  <script src="assets/js/core.js" defer></script>
+  <script src="assets/js/pages/stats.js" defer></script>
+</head>
+<body data-page="stats" data-section="league">
+  <header id="site-header" class="site-header"></header>
+  <main id="main">
+    <div class="wrap">
+      <div class="page-head">
+        <h1>Stats</h1>
+        <p class="lede">Tap a column to sort. Your team is highlighted if you've picked one.</p>
+      </div>
+      <div class="tabs" role="group" aria-label="View">
+        <button class="chip" data-view="players" aria-pressed="true" style="--c:var(--volt)">Players</button>
+        <button class="chip" data-view="teams" aria-pressed="false" style="--c:var(--volt)">Teams</button>
+      </div>
+      <div id="player-filters" class="toolbar">
+        <label class="field"><span>Search</span><input id="f-q" type="search" placeholder="Player name"></label>
+        <label class="field"><span>League</span><select id="f-league"><option value="">All</option></select></label>
+        <label class="field"><span>Role</span><select id="f-role"><option value="">All</option><option>Captain</option><option>Sidekick</option></select></label>
+        <label class="field"><span>Team</span><select id="f-team"><option value="">All</option></select></label>
+      </div>
+      <p id="count" class="muted"></p>
+      <div id="stats"><div class="skeleton"></div></div>
+    </div>
+  </main>
+</body>
+</html>

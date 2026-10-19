@@ -1,0 +1,27 @@
+{
+  "rules": {
+    "admins": {
+      ".read": "auth != null && root.child('admins').child(auth.token.email.replace('.', ',')).val() === true",
+      ".write": false
+    },
+
+    "players":        { ".read": true, ".write": "auth != null && root.child('admins').child(auth.token.email.replace('.', ',')).val() === true" },
+    "selectedPlayer": { ".read": true, ".write": "auth != null && root.child('admins').child(auth.token.email.replace('.', ',')).val() === true" },
+    "currentLeague":  { ".read": true, ".write": "auth != null && root.child('admins').child(auth.token.email.replace('.', ',')).val() === true" },
+    "timer":          { ".read": true, ".write": "auth != null && root.child('admins').child(auth.token.email.replace('.', ',')).val() === true" },
+    "stream_times":   { ".read": true, ".write": "auth != null && root.child('admins').child(auth.token.email.replace('.', ',')).val() === true" },
+    "p_stats":        { ".read": true, ".write": "auth != null && root.child('admins').child(auth.token.email.replace('.', ',')).val() === true" },
+    "budgets":        { ".read": true, ".write": "auth != null && root.child('admins').child(auth.token.email.replace('.', ',')).val() === true" },
+
+    "bids": {
+      ".read": true,
+      ".write": "auth != null && root.child('admins').child(auth.token.email.replace('.', ',')).val() === true",
+      "$coach": {
+        "$bid": {
+          ".write": "!data.exists() && newData.exists() && root.child('timer/running').val() === true",
+          ".validate": "newData.hasChildren(['bid', 'timestamp']) && newData.child('bid').isNumber() && newData.child('bid').val() >= 0 && newData.child('bid').val() <= 1000 && newData.child('timestamp').isNumber() && newData.child('timestamp').val() <= now + 60000"
+        }
+      }
+    }
+  }
+}

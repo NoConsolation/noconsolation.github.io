@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rosters · No Consolation</title>
+  <meta name="description" content="Every Strikers Premier League roster with fitness left for each player.">
+  <meta name="theme-color" content="#120B2A">
+  <link rel="icon" href="images/favicon.png">
+  <meta property="og:title" content="Rosters · No Consolation">
+  <meta property="og:description" content="Every Strikers Premier League roster with fitness left for each player.">
+  <meta property="og:image" content="https://noconsolation.github.io/images/og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://docs.google.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="config.js" defer></script>
+  <script src="assets/js/core.js" defer></script>
+  <script src="assets/js/pages/rosters.js" defer></script>
+</head>
+<body data-page="rosters" data-section="league">
+  <header id="site-header" class="site-header"></header>
+  <main id="main">
+    <div class="wrap">
+      <div class="page-head row row--between">
+        <div>
+          <h1>Rosters</h1>
+          <p class="lede">Fitness left for every player. Captains are marked C.</p>
+        </div>
+        <div class="row"><div id="tools"></div></div>
+      </div>
+      <div class="row">
+        <a class="btn" href="rostform.html"><span>Submit roster</span></a>
+        <a class="btn btn--ghost" href="waiver.html"><span>Waiver claim</span></a>
+      </div>
+      <div class="legend">
+        <span><span class="fit fit--green">7</span> Fresh</span>
+        <span><span class="fit fit--blue">5</span> Rested</span>
+        <span><span class="fit fit--yellow">3</span> Worn</span>
+        <span><span class="fit fit--red">2</span> Tired</span>
+      </div>
+      <div id="rosters"><div class="skeleton"></div></div>
+    </div>
+  </main>
+</body>
+</html>

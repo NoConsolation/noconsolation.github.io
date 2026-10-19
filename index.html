@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>No Consolation</title>
+  <meta name="description" content="Home of the Strikers Premier League — standings, schedule, streams and forms for the No Consolation Mario Strikers league.">
+  <meta name="theme-color" content="#120B2A">
+  <link rel="icon" href="images/favicon.png">
+  <meta property="og:title" content="No Consolation">
+  <meta property="og:description" content="Home of the Strikers Premier League — standings, schedule, streams and forms for the No Consolation Mario Strikers league.">
+  <meta property="og:image" content="https://noconsolation.github.io/images/og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://docs.google.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="config.js" defer></script>
+  <script src="assets/js/core.js" defer></script>
+  <script src="assets/js/pages/home.js" defer></script>
+</head>
+<body data-page="home">
+  <header id="site-header" class="site-header"></header>
+  <main id="main">
+    <section class="hero">
+      <div class="wrap hero__inner">
+        <div>
+          <p class="hero__kicker">Home of the Strikers Premier League</p>
+          <h1 class="wordmark"><span>No</span><span>Consolation</span></h1>
+          <p class="lede">Eighteen coaches, three leagues, one ruthless competition amongst friends. Standings, matchups, streams and every weekly form live here.</p>
+          <div class="row">
+            <a class="btn" href="spl.html"><span>See the standings</span></a>
+            <a class="btn btn--ghost" href="rostform.html"><span>Submit your roster</span></a>
+          </div>
+        </div>
+        <div class="hero__art"><img src="images/nc-banner.webp" width="1456" height="840" alt="No Consolation shard logo"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div id="lanes" class="lanes"><div class="skeleton"></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="row row--between" style="margin-bottom:1rem">
+          <h2 style="margin:0">Matchups · <span id="week-name">this week</span></h2>
+          <div id="week-tools"></div>
+        </div>
+        <div id="this-week"><div class="skeleton"></div></div>
+        <p style="margin-top:1rem"><a href="spl.html">Full schedule and results</a></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap grid grid--2" style="align-items:start">
+        <div>
+          <h2>Latest from the channel</h2>
+          <div class="embed"><button id="latest-video" class="facade"><span>Play latest uploads</span></button></div>
+        </div>
+        <div>
+          <h2>Quick links</h2>
+          <nav class="quick" aria-label="Quick links">
+            <a href="rostform.html"><strong>Weekly roster</strong><span>Lineup and map picks</span></a>
+            <a href="waiver.html"><strong>Waiver claim</strong><span>Claim a free agent</span></a>
+            <a href="spl-rosters.html"><strong>Rosters</strong><span>Fitness for every team</span></a>
+            <a href="spl-stats.html"><strong>Stats</strong><span>Player and team leaders</span></a>
+            <a href="references.html"><strong>References</strong><span>Rules, preds, predictions</span></a>
+            <a href="streaming.html"><strong>Watch live</strong><span>Twitch, YouTube, podcast</span></a>
+          </nav>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

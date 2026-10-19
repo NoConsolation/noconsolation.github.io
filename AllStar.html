@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>All-Star voting · No Consolation</title>
+  <meta name="description" content="Vote for the Strikers Premier League All-Stars.">
+  <meta name="theme-color" content="#120B2A">
+  <link rel="icon" href="images/favicon.png">
+  <meta property="og:title" content="All-Star voting · No Consolation">
+  <meta property="og:description" content="Vote for the Strikers Premier League All-Stars.">
+  <meta property="og:image" content="https://noconsolation.github.io/images/og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://docs.google.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="config.js" defer></script>
+  <script src="assets/js/core.js" defer></script>
+  <script src="assets/js/pages/allstar.js" defer></script>
+</head>
+<body data-page="allstar">
+  <header id="site-header" class="site-header"></header>
+  <main id="main">
+    <div class="wrap">
+      <div class="page-head">
+        <h1 id="title">All-Star voting</h1>
+        <ul class="rules">
+          <li>Pick your top three at each position. Players need at least two series at that position to qualify.</li>
+          <li>At least two nominees per team, one ballot per coach. Table order is randomized.</li>
+          <li>The colored row is stats at that position; the bold row is full-season stats.</li>
+        </ul>
+      </div>
+      <div id="ballot"><div class="skeleton"></div></div>
+    </div>
+    <div id="vote-bar" class="vote-bar">
+      <div class="wrap">
+        <label class="field"><span>Your name</span><input id="voter" type="text" autocomplete="name" placeholder="Name"></label>
+        <button id="submit" class="btn" type="button"><span>Submit vote</span></button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

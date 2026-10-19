@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Waiver claim · No Consolation</title>
+  <meta name="description" content="Claim a free agent in the Strikers Premier League.">
+  <meta name="theme-color" content="#120B2A">
+  <link rel="icon" href="images/favicon.png">
+  <meta property="og:title" content="Waiver claim · No Consolation">
+  <meta property="og:description" content="Claim a free agent in the Strikers Premier League.">
+  <meta property="og:image" content="https://noconsolation.github.io/images/og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://docs.google.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="config.js" defer></script>
+  <script src="assets/js/core.js" defer></script>
+  <script src="assets/js/pages/waiver.js" defer></script>
+</head>
+<body data-page="waiver">
+  <header id="site-header" class="site-header"></header>
+  <main id="main">
+    <div class="wrap">
+      <div class="page-head">
+        <h1>Waiver claim</h1>
+        <p class="lede">Pick up to two free agents in order of preference and the player you'd drop. Claims are processed in waiver order.</p>
+      </div>
+      <div id="boards" class="grid grid--3"><div class="skeleton"></div></div>
+      <section class="section">
+        <form id="waiver-form" class="panel" novalidate style="max-width:720px">
+          <h2 class="panel__title" style="--league:var(--volt)">Submit a claim</h2>
+          <div class="form-grid">
+            <label class="field"><span>Your team</span><select id="team" name="team" required><option value="">Loading…</option></select></label>
+            <label class="field"><span>First choice</span><select id="option1" name="option1" required><option value="">Choose your team first</option></select></label>
+            <label class="field"><span>Second choice (optional)</span><select id="option2" name="option2"><option value="">No second choice</option></select></label>
+            <label class="field"><span>Player to drop</span><select id="droppedPlayer" name="droppedPlayer" required><option value="">Choose your team first</option></select></label>
+          </div>
+          <ul id="form-errors" class="form-errors" aria-live="polite" style="margin-top:1rem"></ul>
+          <div class="form-actions"><button id="submit" class="btn" type="submit" disabled><span>Submit claim</span></button></div>
+          <div id="done" hidden style="margin-top:1rem"></div>
+        </form>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

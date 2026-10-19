@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keepers · No Consolation</title>
+  <meta name="description" content="Choose the players you're keeping for next season.">
+  <meta name="theme-color" content="#120B2A">
+  <link rel="icon" href="images/favicon.png">
+  <meta property="og:title" content="Keepers · No Consolation">
+  <meta property="og:description" content="Choose the players you're keeping for next season.">
+  <meta property="og:image" content="https://noconsolation.github.io/images/og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://docs.google.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="config.js" defer></script>
+  <script src="assets/js/core.js" defer></script>
+  <script src="assets/js/pages/keepers.js" defer></script>
+</head>
+<body data-page="keeperform">
+  <header id="site-header" class="site-header"></header>
+  <main id="main">
+    <div class="wrap">
+      <div class="page-head">
+        <h1>Keepers</h1>
+        <ul class="rules">
+          <li>Keep up to <strong id="rule-max">3</strong> players, and at most one captain.</li>
+          <li>Kept players still go up for auction, but another coach must bid at least <strong id="rule-markup">10%</strong> over their value to take them.</li>
+          <li>You can still bid on any player who gets released.</li>
+        </ul>
+      </div>
+      <div class="grid grid--2" style="align-items:start">
+        <form id="keeper-form" class="panel" novalidate>
+          <label class="field"><span>Coach</span><select id="playername" name="playername" required><option value="">Loading…</option></select></label>
+          <div class="form-grid" style="margin-top:1rem">
+            <label class="field"><span>Captain</span><select id="captain" name="captain"><option value="">No captain</option></select></label>
+            <label class="field"><span>Sidekick 1</span><select id="topmid" name="topmid"><option value="">No sidekick</option></select></label>
+            <label class="field"><span>Sidekick 2</span><select id="botmid" name="botmid"><option value="">No sidekick</option></select></label>
+            <label class="field"><span>Sidekick 3</span><select id="def" name="def"><option value="">No sidekick</option></select></label>
+          </div>
+          <p id="count" class="muted" style="margin-top:1rem"></p>
+          <ul id="form-errors" class="form-errors" aria-live="polite"></ul>
+          <div class="form-actions"><button id="submit" class="btn" type="submit" disabled><span>Submit keepers</span></button></div>
+          <div id="done" hidden style="margin-top:1rem"></div>
+        </form>
+        <div id="roster-preview"></div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

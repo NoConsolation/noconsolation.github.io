@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Draft room · No Consolation</title>
+  <meta name="description" content="Live SPL auction draft.">
+  <meta name="theme-color" content="#120B2A">
+  <link rel="icon" href="images/favicon.png">
+  <meta property="og:title" content="Draft room · No Consolation">
+  <meta property="og:description" content="Live SPL auction draft.">
+  <meta property="og:image" content="https://noconsolation.github.io/images/og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="config.js" defer></script>
+  <script src="assets/js/core.js" defer></script>
+  <meta name="robots" content="noindex">
+  <script type="module" src="assets/js/draft/draft.js"></script>
+</head>
+<body data-page="draft">
+  <header id="site-header" class="site-header"></header>
+  <main id="main">
+    <div class="wrap">
+      <div class="draft__top">
+        <div>
+          <h1 id="pool-name" style="margin:0">Draft room</h1>
+          <p class="muted" style="margin:.25rem 0 0">Bids open when the commissioner starts the clock.</p>
+        </div>
+        <div class="clocks">
+          <div id="rclock-wrap" class="clock-wrap" hidden><span>Unlock timer</span><div id="rclock" class="clock clock--restricted">20s</div></div>
+          <div class="clock-wrap"><span>Bid clock</span><div id="clock" class="clock">40</div></div>
+        </div>
+      </div>
+
+      <div id="player-card" class="panel card" hidden></div>
+
+      <div class="draft">
+        <aside class="panel" style="--league:var(--muted)">
+          <h2 class="panel__title">Still available</h2>
+          <ul id="available" class="picklist"></ul>
+        </aside>
+
+        <div>
+          <form id="bid-form" class="panel bid-form" novalidate>
+            <label class="field"><span>Coach</span><select id="coach"></select></label>
+            <label class="field"><span>Your bid</span><input id="bid" type="number" inputmode="numeric" min="0" placeholder="0" required></label>
+            <p id="bid-hint" class="muted" style="margin:0"></p>
+            <button id="submit" class="btn btn--block" type="submit" disabled><span>Place bid</span></button>
+          </form>
+          <section style="margin-top:1.25rem"><h2>Draft board</h2><div id="board"></div></section>
+          <section style="margin-top:1.25rem"><h2>Characters left</h2><div id="chars"></div></section>
+        </div>
+
+        <aside>
+          <div class="panel" style="--league:var(--volt)">
+            <h2 class="panel__title">Live bids</h2>
+            <div id="bids" class="bids"></div>
+          </div>
+          <div class="panel" style="--league:var(--muted);margin-top:1.25rem">
+            <h2 class="panel__title">Budgets</h2>
+            <table id="budgets" class="table"><tbody></tbody></table>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

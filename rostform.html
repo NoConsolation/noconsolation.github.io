@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weekly roster · No Consolation</title>
+  <meta name="description" content="Submit your weekly Strikers lineup and map picks.">
+  <meta name="theme-color" content="#120B2A">
+  <link rel="icon" href="images/favicon.png">
+  <meta property="og:title" content="Weekly roster · No Consolation">
+  <meta property="og:description" content="Submit your weekly Strikers lineup and map picks.">
+  <meta property="og:image" content="https://noconsolation.github.io/images/og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://docs.google.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="config.js" defer></script>
+  <script src="assets/js/core.js" defer></script>
+  <script src="assets/js/pages/rostform.js" defer></script>
+</head>
+<body data-page="rostform">
+  <header id="site-header" class="site-header"></header>
+  <main id="main">
+    <div class="wrap">
+      <div class="page-head">
+        <h1>Weekly roster</h1>
+        <p class="lede">Pick a captain and three sidekicks, then rank the maps. Players who play lose fitness; anyone sitting out comes back fresh.</p>
+      </div>
+      <div class="grid grid--2" style="align-items:start">
+        <form id="roster-form" class="panel" novalidate>
+          <fieldset>
+            <legend>Team</legend>
+            <label class="field"><span>Your team</span><select id="team" name="team" required><option value="">Loading teams…</option></select></label>
+          </fieldset>
+          <fieldset>
+            <legend>Lineup</legend>
+            <div class="form-grid">
+              <label class="field"><span>Captain</span><select id="captain" name="captain" required><option value="">Choose a player</option></select></label>
+              <label class="field"><span>Top midfield</span><select id="topmid" name="topmid" required><option value="">Choose a player</option></select></label>
+              <label class="field"><span>Bottom midfield</span><select id="botmid" name="botmid" required><option value="">Choose a player</option></select></label>
+              <label class="field"><span>Defender</span><select id="def" name="def" required><option value="">Choose a player</option></select></label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Maps</legend>
+            <div id="maps" class="maps"></div>
+          </fieldset>
+          <ul id="form-errors" class="form-errors" aria-live="polite"></ul>
+          <div class="form-actions"><button id="submit" class="btn" type="submit" disabled><span>Submit roster</span></button></div>
+          <div id="done" hidden style="margin-top:1rem"></div>
+        </form>
+        <div>
+          <h2>Fitness check</h2>
+          <div id="roster-preview"><p class="note">Pick your team to see fitness.</p></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

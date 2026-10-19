@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Commissioner · No Consolation</title>
+  <meta name="description" content="Commissioner console.">
+  <meta name="theme-color" content="#120B2A">
+  <link rel="icon" href="images/favicon.png">
+  <meta property="og:title" content="Commissioner · No Consolation">
+  <meta property="og:description" content="Commissioner console.">
+  <meta property="og:image" content="https://noconsolation.github.io/images/og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="config.js" defer></script>
+  <script src="assets/js/core.js" defer></script>
+  <meta name="robots" content="noindex">
+  <script type="module" src="assets/js/draft/commish.js"></script>
+</head>
+<body data-page="commish">
+  <header id="site-header" class="site-header"></header>
+  <main id="main">
+    <div class="wrap">
+      <section id="gate" class="gate panel" style="--league:var(--red)">
+        <h1>Commissioner</h1>
+        <p class="muted">Sign in with the Google account that's on the commissioner list.</p>
+        <button id="sign-in" class="btn"><span>Sign in with Google</span></button>
+        <div id="gate-msg" style="margin-top:1rem"></div>
+      </section>
+
+      <section id="console" hidden>
+        <div class="page-head row row--between">
+          <h1 style="margin:0">Commissioner</h1>
+          <div class="row"><span id="who" class="muted"></span><button id="sign-out" class="btn btn--ghost btn--small"><span>Sign out</span></button></div>
+        </div>
+        <p id="admin-warning" class="note note--warn" hidden>No admin emails are set in config.js, so any signed-in Google account can open this page. Add yours to <code>admins</code> and publish the database rules.</p>
+
+        <div class="tabs" role="group" aria-label="Section">
+          <button class="chip" data-tab="draft" aria-pressed="true" style="--c:var(--volt)">Draft</button>
+          <button class="chip" data-tab="streams" aria-pressed="false" style="--c:var(--volt)">Stream times</button>
+        </div>
+
+        <div data-panel="draft">
+          <div class="draft__top">
+            <label class="field" style="min-width:280px"><span>Pool being drafted</span><select id="pool"></select></label>
+            <div class="clocks">
+              <div id="rclock-wrap" class="clock-wrap" hidden><span>Unlock timer</span><div id="rclock" class="clock clock--restricted">20s</div></div>
+              <div class="clock-wrap"><span>Bid clock</span><div id="clock" class="clock">40</div></div>
+            </div>
+          </div>
+          <div id="player-card" class="panel card" hidden></div>
+          <div class="draft">
+            <aside class="panel" style="--league:var(--muted)">
+              <h2 class="panel__title">Pick a player</h2>
+              <ul id="player-list" class="picklist"></ul>
+            </aside>
+            <div>
+              <div class="row" style="margin-bottom:1.25rem">
+                <button id="start" class="btn" disabled><span>Start clock</span></button>
+                <button id="award" class="btn btn--red"><span>Award to top bid</span></button>
+                <button id="stop" class="btn btn--ghost btn--small"><span>Stop clock</span></button>
+                <button id="clear-bids" class="btn btn--ghost btn--small"><span>Clear all bids</span></button>
+              </div>
+              <section><h2>Draft board</h2><div id="board"></div></section>
+              <section style="margin-top:1.25rem"><h2>Characters left</h2><div id="chars"></div></section>
+            </div>
+            <aside>
+              <div class="panel" style="--league:var(--volt)"><h2 class="panel__title">Live bids</h2><div id="bids" class="bids"></div></div>
+              <div class="panel" style="--league:var(--muted);margin-top:1.25rem"><h2 class="panel__title">Budgets</h2><table id="budgets" class="table"><tbody></tbody></table></div>
+            </aside>
+          </div>
+        </div>
+
+        <div data-panel="streams" hidden>
+          <p class="lede">Shown on the home page and next to each league's standings.</p>
+          <div id="stream-times" class="grid grid--3"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

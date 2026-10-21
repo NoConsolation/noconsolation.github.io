@@ -107,7 +107,7 @@ window.NC_CONFIG = {
       },
       schedule: { rows: [41, 221], matchesPerLeague: 3, leagueOrder: ["esl", "gsc", "bs"] },
       rosterGrid: { startRow: 1, startCol: 1, groups: 3, perGroup: 6, boxHeight: 8 },
-      bracket: null,                              // add once playoffs start (see season 5 for shape)
+      bracket: { gid: 759357720, width: 1300, height: 800, zoom: 1.2, top: -30, left: -4 },
       coaches: "teams",                           // build the coach table from `teams` above
     },
 

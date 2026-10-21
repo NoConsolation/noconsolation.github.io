@@ -256,6 +256,8 @@ window.NC_CONFIG = {
      Google accounts. This hides the controls in the browser; the
      database rules (database.rules.json) are what actually enforce it. */
   admins: [
+     "purcell.colin8@gmail.com",
+     "thereisnoconsolation@gmail.com",
     // "commish@gmail.com",
   ],
 

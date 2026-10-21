@@ -107,7 +107,7 @@ window.NC_CONFIG = {
       },
       schedule: { rows: [41, 221], matchesPerLeague: 3, leagueOrder: ["esl", "gsc", "bs"] },
       rosterGrid: { startRow: 1, startCol: 1, groups: 3, perGroup: 6, boxHeight: 8 },
-      bracket: { gid: 759357720, width: 1300, height: 800, zoom: 1.2, top: -30, left: -4 },
+      bracket: { gid: 759357720, height: 700 },
       coaches: "teams",                           // build the coach table from `teams` above
     },
 
@@ -128,7 +128,7 @@ window.NC_CONFIG = {
         ],
       },
       schedule: { rows: [29, 149], matchesPerLeague: 3, leagueOrder: ["mls", "spl"] },
-      bracket: { gid: 1815967254, width: 1300, height: 800, zoom: 1.2, top: -30, left: -4 },
+      bracket: { crop: true, gid: 1815967254, width: 1300, height: 800, zoom: 1.2, top: -30, left: -4 },
       coaches: { gid: 1520901699, rows: [33, 46], cols: [13, 17] },
     },
 
@@ -151,7 +151,7 @@ window.NC_CONFIG = {
       schedule: { rows: [29, 149], matchesPerLeague: 3, leagueOrder: ["mls", "spl"] },
       // The old page showed Season 3's bracket here. Pointing at Season 4's own sheet;
       // if that tab doesn't exist, replace `gid` or set `sheet` to Season 3's ID.
-      bracket: { gid: 1815967254, width: 900, height: 800, zoom: 1.2, top: -30, left: -4 },
+      bracket: { crop: true, gid: 1815967254, width: 900, height: 800, zoom: 1.2, top: -30, left: -4 },
       coaches: null,
     },
 
@@ -172,7 +172,7 @@ window.NC_CONFIG = {
         ],
       },
       schedule: { rows: [29, 149], matchesPerLeague: 3, leagueOrder: ["mls", "spl"] },
-      bracket: { gid: 1815967254, width: 900, height: 800, zoom: 1.2, top: -30, left: -4 },
+      bracket: { crop: true, gid: 1815967254, width: 900, height: 800, zoom: 1.2, top: -30, left: -4 },
       coaches: null,
     },
 
@@ -193,7 +193,7 @@ window.NC_CONFIG = {
         ],
       },
       schedule: { rows: [29, 125], matchesPerLeague: null, leagueOrder: [] },
-      bracket: { gid: 269961088, width: 1200, height: 500, zoom: 1, top: -30, left: -2, widget: true },
+      bracket: { crop: true, gid: 269961088, width: 1200, height: 500, zoom: 1, top: -30, left: -2, widget: true },
       coaches: null,
       extraLinks: [{ label: "Season 2 stats", href: "spl-statsszn2.html" }],
     },

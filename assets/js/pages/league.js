@@ -41,18 +41,27 @@
     if (!isHistory) renderCoachesFromTeams();
   }, () => message(els.standings, "Standings didn't load. Check that the sheet is still published to the web, then refresh.", "error"));
 
-  /* ---------- bracket ---------- */
+  /* ---------- bracket ----------
+     Default: show the published tab at full width in a scrollable frame.
+     Optional `range: "A1:I20"` shows just those cells.
+     `crop: true` keeps the old fixed-size cropped embed (used by past seasons). */
   if (s.bracket && els.bracket) {
     const b = s.bracket;
-    const src = htmlUrl(b.sheet || s.sheet, b.gid, b.widget);
+    const base = htmlUrl(b.sheet || s.sheet, b.gid, false);
+    const src = base + "&widget=true&headers=false&chrome=false" + (b.range ? "&range=" + encodeURIComponent(b.range) : "");
     els.bracket.hidden = false;
+    const frame = b.crop
+      ? `<div class="table-wrap"><div style="position:relative;overflow:hidden;width:${b.width}px;height:${b.height}px;margin-inline:auto;background:#fff">
+          <iframe title="Playoff bracket" loading="lazy" src="${esc(htmlUrl(b.sheet || s.sheet, b.gid, b.widget))}"
+            style="position:absolute;top:${b.top || 0}px;left:${b.left || 0}px;width:${b.iframeWidth || b.width * 2.3}px;height:${b.iframeHeight || b.height * 2.5}px;border:0;pointer-events:none;zoom:${b.zoom || 1}"></iframe>
+        </div></div>`
+      : `<div class="bracket-frame" style="height:${b.height || 640}px">
+          <iframe title="Playoff bracket" loading="lazy" src="${esc(src)}"></iframe>
+        </div>`;
     els.bracket.innerHTML = `
       <div class="row row--between"><h2>Playoff bracket</h2>
-        <a class="btn btn--ghost btn--small" href="${esc(src)}" target="_blank" rel="noopener">Open full bracket</a></div>
-      <div class="table-wrap"><div style="position:relative;overflow:hidden;width:${b.width}px;height:${b.height}px;margin-inline:auto;background:#fff">
-        <iframe title="Playoff bracket" loading="lazy" src="${esc(src)}"
-          style="position:absolute;top:${b.top || 0}px;left:${b.left || 0}px;width:${b.iframeWidth || b.width * 2.3}px;height:${b.iframeHeight || b.height * 2.5}px;border:0;pointer-events:none;zoom:${b.zoom || 1}"></iframe>
-      </div></div>`;
+        <a class="btn btn--ghost btn--small" href="${esc(base)}" target="_blank" rel="noopener">Open full bracket</a></div>
+      ${frame}`;
   }
 
   /* ---------- schedule ---------- */

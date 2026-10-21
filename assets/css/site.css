@@ -516,5 +516,5 @@ dialog::backdrop { background: rgba(8, 5, 20, .75); }
 .tabs { display: flex; gap: .5rem; margin-bottom: 1.25rem; }
 
 /* playoff bracket embed */
-.bracket-frame { width: 100%; max-height: 80vh; background: #fff; border: 1px solid var(--line); overflow: hidden; }
+.bracket-frame { width: 100%; background: #fff; border: 1px solid var(--line); overflow: auto; -webkit-overflow-scrolling: touch; }
 .bracket-frame iframe { width: 100%; height: 100%; border: 0; display: block; }

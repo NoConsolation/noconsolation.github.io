@@ -48,7 +48,7 @@
   if (s.bracket && els.bracket) {
     const b = s.bracket;
     const base = htmlUrl(b.sheet || s.sheet, b.gid, false);
-    const src = base + "&widget=true&headers=false&chrome=false" + (b.range ? "&range=" + encodeURIComponent(b.range) : "");
+    const src = base + "&headers=false&chrome=false" + (b.range ? "&range=" + encodeURIComponent(b.range) : "");
     els.bracket.hidden = false;
     const frame = b.crop
       ? `<div class="table-wrap"><div style="position:relative;overflow:hidden;width:${b.width}px;height:${b.height}px;margin-inline:auto;background:#fff">

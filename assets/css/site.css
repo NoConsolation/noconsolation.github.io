@@ -518,3 +518,60 @@ dialog::backdrop { background: rgba(8, 5, 20, .75); }
 /* playoff bracket embed */
 .bracket-frame { width: 100%; background: #fff; border: 1px solid var(--line); overflow: auto; -webkit-overflow-scrolling: touch; }
 .bracket-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+/* ---------------- Strikers Premier League (championship tier) ---------------- */
+.spl-tier {
+  --gold: #FFC83D;
+  --league: var(--gold);
+  position: relative;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  margin-block: 1rem 2.5rem;
+  background:
+    radial-gradient(700px 260px at 50% -40%, rgba(255, 200, 61, .22), transparent 70%),
+    linear-gradient(180deg, rgba(255, 200, 61, .07), rgba(255, 200, 61, 0) 60%);
+  box-shadow: inset 0 0 0 1px rgba(255, 200, 61, .35);
+  clip-path: var(--chamfer);
+}
+.spl-head { text-align: center; margin-bottom: 1.25rem; }
+.spl-kicker { font: 600 .95rem/1 var(--cond); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin: 0 0 .45rem; }
+.spl-title {
+  margin: 0; font-size: clamp(1.7rem, 4.4vw, 2.6rem);
+  background: linear-gradient(180deg, #FFF3C4 0%, var(--gold) 55%, #E09A1A 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, .45)) drop-shadow(0 0 18px rgba(255, 200, 61, .35));
+}
+.spl-champ {
+  display: flex; align-items: center; justify-content: center; gap: .9rem;
+  margin: 0 auto 1.5rem; padding: .85rem 1.4rem; width: fit-content; max-width: 100%;
+  background: linear-gradient(90deg, rgba(255, 200, 61, .18), rgba(255, 200, 61, .06));
+  border: 1px solid rgba(255, 200, 61, .55);
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0 50%);
+}
+.spl-champ__trophy { font-size: 2rem; line-height: 1; }
+.spl-champ__label { display: block; font: 600 .85rem/1.1 var(--cond); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.spl-champ__name { display: block; font: 400 1.4rem/1.15 var(--display); color: var(--text); }
+.spl-grid { align-items: start; }
+.spl-panel { border-top-color: var(--gold); }
+.spl-panel .table tbody tr[data-top] > th:first-child .rank { color: var(--gold); }
+.spl-sub { font: 600 1.05rem/1.2 var(--cond); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 1rem 0 .5rem; }
+.spl-panel .panel__title + .spl-sub { margin-top: .35rem; }
+.spl-sub--section { margin-top: 2rem; color: var(--gold); }
+.spl-match { --league: var(--gold); }
+.spl-match__label { font: 600 .8rem/1 var(--cond); color: var(--muted); padding: .35rem 0 .2rem; text-transform: uppercase; letter-spacing: .08em; }
+.spl-match--big .match__team { min-height: 3rem; font-size: 1.05rem; }
+.spl-wins { text-align: center; font: 700 1.1rem/1 var(--cond); color: var(--muted); border-left: 1px solid rgba(255, 255, 255, .1); }
+.match__team.is-win .spl-wins { color: var(--gold); }
+.spl-seed { display: inline-grid; place-items: center; width: 1.35rem; height: 1.35rem; margin-right: .45rem;
+  font: 700 .8rem/1 var(--cond); color: var(--pitch); background: var(--gold); vertical-align: .1em; }
+.spl-match__head { display: grid; gap: .25rem; padding-top: .3rem; font: 600 .75rem/1 var(--cond); color: var(--muted); text-align: center; letter-spacing: .05em; }
+.spl-match__head span:last-child { color: var(--gold); }
+.spl-matches { grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+.spl-match .match__team, .spl-match__head { grid-template-columns: minmax(0, 1fr) repeat(var(--n, 3), var(--g, 2.1rem)) var(--w, 2.4rem); }
+@media (max-width: 560px) {
+  .spl-tier { padding: 1rem .6rem; clip-path: none; }
+  .spl-tier .panel { padding: 1rem .75rem; }
+  .spl-match { --g: 1.55rem; --w: 1.9rem; padding-inline: .5rem; }
+  .spl-match .match__team { gap: .15rem; font-size: .95rem; }
+  .spl-panel .table th, .spl-panel .table td { padding-inline: .3rem; }
+  .spl-panel .table .rank { width: 1.2em; }
+}

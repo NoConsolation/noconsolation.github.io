@@ -109,6 +109,32 @@ window.NC_CONFIG = {
       rosterGrid: { startRow: 1, startCol: 1, groups: 3, perGroup: 6, boxHeight: 8 },
       bracket: { gid: 759357720, height: 700 },
       coaches: "teams",                           // build the coach table from `teams` above
+
+      /* Strikers Premier League — the championship table above the three leagues.
+         Reads the "SPL" tab of this season's sheet. Cells are written exactly
+         as they appear in Google Sheets (column letter + row number), NOT 0-based.
+         Delete this whole `spl` block to hide the section.                    */
+      spl: {
+        gid: 766553747,
+        name: "Strikers Premier League",
+        standings: "K3:P7",                               // header row + one row per team
+        groupSeries: { range: "K9:N20", bestOf: 3 },      // pairs of rows: team + up to 3 games
+        playIn: {
+          title: "B2",
+          teams: [{ name: "B3", games: "C3:G3" }, { name: "B5", games: "C5:G5" }],
+          winner: "I4",
+          bestOf: 5,
+        },
+        finals: {
+          title: "B13",
+          teams: [
+            { seed: "A14", name: "B14", games: "C14:F14" },
+            { seed: "A16", name: "B16", games: "C16:F16" },
+          ],
+          winner: "I15",
+          bestOf: 5,
+        },
+      },
     },
 
     5: {

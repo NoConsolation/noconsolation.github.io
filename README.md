@@ -15,6 +15,7 @@ Plain HTML, CSS and JavaScript. No build step: edit a file on GitHub, commit, an
 | Change teams, coaches or leagues | `teams` and `leagues` |
 | Give someone commissioner access | `admins` (and the database, see below) |
 | Set next stream times | Commissioner page → **Stream times** tab (no file edit needed) |
+| Change what the SPL (championship) section reads | `seasons[N].spl` — cell ranges in normal Sheets notation, e.g. `"K9:N20"` |
 
 ## Starting a new season
 
@@ -28,12 +29,23 @@ Row and column numbers in `config.js` are **0-based** (row 1 in Sheets is `0`). 
 
 When playoffs start, fill in `bracket` for the current season (copy the shape from season 5).
 
+### Strikers Premier League section
+
+The gold championship section at the top of `spl.html` reads the season's **SPL** tab. It only shows the cells listed under `spl` in `config.js`, so leftover or hidden cells elsewhere on that tab never appear on the site.
+
+- `gid`: the SPL tab's gid (the number after `gid=` in its URL).
+- `standings`: the header row plus one row per team, e.g. `"K3:P7"`.
+- `groupSeries`: the block of series, two rows per series (team name + game scores), and `bestOf` (3 = first to 2 wins).
+- `playIn` / `finals`: the team-name cells, each team's game-score row, the winner cell, and `bestOf`. `seed` cells are optional.
+
+These cell references use normal Sheets notation (column letter + row number), unlike the 0-based numbers above. Games after a team has clinched a series are ignored, so a hidden 0 in an unplayed game 3 doesn't show. The champion banner appears once the Grand Finals winner cell is filled in or a team clinches. To hide the section, delete the `spl` block. For a new season, copy the block into the new season and update `gid` and any ranges that moved.
+
 ## Pages
 
 | Page | What it does |
 |---|---|
 | `index.html` | Home: league streams, this week's matchups, latest uploads |
-| `spl.html` | Current standings, schedule (with league filter), coaches |
+| `spl.html` | Strikers Premier League (championship) table and playoffs, league standings, schedule (with league filter), coaches |
 | `season.html?s=N` | Any past season (old `splszn2`–`5.html` links redirect here) |
 | `spl-stats.html` | Sortable player stats + team totals (from Firebase `p_stats`) |
 | `spl-rosters.html` | Every roster with fitness left |

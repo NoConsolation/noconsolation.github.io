@@ -66,7 +66,7 @@ Code lives in `assets/`: one stylesheet (`assets/css/site.css`), the shared head
 
 Forms post to the same Google Apps Script endpoints as before, with the same field names, so the scripts don't need changes.
 
-## YouTube live detection (one time, optional but recommended)
+## YouTube live detection (idk maybe we do it)
 
 With a key, the Watch page shows the big player only while the channel is live (or has a stream scheduled in the next 24 hours), and an "offline" card with the next stream times otherwise. Without a key, it always shows YouTube's channel live player, which displays YouTube's own offline message between streams.
 

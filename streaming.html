@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Watch & listen · No Consolation</title>
-  <meta name="description" content="Watch No Consolation live on Twitch, catch highlights on YouTube and listen to the podcast.">
+  <meta name="description" content="Watch No Consolation live on YouTube, catch the Shorts and listen to the podcast.">
   <meta name="theme-color" content="#120B2A">
   <link rel="icon" href="images/favicon.png">
   <meta property="og:title" content="Watch & listen · No Consolation">
-  <meta property="og:description" content="Watch No Consolation live on Twitch, catch highlights on YouTube and listen to the podcast.">
+  <meta property="og:description" content="Watch No Consolation live on YouTube, catch the Shorts and listen to the podcast.">
   <meta property="og:image" content="https://noconsolation.github.io/images/og-image.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,19 +24,29 @@
     <div class="wrap">
       <div class="page-head">
         <h1>Watch &amp; listen</h1>
-        <p class="lede">Matches stream live on Twitch. Highlights land on YouTube, and the podcast covers the rest.</p>
+        <p class="lede">Matches stream live on YouTube. Catch the Shorts and past streams in between, and the podcast covers the rest.</p>
       </div>
       <section>
-        <h2>Live on Twitch</h2>
-        <div id="twitch" class="embed"></div>
+        <div class="row row--between" style="margin-bottom:.75rem">
+          <h2 id="live-title" style="margin:0">Live on YouTube</h2>
+          <span id="live-badge" class="live-badge" hidden>Live</span>
+        </div>
+        <div id="live" class="embed"><div class="skeleton"></div></div>
         <div class="row" style="margin-top:1rem">
-          <a class="btn btn--red" href="https://twitch.tv/noconsolation" target="_blank" rel="noopener"><span>Open Twitch</span></a>
+          <a id="open-live" class="btn btn--red" href="#" target="_blank" rel="noopener"><span>Open on YouTube</span></a>
           <a id="suggest" class="btn btn--ghost" href="#" target="_blank" rel="noopener"><span>Suggest something for the stream</span></a>
         </div>
       </section>
       <section class="section grid grid--2" style="padding-inline:0">
         <div><h2>Latest uploads</h2><div class="embed"><button id="latest" class="facade"><span>Play latest uploads</span></button></div></div>
-        <div><h2>Highlights playlist</h2><div class="embed"><button id="playlist" class="facade"><span>Play highlights</span></button></div></div>
+        <div><h2>Shorts</h2>
+          <a id="shorts" class="shorts-card" href="#" target="_blank" rel="noopener">
+            <span class="shorts-card__icon" aria-hidden="true"></span>
+            <strong>Watch the Shorts</strong>
+            <span>Goals, chaos and highlights in under a minute.</span>
+            <span class="btn btn--small"><span>Open YouTube Shorts</span></span>
+          </a>
+        </div>
       </section>
       <section>
         <h2>Podcast</h2>

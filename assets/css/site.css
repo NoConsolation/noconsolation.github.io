@@ -575,3 +575,46 @@ dialog::backdrop { background: rgba(8, 5, 20, .75); }
   .spl-panel .table th, .spl-panel .table td { padding-inline: .3rem; }
   .spl-panel .table .rank { width: 1.2em; }
 }
+
+/* ---------------- watch page: YouTube live + Shorts ---------------- */
+.live-badge {
+  display: inline-flex; align-items: center; gap: .45rem; padding: .35rem .7rem;
+  font: 700 .95rem/1 var(--cond); letter-spacing: .08em; text-transform: uppercase;
+  color: #fff; background: var(--red);
+}
+.live-badge::before { content: ""; width: .55rem; height: .55rem; border-radius: 50%; background: #fff; animation: live-pulse 1.4s ease-in-out infinite; }
+.live-badge.is-upcoming { background: var(--panel-2); color: var(--volt); box-shadow: inset 0 0 0 1px var(--volt); }
+.live-badge.is-upcoming::before { background: var(--volt); animation: none; }
+@keyframes live-pulse { 50% { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) { .live-badge::before { animation: none; } }
+
+.embed--off { background:
+  linear-gradient(rgba(18, 11, 42, .82), rgba(18, 11, 42, .92)), url("../../images/shards.webp") center / cover; }
+.live-off {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .6rem; padding: 1.5rem; text-align: center; overflow-y: auto;
+}
+.live-off h3 { margin: 0; font-size: clamp(1.2rem, 3vw, 1.7rem); }
+.live-off__dot { width: .8rem; height: .8rem; border-radius: 50%; background: var(--muted); box-shadow: 0 0 0 6px rgba(173, 164, 217, .15); }
+.live-off__times { list-style: none; margin: .25rem 0 .5rem; padding: 0; display: grid; gap: .3rem; font: 500 1.05rem/1.25 var(--cond); }
+.live-off__times li { display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
+.live-off__times strong { color: var(--text); }
+
+.shorts-card {
+  position: relative; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: .55rem;
+  aspect-ratio: 16 / 9; padding: clamp(1.25rem, 4vw, 2rem); text-decoration: none; color: var(--text);
+  background:
+    radial-gradient(420px 240px at 85% 20%, rgba(255, 46, 77, .35), transparent 70%),
+    linear-gradient(rgba(18, 11, 42, .7), rgba(18, 11, 42, .88)), url("../../images/shards.webp") center / cover;
+  clip-path: var(--chamfer); border-top: 3px solid var(--red);
+}
+.shorts-card:hover { color: var(--text); filter: brightness(1.08); }
+.shorts-card strong { font: 400 clamp(1.3rem, 3vw, 1.7rem)/1.1 var(--display); }
+.shorts-card > span:not(.btn):not(.shorts-card__icon) { color: var(--muted); max-width: 32ch; }
+.shorts-card__icon {
+  width: 2.6rem; height: 3.2rem; background: var(--red);
+  clip-path: polygon(30% 0, 100% 0, 100% 72%, 70% 100%, 0 100%, 0 28%);
+  display: grid; place-items: center; position: relative;
+}
+.shorts-card__icon::after { content: ""; width: 1rem; height: 1.1rem; background: #fff; clip-path: polygon(0 0, 100% 50%, 0 100%); margin-left: .2rem; }
+@media (max-width: 560px) { .shorts-card { aspect-ratio: auto; min-height: 220px; } }

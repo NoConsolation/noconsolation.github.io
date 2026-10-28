@@ -301,8 +301,23 @@ window.NC_CONFIG = {
   /* ---------- Media & socials ---------- */
   media: {
     youtubeChannelId: "UCE0Y9Niy6KNT27yO7pVjFtw",
-    youtubePlaylistId: "PLvZQiW1fJARIncO8u9JMVeeJHMiZZXL2L",
-    twitchChannel: "noconsolation",
+    youtubeShorts: "https://www.youtube.com/@thereisnoconsolation/shorts",
+
+    /* Live player on the Watch page.
+       • apiKey (recommended): a YouTube Data API key restricted to this site
+         (setup in README.md). With it, the big player only appears while the
+         channel is live (or has a stream scheduled); otherwise the page shows
+         "offline" with the next stream times.
+       • Without a key, the page always shows YouTube's channel live player,
+         which displays YouTube's own offline message when you're not live.
+       • manualVideoId: paste a stream's video ID (the part after watch?v=) to
+         force that stream on the page. Leave "" for normal behaviour.        */
+    youtubeLive: {
+      apiKey: "",
+      checkEveryMinutes: 2,
+      manualVideoId: "",
+    },
+
     spotifyShowId: "5CCgIC9e6ULAosE6sSSrPx",
     suggestionForm: "https://docs.google.com/forms/d/e/1FAIpQLSeaPBEMQ349MuLmaHvUqy4OzUyS_P6xugEFxLkQj-2VnFVdZw/viewform?usp=header",
     rosterSlides: "https://docs.google.com/presentation/d/e/2PACX-1vROfuRdWp1nlam1LwMpkUOaBJt6cg9-ovCCkdp0AMhtxg68dRQ7G7XWGkH7Z7yVk8E32wJG7VGQPjzw/embed?start=false&loop=false&delayms=3000",

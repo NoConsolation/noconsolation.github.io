@@ -15,6 +15,9 @@ Plain HTML, CSS and JavaScript. No build step: edit a file on GitHub, commit, an
 | Change teams, coaches or leagues | `teams` and `leagues` |
 | Give someone commissioner access | `admins` (and the database, see below) |
 | Set next stream times | Commissioner page → **Stream times** tab (no file edit needed) |
+| Turn on automatic YouTube live detection | `media.youtubeLive.apiKey` (setup below) |
+| Force a specific stream onto the Watch page | `media.youtubeLive.manualVideoId` — the ID after `watch?v=`; set back to `""` afterwards |
+| Change the Shorts link | `media.youtubeShorts` |
 | Change what the SPL (championship) section reads | `seasons[N].spl` — cell ranges in normal Sheets notation, e.g. `"K9:N20"` |
 
 ## Starting a new season
@@ -53,7 +56,7 @@ These cell references use normal Sheets notation (column letter + row number), u
 | `waiver.html` | Waiver order, free agents, claim form |
 | `keeperform.html` | Keeper selection |
 | `AllStar.html` | All-Star ballot |
-| `streaming.html` | Twitch, YouTube and podcast (old `podcasts`, `twitch`, `youtube` pages redirect here) |
+| `streaming.html` | YouTube live player, latest uploads, Shorts and podcast (old `podcasts`, `twitch`, `youtube` pages redirect here) |
 | `references.html` | SPL references, preds, predictions |
 | `roster.html` | About the crew |
 | `Draft.html` | Coaches' draft room — bids only |
@@ -62,6 +65,19 @@ These cell references use normal Sheets notation (column letter + row number), u
 Code lives in `assets/`: one stylesheet (`assets/css/site.css`), the shared header/footer and helpers (`assets/js/core.js`), one script per page (`assets/js/pages/`), and the draft code (`assets/js/draft/`).
 
 Forms post to the same Google Apps Script endpoints as before, with the same field names, so the scripts don't need changes.
+
+## YouTube live detection (one time, optional but recommended)
+
+With a key, the Watch page shows the big player only while the channel is live (or has a stream scheduled in the next 24 hours), and an "offline" card with the next stream times otherwise. Without a key, it always shows YouTube's channel live player, which displays YouTube's own offline message between streams.
+
+1. Go to **console.cloud.google.com**, create a project (any name), then **APIs & Services → Library** → enable **YouTube Data API v3**.
+2. **APIs & Services → Credentials → Create credentials → API key.**
+3. Edit the key:
+   - **Application restrictions → Websites**: add `https://noconsolation.github.io/*`.
+   - **API restrictions → Restrict key** → YouTube Data API v3 only.
+4. Paste the key into `media.youtubeLive.apiKey` in `config.js` and commit.
+
+The key is visible in the page source, which is normal for browser keys; the website restriction stops other sites from using it. Each check costs 2 of the 10,000 free daily units, and an open Watch page re-checks every `checkEveryMinutes` (default 2) while it's on screen, so normal traffic stays far inside the free quota. If a live stream ever doesn't show up, paste its video ID into `manualVideoId` as a fallback.
 
 ## Commissioner login setup (one time)
 

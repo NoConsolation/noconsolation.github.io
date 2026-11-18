@@ -11,6 +11,65 @@ const els = {
   card: $("#player-card"), available: $("#available"),
 };
 
+/* --- sticky mini bar for phones: clock, player up, top bid --- */
+const mini = document.createElement("button");
+mini.type = "button";
+mini.className = "draft-mini";
+mini.setAttribute("aria-label", "Jump to bidding");
+mini.innerHTML = `
+  <span class="draft-mini__clock" data-clock>–</span>
+  <span class="draft-mini__who"><strong data-name>Waiting for a player</strong><small data-meta></small></span>
+  <span class="draft-mini__bid"><small>Top bid</small><strong data-top>–</strong></span>`;
+document.body.appendChild(mini);
+mini.addEventListener("click", () => {
+  els.form.scrollIntoView({ behavior: "smooth", block: "center" });
+  setTimeout(() => els.bid.focus({ preventScroll: true }), 350);
+});
+const miniStyle = document.createElement("style");
+miniStyle.textContent = `
+  .draft-mini { display: none; }
+  @media (max-width: 999px) {
+    .draft-mini {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+      display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .8rem;
+      padding: .55rem 1rem calc(.55rem + env(safe-area-inset-bottom)); border: 0; text-align: left; cursor: pointer;
+      color: var(--text); background: rgba(26, 18, 64, .96); border-top: 2px solid var(--league, var(--volt));
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font: inherit;
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, .35);
+    }
+    body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+    #toasts { bottom: calc(86px + env(safe-area-inset-bottom)); }
+  }
+  .draft-mini__clock {
+    min-width: 3.3rem; padding: .3rem .4rem; text-align: center; font: 400 1.9rem/1 var(--display);
+    border: 2px solid var(--red); background: var(--panel); color: #fff;
+  }
+  .draft-mini__clock.is-low { color: var(--red); animation: pulse .8s infinite; }
+  .draft-mini__clock.is-restricted { border-color: var(--sky); }
+  .draft-mini__clock.is-idle { color: var(--muted); border-color: var(--line); }
+  .draft-mini__who { min-width: 0; display: grid; }
+  .draft-mini__who strong { font: 700 1.05rem/1.2 var(--cond); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .draft-mini__who small { color: var(--muted); font-size: .85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .draft-mini__bid { display: grid; text-align: right; }
+  .draft-mini__bid small { color: var(--muted); font-size: .75rem; }
+  .draft-mini__bid strong { font: 700 1.15rem/1.1 var(--cond); color: var(--volt); white-space: nowrap; }`;
+document.head.appendChild(miniStyle);
+const miniEl = (k) => mini.querySelector(`[data-${k}]`);
+
+function updateMini() {
+  const sp = selected && players[selected.name];
+  miniEl("name").textContent = sp ? selected.name : "Waiting for a player";
+  miniEl("meta").textContent = sp
+    ? [sp.char, sp.role, sp.status === "Restricted" ? `Restricted · min 🟡 ${minRestrictedBid(sp.price)}` : ""].filter(Boolean).join(" · ")
+    : "";
+  let top = null;
+  for (const c in bidsData) for (const k in bidsData[c]) {
+    const b = bidsData[c][k];
+    if (!top || Number(b.bid) > top.bid || (Number(b.bid) === top.bid && b.timestamp < top.ts)) top = { coach: c, bid: Number(b.bid), ts: b.timestamp };
+  }
+  miniEl("top").textContent = top ? `${top.bid} · ${top.coach}` : "–";
+}
+
 /* --- who am I --- */
 let me = "";
 try { me = localStorage.getItem("lastCoach") || ""; } catch (_) {}
@@ -34,7 +93,7 @@ onValue(ref(db, "currentLeague"), (snap) => {
   unsubPlayers = watchPlayers(pool, (p) => { players = p; refresh(); });
 });
 onValue(ref(db, "selectedPlayer"), (s) => { selected = s.val(); refresh(); });
-onValue(ref(db, "bids"), (s) => { bidsData = s.val() || {}; renderBids(els.bids, bidsData); });
+onValue(ref(db, "bids"), (s) => { bidsData = s.val() || {}; renderBids(els.bids, bidsData); updateMini(); });
 onValue(ref(db, "timer"), (s) => { timer = s.val(); tick(); });
 
 function refresh() {
@@ -47,6 +106,7 @@ function refresh() {
   const sp = selected && selected.league === pool ? players[selected.name] : null;
   renderPlayerCard(els.card, selected?.name, sp);
   hint();
+  updateMini();
 }
 
 /* --- timer display --- */
@@ -63,6 +123,11 @@ function tick() {
   els.rwrap.hidden = !showR;
   if (showR) els.rclock.textContent = Math.max(0, D.restrictedWindowSeconds - elapsed) + "s";
   els.submit.disabled = !(running && left > 0);
+  const mc = miniEl("clock");
+  mc.textContent = running ? left : "–";
+  mc.classList.toggle("is-low", running && left <= 10);
+  mc.classList.toggle("is-idle", !running);
+  mc.classList.toggle("is-restricted", showR);
 }
 
 function hint() {

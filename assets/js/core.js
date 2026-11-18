@@ -349,14 +349,20 @@
       if (!byName[week]) { byName[week] = { name: week, matches: [] }; weeks.push(byName[week]); }
       const w = byName[week];
       const idx = w.matches.length;
-      const league = sc.matchesPerLeague && sc.leagueOrder.length
+      // Interleague weeks (config: schedule.interleagueWeeks) mix leagues, so each
+      // match is labelled by its two teams instead of its position in the week.
+      const inter = (sc.interleagueWeeks || []).some((x) => String(x).trim().toLowerCase() === week.toLowerCase());
+      const homeLeague = (n) => (teamByName(n) || teamByCoach(n) || {}).league || null;
+      const league = inter ? "inter" : sc.matchesPerLeague && sc.leagueOrder.length
         ? sc.leagueOrder[Math.floor(idx / sc.matchesPerLeague)] || null : null;
+      const leagues = inter ? [homeLeague(a[2]), homeLeague(b[2])] : [league];
       const games = [3, 4, 5].map((c) => [parseInt(a[c], 10), parseInt(b[c], 10)]);
       const played = games.filter(([x, y]) => !isNaN(x) && !isNaN(y));
       const winsA = played.filter(([x, y]) => x > y).length;
       const winsB = played.filter(([x, y]) => y > x).length;
+      if (inter) w.inter = true;
       w.matches.push({
-        league,
+        league, inter, leagues,
         teams: [{ name: a[2].trim(), scores: [3, 4, 5].map((c) => (a[c] || "").trim()), wins: winsA },
                 { name: (b[2] || "").trim(), scores: [3, 4, 5].map((c) => (b[c] || "").trim()), wins: winsB }],
         games,
@@ -369,18 +375,28 @@
   }
 
   function matchCard(m, s) {
-    const lg = m.league ? leagueById(m.league, s) : null;
+    const lg = m.league && !m.inter ? leagueById(m.league, s) : null;
+    const teamLg = m.inter ? m.leagues.map((id) => (id ? leagueById(id, s) : null)) : [];
+    const lgTag = (l) => (l ? `<span class="lg-tag" style="--c:${l.color}">${esc(l.short || l.name)}</span>` : "");
     const row = (t, oi) => {
       const o = m.teams[oi];
       const win = t.wins > o.wins;
       return `<div class="match__team${win ? " is-win" : ""}${myTeam.is(t.name) ? " is-mine" : ""}">
-        <span class="match__name">${esc(t.name)}</span>
+        <span class="match__name">${esc(t.name)}${m.inter ? " " + lgTag(teamLg[1 - oi]) : ""}</span>
         ${t.scores.map((v, g) => {
           const x = parseInt(v, 10), y = parseInt(o.scores[g], 10);
           return `<span class="match__g${!isNaN(x) && !isNaN(y) && x > y ? " is-high" : ""}">${esc(v)}</span>`;
         }).join("")}
       </div>`;
     };
+    if (m.inter) {
+      const [ca, cb] = teamLg.map((l) => l?.color || "var(--muted)");
+      return `<article class="match match--inter${m.done ? " is-done" : ""}" data-league="${esc(["inter", ...m.leagues.filter(Boolean)].join(" "))}"
+        style="--league:${ca};--league-b:${cb}">
+        <p class="match__inter">Interleague</p>
+        ${row(m.teams[0], 1)}${row(m.teams[1], 0)}
+      </article>`;
+    }
     return `<article class="match${m.done ? " is-done" : ""}" data-league="${esc(m.league || "")}"${lg ? ` style="--league:${lg.color}"` : ""}>
       ${row(m.teams[0], 1)}${row(m.teams[1], 0)}
     </article>`;
@@ -410,13 +426,65 @@
     return out || "";
   }
 
+  /* Stream times. Source of truth: the "Next Streams" table in the season sheet
+     (config: seasons[N].streams). Any league the sheet leaves blank or "TBD"
+     falls back to the Commissioner page's stream times in Firebase.
+     Returns { [league.streamKey]: { day, date: "YYYY-MM-DD", time } }.       */
   let streamPromise = null;
   function streamTimes() {
-    if (!streamPromise) {
-      streamPromise = fetch(`${C.firebase.databaseURL}/stream_times.json`)
-        .then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
-    }
+    if (streamPromise) return streamPromise;
+    const fromFirebase = fetch(`${C.firebase.databaseURL}/stream_times.json`)
+      .then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
+    const s = season();
+    const cfg = s && s.streams;
+    const fromSheet = cfg && s.sheet && !/^PASTE/.test(s.sheet)
+      ? fetchSheet(csvUrl(s.sheet, cfg.gid ?? s.gids.standings)).then((rows) => sheetStreams(rows, cfg, s)).catch(() => ({}))
+      : Promise.resolve({});
+    streamPromise = Promise.all([fromSheet, fromFirebase]).then(([sheet, fb]) => ({ ...(fb || {}), ...sheet }));
     return streamPromise;
+  }
+
+  function sheetStreams(rows, cfg, s) {
+    const out = {};
+    const norm = (v) => String(v || "").trim().toLowerCase();
+    const blank = (v) => !String(v || "").trim() || /^tbd$/i.test(String(v).trim());
+    for (let r = cfg.rows[0]; r <= cfg.rows[1]; r++) {
+      const row = rows[r] || [];
+      const label = norm(row[cfg.leagueCol ?? 0]);
+      const lg = (s.leagues || C.leagues).find((l) => norm(l.name) === label || norm(l.short) === label || norm(l.streamKey) === label);
+      if (!lg || !lg.streamKey) continue;
+      const dateRaw = String(row[cfg.dateCol] || "").trim();
+      const timeRaw = String(row[cfg.timeCol] || "").trim();
+      if (blank(dateRaw) && blank(timeRaw)) continue;          // leave it to the fallback
+      const date = blank(dateRaw) ? "" : toISO(dateRaw);
+      out[lg.streamKey] = { day: date ? weekday(date) : "", date, time: blank(timeRaw) ? "" : to24h(timeRaw) };
+    }
+    return out;
+  }
+  /* "10/17" or "10/17/2026" → "2026-10-17" (year guessed as the nearest one) */
+  function toISO(v) {
+    const m = v.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/);
+    if (!m) return /^\d{4}-\d{2}-\d{2}/.test(v) ? v.slice(0, 10) : "";
+    const now = new Date();
+    let y = m[3] ? (m[3].length === 2 ? 2000 + +m[3] : +m[3]) : now.getFullYear();
+    if (!m[3]) {                                              // Dec → Jan wrap-around
+      const cand = new Date(y, +m[1] - 1, +m[2]);
+      const diff = (cand - now) / 864e5;
+      if (diff < -180) y++; else if (diff > 180) y--;
+    }
+    return `${y}-${String(m[1]).padStart(2, "0")}-${String(m[2]).padStart(2, "0")}`;
+  }
+  /* "5:00 PM" → "17:00" (formatStream shows it in the viewer's clock style) */
+  function to24h(v) {
+    const m = v.match(/^(\d{1,2}):(\d{2})\s*([AaPp][Mm])?$/);
+    if (!m) return v;
+    let h = +m[1];
+    if (m[3]) { const pm = /p/i.test(m[3]); if (pm && h < 12) h += 12; if (!pm && h === 12) h = 0; }
+    return `${String(h).padStart(2, "0")}:${m[2]}`;
+  }
+  function weekday(iso) {
+    const [y, mo, d] = iso.split("-").map(Number);
+    return new Date(y, mo - 1, d).toLocaleDateString("en-US", { weekday: "long" });
   }
 
   function fillStreamTimes(root = document) {
@@ -431,6 +499,17 @@
   }
 
   /* ---------------- boot ---------------- */
+  if (!document.getElementById("nc-inter-css")) {
+    const st = document.createElement("style");
+    st.id = "nc-inter-css";
+    st.textContent = `
+      .match--inter { border-left: 0; background: linear-gradient(var(--panel), var(--panel)) padding-box,
+        linear-gradient(180deg, var(--league), var(--league-b)) border-box; border-left: 4px solid transparent; }
+      .match__inter { margin: .3rem 0 .1rem; font: 700 .78rem/1 var(--cond); color: var(--volt); }
+      .lg-tag { display: inline-block; margin-left: .3rem; padding: .05rem .3rem; font: 700 .7rem/1.3 var(--cond); color: var(--pitch); background: var(--c); vertical-align: .1em; }
+      .week__tag--inter { border-color: var(--volt); color: var(--volt); }`;
+    document.head.appendChild(st);
+  }
   renderHeader();
   renderFooter();
   document.documentElement.classList.add("js");

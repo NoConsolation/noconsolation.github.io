@@ -71,8 +71,9 @@
     if (!weeks.length) { message(els.schedule, "No matches posted yet.", "info"); return; }
     const current = weeks.find((w) => !w.done) || weeks[weeks.length - 1];
     els.schedule.innerHTML = weeks.map((w) => {
-      const tag = w === current && !w.done && !isHistory ? '<span class="week__tag week__tag--now">This week</span>'
-        : w.done ? '<span class="week__tag week__tag--done">Final</span>' : "";
+      const tag = (w === current && !w.done && !isHistory ? '<span class="week__tag week__tag--now">This week</span>'
+        : w.done ? '<span class="week__tag week__tag--done">Final</span>' : "")
+        + (w.inter ? ' <span class="week__tag week__tag--inter">Interleague</span>' : "");
       return `<details class="week"${w === current && !isHistory ? " open" : ""} id="${esc(slug(w.name))}">
         <summary>${esc(w.name)} ${tag}</summary>
         <div class="matches">${w.matches.map((m) => matchCard(m, s)).join("")}</div>
@@ -85,7 +86,8 @@
   const scheduleLeagues = (s.schedule.leagueOrder || []).map((id) => leagueById(id, s)).filter(Boolean);
   if (els.filters && scheduleLeagues.length > 1) {
     els.filters.innerHTML = `<button class="chip" aria-pressed="true" data-league="">All</button>` +
-      scheduleLeagues.map((l) => `<button class="chip" style="--c:${l.color}" aria-pressed="false" data-league="${esc(l.id)}">${esc(l.short || l.name)}</button>`).join("");
+      scheduleLeagues.map((l) => `<button class="chip" style="--c:${l.color}" aria-pressed="false" data-league="${esc(l.id)}">${esc(l.short || l.name)}</button>`).join("") +
+      ((s.schedule.interleagueWeeks || []).length ? `<button class="chip" style="--c:var(--volt)" aria-pressed="false" data-league="inter">Interleague</button>` : "");
     els.filters.addEventListener("click", (e) => {
       const b = e.target.closest(".chip"); if (!b) return;
       activeLeague = b.dataset.league;
@@ -94,9 +96,12 @@
     });
   }
   function applyFilter() {
-    $$(".match", els.schedule).forEach((m) => { m.hidden = !!activeLeague && m.dataset.league !== activeLeague; });
+    // a match can belong to several leagues (interleague: "inter esl gsc")
+    $$(".match", els.schedule).forEach((m) => { m.hidden = !!activeLeague && !m.dataset.league.split(" ").includes(activeLeague); });
+    // hide weeks with nothing left to show
+    $$(".week", els.schedule).forEach((w) => { w.hidden = !!activeLeague && !w.querySelector(".match:not([hidden])"); });
     $$(".standings", els.standings).forEach((t) => {
-      t.style.display = activeLeague && t.dataset.league !== activeLeague ? "none" : "";
+      t.style.display = activeLeague && activeLeague !== "inter" && t.dataset.league !== activeLeague ? "none" : "";
     });
   }
 

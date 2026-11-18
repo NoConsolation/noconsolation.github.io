@@ -27,7 +27,7 @@ let unsubPlayers = null;
 
 onValue(ref(db, "currentLeague"), (snap) => {
   pool = snap.val();
-  els.pool.textContent = pool ? `${POOLS[pool]?.name || pool} draft` : "Waiting for the commissioner";
+  els.pool.textContent = pool ? (/draft$/i.test(POOLS[pool]?.name || "") ? POOLS[pool].name : `${POOLS[pool]?.name || pool} draft`) : "Waiting for the commissioner";
   document.documentElement.style.setProperty("--league", poolColor(pool));
   if (unsubPlayers) unsubPlayers();
   if (!pool) return;

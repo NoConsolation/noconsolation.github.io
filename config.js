@@ -17,7 +17,7 @@
 
 window.NC_CONFIG = {
 
-  currentSeason: 6,
+  currentSeason: 7,
 
   /* ---------- Scrolling banner at the top of every page ---------- */
   announcement: {
@@ -45,7 +45,7 @@ window.NC_CONFIG = {
     {
       title: "Season Spreadsheet",
       description: "Season specific stats, standings, and schedule.",
-      href: "https://docs.google.com/spreadsheets/d/1AVjOb4M8eHHUd0R5U9PpcTwZwj2sqFuiS6fTNd4NA5Q/edit?usp=drivesdk",
+      href: "https://docs.google.com/spreadsheets/d/14PUkY_iiLyyMpmjnWjHP09St04TaxD8BVPMiPVwRLTg/edit",
       updated: "",
     },
   ],
@@ -64,27 +64,29 @@ window.NC_CONFIG = {
      than `coach` (e.g. "EricA"). Order inside a league = draft board
      column order.                                                     */
   teams: [
+    // Season 7. The league sheet lists coaches, so `name` is the coach for now —
+    // swap in team names once they're set (the sheet's team column must match).
     // Elite Strikers League
-    { name: "Wicked Inc.",             coach: "Austin",  league: "esl" },
-    { name: "Hubris Manifest",         coach: "Garrett", league: "esl" },
-    { name: "Shy Bonka Koopa",         coach: "Brandon", league: "esl" },
-    { name: "Fiery Flounders",         coach: "Eric A",  league: "esl", draftName: "EricA" },
-    { name: "Skull Island",            coach: "Tanya",   league: "esl" },
-    { name: "Brad",                    coach: "Brad",    league: "esl" },
+    { name: "Tanya",      coach: "Tanya",      league: "esl" },
+    { name: "Eric A",     coach: "Eric A",     league: "esl", draftName: "EricA" },
+    { name: "Garrett",    coach: "Garrett",    league: "esl" },
+    { name: "Brandon",    coach: "Brandon",    league: "esl" },
+    { name: "Austin",     coach: "Austin",     league: "esl" },
+    { name: "Brad",       coach: "Brad",       league: "esl" },
     // Galactic Strikers Conference
-    { name: "Wariors FC",              coach: "Colin",   league: "gsc" },
-    { name: "New York Red Boos",       coach: "Eric P",  league: "gsc", draftName: "EricP" },
-    { name: "Ferb Fletcher",           coach: "Jake",    league: "gsc" },
-    { name: "Halloween Town Horrors",  coach: "Ben",     league: "gsc" },
-    { name: "Come on Mr. Monty",       coach: "Jaco",    league: "gsc" },
-    { name: "Spread Triple Option",    coach: "Danny",   league: "gsc" },
+    { name: "Colin",      coach: "Colin",      league: "gsc" },
+    { name: "Danny",      coach: "Danny",      league: "gsc" },
+    { name: "Jaco",       coach: "Jaco",       league: "gsc" },
+    { name: "Jake & Ben", coach: "Jake & Ben", league: "gsc", draftName: "JakeBen" },
+    { name: "Eric P",     coach: "Eric P",     league: "gsc", draftName: "EricP" },
+    { name: "Freddy",     coach: "Freddy",     league: "gsc" },
     // Biker Strikers
-    { name: "Anchors Down",            coach: "Hamilton", league: "bs" },
-    { name: "Reid Hot Chili Strikers", coach: "Reid",     league: "bs" },
-    { name: "Snout Talk",              coach: "Teddy",    league: "bs" },
-    { name: "Kongquerors FC",          coach: "Charlie",  league: "bs" },
-    { name: "Mont-O and the Gals",     coach: "Dave",     league: "bs" },
-    { name: "Fredchester United",      coach: "Freddy",   league: "bs" },
+    { name: "Reid",       coach: "Reid",       league: "bs" },
+    { name: "Hamilton",   coach: "Hamilton",   league: "bs" },
+    { name: "Charlie",    coach: "Charlie",    league: "bs" },
+    { name: "Dave C",     coach: "Dave C",     league: "bs", draftName: "DaveC" },
+    { name: "Dave A",     coach: "Dave A",     league: "bs", draftName: "DaveA" },
+    { name: "Teddy",      coach: "Teddy",      league: "bs" },
   ],
 
   /* ---------- Seasons ----------
@@ -92,6 +94,38 @@ window.NC_CONFIG = {
      File → Share → Publish to web link. Row/column numbers below are
      0-based (row 1 in Sheets = 0 here), matching the old site exactly. */
   seasons: {
+    7: {
+      label: "Season 7",
+      // Published ID (File → Share → Publish to web → the part after /d/e/).
+      sheet: "2PACX-1vTiZTvloeS_fVH70CR1aMQpSK0INgbPfbkLW0Sw3wfJZ-XBUxoWHcRJ13fAs6D9uB4ZLdcPdtWLUEt0",
+      // Season 7 was copied from Season 6, so the tab IDs carried over
+      // (Display is still 1520901699). Double-check the others once published.
+      gids: { standings: 1520901699, schedule: 1001386983, rosters: 1896446593, waivers: 1166432758 },
+      standings: {
+        columns: [0, 1, 2, 3, 4, 7, 5, 6],       // Team, Pts, Games, W, L, GD, GF, GA
+        cutLines: [1, 4],
+        tables: [
+          { league: "esl", headerRow: 1,  rows: [2, 8]   },
+          { league: "gsc", headerRow: 9,  rows: [10, 16] },
+          { league: "bs",  headerRow: 17, rows: [18, 24] },
+        ],
+      },
+      // Schedule tab, long list starting at sheet row 42 (12 weeks × 9 matches × 2 rows).
+      // Normal weeks: matches 1–3 ESL, 4–6 GSC, 7–9 BS. Interleague weeks are
+      // labelled by each team's league from `teams` above.
+      schedule: {
+        rows: [41, 257], matchesPerLeague: 3, leagueOrder: ["esl", "gsc", "bs"],
+        interleagueWeeks: ["Week 4", "Week 8"],
+      },
+      rosterGrid: { startRow: 1, startCol: 1, groups: 3, perGroup: 6, boxHeight: 8 },
+      bracket: null,
+      coaches: "teams",
+      // "Next Streams" table on the standings tab (sheet rows 28–30). 0-based
+      // rows/cols: A = league name, G = date, H = time. Blank or "TBD" falls back
+      // to the Commissioner page's stream times.
+      streams: { rows: [27, 29], leagueCol: 0, dateCol: 6, timeCol: 7 },
+    },
+
     6: {
       label: "Season 6",
       sheet: "2PACX-1vSgCY7AFJxG4_LzuYyuQUgE5GHw_aYk9lW9Ua3UKFTb8iiipRxXJSb0TYGrsP5rWgNrfCT9uFX3GKf7",
@@ -108,7 +142,7 @@ window.NC_CONFIG = {
       schedule: { rows: [41, 221], matchesPerLeague: 3, leagueOrder: ["esl", "gsc", "bs"] },
       rosterGrid: { startRow: 1, startCol: 1, groups: 3, perGroup: 6, boxHeight: 8 },
       bracket: { gid: 759357720, height: 700 },
-      coaches: "teams",                           // build the coach table from `teams` above
+      coaches: null,                              // `teams` is Season 7 now, so hide the S6 coach table
 
       /* Strikers Premier League — the championship table above the three leagues.
          Reads the "SPL" tab of this season's sheet. Cells are written exactly
@@ -269,6 +303,18 @@ window.NC_CONFIG = {
   /* ---------- Live auction draft ---------- */
   draft: {
     live: false,               // true shows "Draft" in the nav for everyone
+
+    /* "mega"    → one draft: every coach bids on every player, any league.
+       "leagues" → the old way: one draft per league (each league's draftPool). */
+    mode: "mega",
+    mega: {
+      pool: "Mega",            // Firebase key: players load into players/Mega
+      name: "Mega Draft",
+      color: "#FFD60A",
+    },
+    captains: 2,               // draft board rows: captains, then sidekicks
+    sidekicks: 5,
+
     budget: 105,
     countdownSeconds: 40,
     restrictedWindowSeconds: 20,

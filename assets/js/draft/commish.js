@@ -164,7 +164,7 @@ function start() {
     const key = f.dataset.key;
     onValue(ref(db, `stream_times/${key}`), (s) => {
       const v = s.val();
-      f.querySelector("[data-current]").textContent = "Showing on site: " + (NC.formatStream(v) || "TBD");
+      f.querySelector("[data-current]").textContent = (C.seasons[C.currentSeason]?.streams ? "Backup, used only when the sheet says TBD: " : "Showing on site: ") + (NC.formatStream(v) || "TBD");
       if (v) { f.day.value = v.day || ""; f.date.value = /^\d{4}-\d{2}-\d{2}/.test(v.date || "") ? v.date.slice(0, 10) : ""; f.time.value = /^\d{1,2}:\d{2}$/.test(v.time || "") ? v.time.padStart(5, "0") : ""; }
     });
     f.addEventListener("submit", (e) => {

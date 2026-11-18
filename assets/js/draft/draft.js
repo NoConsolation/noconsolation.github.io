@@ -1,7 +1,7 @@
 /* Draft room for coaches. Read-only except for placing bids; all draft state
    changes (locking, awarding, timers) happen on the commissioner console. */
 import { C, NC, D, db, ref, get, push, onValue, POOLS, ALL_COACHES, poolColor, budgets, renderBudgets,
-         renderBoard, renderCharCounts, renderBids, renderPlayerCard, minRestrictedBid } from "./common.js";
+         renderBoard, renderCharCounts, renderBids, renderPlayerCard, minRestrictedBid, watchPlayers, playerPath } from "./common.js";
 
 const { $, esc, toast } = NC;
 const els = {
@@ -31,7 +31,7 @@ onValue(ref(db, "currentLeague"), (snap) => {
   document.documentElement.style.setProperty("--league", poolColor(pool));
   if (unsubPlayers) unsubPlayers();
   if (!pool) return;
-  unsubPlayers = onValue(ref(db, `players/${pool}`), (s) => { players = s.val() || {}; refresh(); });
+  unsubPlayers = watchPlayers(pool, (p) => { players = p; refresh(); });
 });
 onValue(ref(db, "selectedPlayer"), (s) => { selected = s.val(); refresh(); });
 onValue(ref(db, "bids"), (s) => { bidsData = s.val() || {}; renderBids(els.bids, bidsData); });
@@ -86,7 +86,7 @@ els.form.addEventListener("submit", async (e) => {
   try {
     const sel = (await get(ref(db, "selectedPlayer"))).val();
     if (!sel) { toast("No player is up yet", "error"); return; }
-    const p = (await get(ref(db, `players/${sel.league}/${sel.name}`))).val();
+    const p = (await get(ref(db, playerPath(sel.league, sel.name)))).val();
     if (!p) { toast("That player wasn't found", "error"); return; }
     if (p.status === "Restricted" && bid < minRestrictedBid(p.price)) {
       toast(`Restricted player: minimum bid is ${minRestrictedBid(p.price)}`, "error"); return;

@@ -312,6 +312,12 @@ window.NC_CONFIG = {
       name: "Mega Draft",
       color: "#FFD60A",
     },
+    /* Where the player list lives in Firebase.
+       "flat":   players/<name> with league: "mega" and team: "FA" for free agents
+                 (what the current loader writes).
+       "nested": players/<pool>/<name> (the old per-league layout).          */
+    players: { layout: "flat", freeAgentTeam: "FA" },
+
     captains: 2,               // draft board rows: captains, then sidekicks
     sidekicks: 5,
 

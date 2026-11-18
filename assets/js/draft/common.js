@@ -50,6 +50,34 @@ export const poolColor = (pool) => POOLS[pool]?.color || "#7f8c8d";
 /* each coach's home league — used to colour the board and budgets */
 export const COACH_LEAGUE = Object.fromEntries(C.teams.map((t) => [coachKey(t), leagueOf(t)]));
 
+/* ---------------- where players live in Firebase ----------------
+   "flat"   → players/<name>, each with league: "mega" and team: "FA" when
+              undrafted (what your loader writes now).
+   "nested" → players/<pool>/<name> (the old per-league layout).          */
+const PL = D.players || {};
+export const FLAT = (PL.layout || "nested") === "flat";
+const FA = String(PL.freeAgentTeam ?? "FA").toLowerCase();
+export const playerPath = (pool, name) => (FLAT ? `players/${name}` : `players/${pool}/${name}`);
+/* the "no team" value to write back when a player is freed */
+export const NO_TEAM = FLAT ? (PL.freeAgentTeam ?? "FA") : "";
+
+/* Subscribe to one pool's players. Hands back a clean map where undrafted
+   players have team "" (so "FA" never shows up as a coach). */
+export function watchPlayers(pool, cb) {
+  const path = FLAT ? "players" : `players/${pool}`;
+  return onValue(ref(db, path), (snap) => {
+    const raw = snap.val() || {}, out = {};
+    const want = String(pool || "").toLowerCase();
+    for (const [name, p] of Object.entries(raw)) {
+      if (!p || typeof p !== "object") continue;
+      if (FLAT && String(p.league || "").toLowerCase() !== want) continue;
+      const team = String(p.team || "");
+      out[name] = { ...p, team: team.toLowerCase() === FA ? "" : team };
+    }
+    cb(out);
+  });
+}
+
 export const minRestrictedBid = (price) => Math.ceil(Number(price || 0) * (1 + D.restrictedMarkup));
 
 export function budgets(coaches, players) {

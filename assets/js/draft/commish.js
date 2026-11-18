@@ -3,7 +3,7 @@
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { C, NC, D, app, db, ref, get, set, update, remove, onValue, POOLS, poolColor, budgets, renderBudgets,
-         renderBoard, renderCharCounts, renderBids, clearSeenBids, renderPlayerCard, minRestrictedBid } from "./common.js";
+         renderBoard, renderCharCounts, renderBids, clearSeenBids, renderPlayerCard, minRestrictedBid, watchPlayers, playerPath, NO_TEAM } from "./common.js";
 
 const { $, $$, esc, toast } = NC;
 const auth = getAuth(app);
@@ -47,7 +47,7 @@ function start() {
     document.documentElement.style.setProperty("--league", poolColor(pool));
     if (unsub) unsub();
     players = {};
-    if (pool) unsub = onValue(ref(db, `players/${pool}`), (x) => { players = x.val() || {}; refresh(); });
+    if (pool) unsub = watchPlayers(pool, (x) => { players = x; refresh(); });
     refresh();
   });
   onValue(ref(db, "selectedPlayer"), (s) => { selected = s.val(); refresh(); });
@@ -95,7 +95,7 @@ function start() {
       const sel = (await get(ref(db, "selectedPlayer"))).val();
       if (!sel) throw new Error("No player is selected.");
       if (!confirm(`Award ${sel.name} to ${winner} for ${hi}?`)) return;
-      await update(ref(db, `players/${pool}/${sel.name}`), { team: winner, status: "Locked", price: hi, wonTimestamp: Date.now() });
+      await update(ref(db, playerPath(pool, sel.name)), { team: winner, status: "Locked", price: hi, wonTimestamp: Date.now() });
       fetch(D.saveEndpoint, { method: "POST", body: JSON.stringify({ league: pool, player: { name: sel.name, role: players[sel.name]?.role || sel.role }, bids: all }) })
         .then((r) => r.text()).then(console.log).catch(console.error);
       await remove(ref(db, "bids"));
@@ -135,11 +135,11 @@ function start() {
     if (busy) return;
     if (highest >= minRestrictedBid(p.price)) {
       busy = true;
-      await guard(update(ref(db, `players/${sel.league}/${sel.name}`), { status: "Free", team: "", price: "" }));
+      await guard(update(ref(db, playerPath(sel.league, sel.name)), { status: "Free", team: NO_TEAM, price: NO_TEAM === "" ? "" : 0 }));
       busy = false;
     } else if (rLeft === 0 && highest === 0) {
       busy = true;
-      await guard(update(ref(db, `players/${sel.league}/${sel.name}`), { status: "Locked" }));
+      await guard(update(ref(db, playerPath(sel.league, sel.name)), { status: "Locked" }));
       await guard(update(ref(db, "timer"), { running: false }));
       busy = false;
     }

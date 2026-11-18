@@ -38,6 +38,13 @@ export const POOLS = MEGA
       l.draftPool,
       { color: l.color, name: l.name, coaches: C.teams.filter((t) => t.league === l.id).map(coachKey) },
     ]));
+/* Accept any capitalisation of a pool name ("mega", "MEGA" → "Mega"), so a
+   hand-typed value in Firebase still finds its coaches. Hidden aliases don't
+   show up in the commissioner's pool list. */
+Object.keys(POOLS).forEach((k) => {
+  const lower = k.toLowerCase();
+  if (lower !== k && !(lower in POOLS)) Object.defineProperty(POOLS, lower, { value: POOLS[k], enumerable: false });
+});
 export const ALL_COACHES = Object.values(POOLS).flatMap((p) => p.coaches).sort((a, b) => a.localeCompare(b));
 export const poolColor = (pool) => POOLS[pool]?.color || "#7f8c8d";
 /* each coach's home league — used to colour the board and budgets */
